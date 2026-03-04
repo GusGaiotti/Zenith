@@ -33,6 +33,7 @@ public class LedgerService {
     private final LedgerMemberRepository ledgerMemberRepository;
     private final InvitationRepository invitationRepository;
     private final UserRepository userRepository;
+    private final NotificationService notificationService;
 
     @Transactional
     public LedgerResponse createLedger(String name, User authenticatedUser) {
@@ -92,6 +93,7 @@ public class LedgerService {
                 .invitedEmail(targetEmail)
                 .build();
         invitation = invitationRepository.save(invitation);
+        notificationService.createInvitationNotification(invitation, targetUser);
 
         return buildInvitationResponse(invitation);
     }

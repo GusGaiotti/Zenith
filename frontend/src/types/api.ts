@@ -44,6 +44,24 @@ export interface InvitationResponse {
   expiresAt: string;
 }
 
+export interface NotificationResponse {
+  id: number;
+  type: "TRANSACTION_CREATED" | "INVITATION_RECEIVED";
+  title: string;
+  body: string;
+  actorDisplayName: string | null;
+  referenceType: "TRANSACTION" | "INVITATION" | null;
+  referenceId: number | null;
+  invitationToken: string | null;
+  createdAt: string;
+  seenAt: string | null;
+}
+
+export interface NotificationListResponse {
+  unreadCount: number;
+  items: NotificationResponse[];
+}
+
 export interface CategoryResponse {
   id: number;
   name: string;
@@ -202,4 +220,8 @@ export interface TransactionParams {
   type?: TransactionType;
   page?: number;
   size?: number;
+}
+
+export interface MarkNotificationsSeenRequest {
+  ids: number[];
 }

@@ -4,6 +4,7 @@ import { Suspense, useMemo, useState } from "react";
 import { CategoryBreakdownChart } from "@/components/dashboard/CategoryBreakdownChart";
 import { CoupleSplitPanel } from "@/components/dashboard/CoupleSplitPanel";
 import { ExpenseTrendChart } from "@/components/dashboard/ExpenseTrendChart";
+import { NotificationBell } from "@/components/dashboard/NotificationBell";
 import { OverviewCards } from "@/components/dashboard/OverviewCards";
 import { PulseSparkline } from "@/components/dashboard/PulseSparkline";
 import { RecentTransactions } from "@/components/dashboard/RecentTransactions";
@@ -101,6 +102,10 @@ export default function DashboardPage() {
           <p className="mt-1 text-sm text-[var(--text-secondary)]">Resumo mensal da fatura compartilhada.</p>
         </div>
         <div className="flex flex-wrap items-end gap-3">
+          <div className="flex flex-col gap-2">
+            <span className="block text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">Alertas</span>
+            <NotificationBell />
+          </div>
           <MonthPicker
             label="Mes"
             value={yearMonth}

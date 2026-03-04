@@ -43,6 +43,9 @@ class LedgerServiceTest {
     @Mock
     private UserRepository userRepository;
 
+    @Mock
+    private NotificationService notificationService;
+
     @InjectMocks
     private LedgerService ledgerService;
 
@@ -124,6 +127,7 @@ class LedgerServiceTest {
         assertEquals(testInvitation.getToken(), response.getToken());
         assertEquals(targetUser.getEmail(), response.getInvitedEmail());
         assertEquals(Invitation.InvitationStatus.PENDING.name(), response.getStatus());
+        verify(notificationService).createInvitationNotification(any(Invitation.class), eq(targetUser));
     }
 
     @Test
