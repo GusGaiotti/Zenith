@@ -1,0 +1,26 @@
+spring:
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+server:
+  ssl:
+    enabled: false
+  forward-headers-strategy: framework
+
+logging:
+  level:
+    com.gaiotti.zenith: INFO
+    org.springframework.security: WARN
+
+auth:
+  refresh-cookie:
+    secure: true
+    same-site: Strict

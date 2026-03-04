@@ -1,0 +1,2 @@
+-- Consolidated into V2__create_ledgers_and_members.sql
+-- This migration is intentionally left as a no-op for development baseline.
