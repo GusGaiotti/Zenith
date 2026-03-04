@@ -17,4 +17,5 @@ public class LedgerResponse {
     private String name;
     private LocalDateTime createdAt;
     private List<MemberResponse> members;
+    private List<InvitationResponse> pendingInvitations;
 }

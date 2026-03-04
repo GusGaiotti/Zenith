@@ -66,4 +66,11 @@ public class LedgerController {
         InvitationResponse response = ledgerService.declineInvitation(token, authenticatedUser);
         return ResponseEntity.ok(response);
     }
+
+    @PatchMapping("/invitations/{token}/cancel")
+    public ResponseEntity<InvitationResponse> cancelInvitation(@PathVariable String token) {
+        User authenticatedUser = authUtils.getAuthenticatedUser();
+        InvitationResponse response = ledgerService.cancelInvitation(token, authenticatedUser);
+        return ResponseEntity.ok(response);
+    }
 }

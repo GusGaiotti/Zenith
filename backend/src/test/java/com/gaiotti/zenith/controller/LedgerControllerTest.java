@@ -257,4 +257,24 @@ class LedgerControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("DECLINED"));
     }
+
+    @Test
+    @WithMockUser
+    void cancelInvitation_Success() throws Exception {
+        User testUser = createTestUser();
+        InvitationResponse response = InvitationResponse.builder()
+                .id(1L)
+                .token("token123")
+                .invitedEmail("test@example.com")
+                .status("CANCELED")
+                .build();
+
+        when(authUtils.getAuthenticatedUser()).thenReturn(testUser);
+        when(ledgerService.cancelInvitation("token123", testUser)).thenReturn(response);
+
+        mockMvc.perform(patch("/api/v1/ledgers/invitations/token123/cancel")
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("CANCELED"));
+    }
 }

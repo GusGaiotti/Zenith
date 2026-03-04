@@ -4,6 +4,7 @@ export const queryKeys = {
   categories: (ledgerId: number) => ["categories", ledgerId] as const,
   dashboardRoot: (ledgerId: number) => ["dashboard", ledgerId] as const,
   dashboard: (ledgerId: number, type: string) => ["dashboard", ledgerId, type] as const,
+  notifications: (scope: string) => ["notifications", scope] as const,
   ledger: (id: number) => ["ledger", id] as const,
   invitation: (token: string) => ["invitation", token] as const,
 } as const;

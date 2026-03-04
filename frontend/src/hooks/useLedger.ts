@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { acceptInvitation, createLedger, declineInvitation, getLedger, inviteToLedger } from "@/lib/api/ledger";
+import { acceptInvitation, cancelInvitation, createLedger, declineInvitation, getLedger, inviteToLedger } from "@/lib/api/ledger";
 import { queryKeys } from "@/lib/api/query-keys";
 import { useAuthStore } from "@/lib/store/auth.store";
 import { requireLedgerId } from "@/lib/utils/require-ledger-id";
@@ -56,5 +56,19 @@ export function useAcceptInvitation() {
 export function useDeclineInvitation() {
   return useMutation({
     mutationFn: (token: string) => declineInvitation(token).then((response) => response.data),
+  });
+}
+
+export function useCancelInvitation() {
+  const ledgerId = useAuthStore((state) => state.activeLedgerId);
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (token: string) => cancelInvitation(token).then((response) => response.data),
+    onSuccess: () => {
+      if (ledgerId) {
+        queryClient.invalidateQueries({ queryKey: queryKeys.ledger(ledgerId) });
+      }
+    },
   });
 }

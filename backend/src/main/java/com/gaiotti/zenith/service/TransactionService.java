@@ -33,6 +33,7 @@ public class TransactionService {
     private final LedgerRepository ledgerRepository;
     private final LedgerMemberRepository ledgerMemberRepository;
     private final CategoryRepository categoryRepository;
+    private final NotificationService notificationService;
 
     @Transactional(readOnly = true)
     public PageResponse<TransactionResponse> listTransactions(
@@ -102,7 +103,9 @@ public class TransactionService {
                 .createdBy(authenticatedUser)
                 .build();
 
-        return mapToResponse(transactionRepository.save(transaction));
+        Transaction savedTransaction = transactionRepository.save(transaction);
+        notificationService.createTransactionNotifications(savedTransaction, authenticatedUser);
+        return mapToResponse(savedTransaction);
     }
 
     @Transactional(readOnly = true)
