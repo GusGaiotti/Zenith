@@ -55,6 +55,7 @@ public class Invitation {
         PENDING,
         ACCEPTED,
         DECLINED,
+        CANCELED,
         EXPIRED
     }
 }

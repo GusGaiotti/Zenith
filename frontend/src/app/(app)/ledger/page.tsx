@@ -1,22 +1,42 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { InviteModal } from "@/components/ledger/InviteModal";
 import { MemberCard } from "@/components/ledger/MemberCard";
+import { EmptyState } from "@/components/shared/EmptyState";
 import { LoadingSkeleton } from "@/components/shared/LoadingSkeleton";
 import { PageHeader } from "@/components/shared/PageHeader";
-import { useInviteMember, useLedger } from "@/hooks/useLedger";
+import { useCancelInvitation, useInviteMember, useLedger } from "@/hooks/useLedger";
 import { formatDateTime } from "@/lib/utils/date";
+import { useAuthStore } from "@/lib/store/auth.store";
 
 export default function LedgerPage() {
+  const router = useRouter();
   const [name, setName] = useState("Fatura da Casa");
   const [editing, setEditing] = useState(false);
   const [open, setOpen] = useState(false);
 
+  const activeLedgerId = useAuthStore((state) => state.activeLedgerId);
   const ledger = useLedger();
   const inviteMember = useInviteMember();
+  const cancelInvitation = useCancelInvitation();
   const members = ledger.data?.members ?? [];
-  const canInvite = members.length < 2;
+  const pendingInvitations = ledger.data?.pendingInvitations ?? [];
+  const canInvite = members.length < 2 && pendingInvitations.length === 0;
+
+  if (!activeLedgerId) {
+    return (
+      <div className="space-y-6 pb-20 md:pb-6">
+        <PageHeader title="Fatura compartilhada" subtitle="Crie uma fatura quando quiser ou aguarde um convite." />
+        <EmptyState
+          title="Nenhuma fatura ativa"
+          description="Voce ainda nao faz parte de uma fatura. Quando quiser, crie uma nova e convide alguem."
+          action={{ label: "Criar fatura", onClick: () => router.push("/onboarding") }}
+        />
+      </div>
+    );
+  }
 
   if (ledger.isLoading) {
     return <LoadingSkeleton variant="chart" />;
@@ -66,7 +86,19 @@ export default function LedgerPage() {
               joinedAt={new Date(member.joinedAt).toLocaleDateString("pt-BR")}
             />
           ))}
-          {members.length < 2 ? (
+          {pendingInvitations.map((invitation) => (
+            <MemberCard
+              key={invitation.token}
+              name={invitation.invitedUserDisplayName ?? "Convite pendente"}
+              email={invitation.invitedEmail}
+              joinedAt="-"
+              statusLabel="Convite pendente"
+              actionLabel={cancelInvitation.isPending ? "Cancelando..." : "Cancelar convite"}
+              actionDisabled={cancelInvitation.isPending}
+              onAction={() => cancelInvitation.mutate(invitation.token)}
+            />
+          ))}
+          {members.length < 2 && pendingInvitations.length === 0 ? (
             <article className="surface flex min-h-32 items-center justify-center border-dashed p-4 text-sm text-[var(--text-secondary)]">
               Aguardando aceite do convite.
             </article>

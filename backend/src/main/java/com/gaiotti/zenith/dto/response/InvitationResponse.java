@@ -15,6 +15,8 @@ public class InvitationResponse {
     private Long id;
     private String token;
     private String invitedEmail;
+    private String invitedUserDisplayName;
+    private String invitedByDisplayName;
     private String status;
     private LocalDateTime expiresAt;
 }

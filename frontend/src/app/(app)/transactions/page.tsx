@@ -3,6 +3,7 @@
 import { AxiosError } from "axios";
 import { useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { EmptyState } from "@/components/shared/EmptyState";
 import { MonthPicker } from "@/components/shared/MonthPicker";
 import { SelectMenu } from "@/components/shared/SelectMenu";
 import { PageHeader } from "@/components/shared/PageHeader";
@@ -12,6 +13,7 @@ import { TransactionTable } from "@/components/transactions/TransactionTable";
 import { useCategories } from "@/hooks/useCategories";
 import { useLedger } from "@/hooks/useLedger";
 import { useCreateTransaction, useDeleteTransaction, useTransactions, useUpdateTransaction } from "@/hooks/useTransactions";
+import { useAuthStore } from "@/lib/store/auth.store";
 import { formatCurrency } from "@/lib/utils/currency";
 import type { TransactionResponse, TransactionType } from "@/types/api";
 
@@ -49,6 +51,7 @@ export default function TransactionsPage() {
   const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
   const searchParams = useSearchParams();
   const router = useRouter();
+  const activeLedgerId = useAuthStore((state) => state.activeLedgerId);
 
   const openByQuery = searchParams.get("new") === "1";
   const drawerOpen = open || openByQuery;
@@ -101,6 +104,22 @@ export default function TransactionsPage() {
   ];
 
   const activeMutation = editingTransaction ? updateTransaction : createTransaction;
+
+  if (!activeLedgerId) {
+    return (
+      <div className="pb-20 md:pb-6">
+        <PageHeader
+          title="Transacoes"
+          subtitle="Acompanhe cada movimentacao do espaco compartilhado."
+        />
+        <EmptyState
+          title="Nenhuma fatura ativa"
+          description="As transacoes ficam disponiveis assim que voce criar uma fatura ou aceitar um convite."
+          action={{ label: "Criar fatura", onClick: () => router.push("/onboarding") }}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="pb-20 md:pb-6">

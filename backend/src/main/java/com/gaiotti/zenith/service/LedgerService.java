@@ -160,6 +160,25 @@ public class LedgerService {
         return buildInvitationResponse(invitation);
     }
 
+    @Transactional
+    public InvitationResponse cancelInvitation(String token, User authenticatedUser) {
+        Invitation invitation = invitationRepository.findByToken(token)
+                .orElseThrow(() -> new ResourceNotFoundException("Invitation not found"));
+
+        if (invitation.getStatus() != Invitation.InvitationStatus.PENDING) {
+            throw new IllegalArgumentException("Invitation is not pending");
+        }
+
+        if (!invitation.getInvitedBy().getId().equals(authenticatedUser.getId())) {
+            throw new AccessDeniedException("Only the inviter can cancel this invitation");
+        }
+
+        invitation.setStatus(Invitation.InvitationStatus.CANCELED);
+        invitationRepository.save(invitation);
+
+        return buildInvitationResponse(invitation);
+    }
+
     @Transactional(readOnly = true)
     public LedgerResponse getLedgerDetails(Long ledgerId, User authenticatedUser) {
         Ledger ledger = ledgerRepository.findById(ledgerId)
@@ -187,22 +206,33 @@ public class LedgerService {
                         .email(m.getUser().getEmail())
                         .displayName(m.getUser().getDisplayName())
                         .joinedAt(m.getJoinedAt())
-                        .build())
+                .build())
                 .collect(Collectors.toList());
+
+        List<InvitationResponse> pendingInvitations = invitationRepository
+                .findByLedgerIdAndStatusOrderByCreatedAtDesc(ledger.getId(), Invitation.InvitationStatus.PENDING)
+                .stream()
+                .map(this::buildInvitationResponse)
+                .toList();
 
         return LedgerResponse.builder()
                 .id(ledger.getId())
                 .name(ledger.getName())
                 .createdAt(ledger.getCreatedAt())
                 .members(memberResponses)
+                .pendingInvitations(pendingInvitations)
                 .build();
     }
 
     private InvitationResponse buildInvitationResponse(Invitation invitation) {
+        User invitedUser = userRepository.findByEmail(invitation.getInvitedEmail()).orElse(null);
+
         return InvitationResponse.builder()
                 .id(invitation.getId())
                 .token(invitation.getToken())
                 .invitedEmail(invitation.getInvitedEmail())
+                .invitedUserDisplayName(invitedUser != null ? invitedUser.getDisplayName() : null)
+                .invitedByDisplayName(invitation.getInvitedBy() != null ? invitation.getInvitedBy().getDisplayName() : null)
                 .status(invitation.getStatus().name())
                 .expiresAt(invitation.getExpiresAt())
                 .build();

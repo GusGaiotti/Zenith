@@ -34,12 +34,15 @@ export interface LedgerResponse {
   name: string;
   createdAt: string;
   members: MemberResponse[];
+  pendingInvitations: InvitationResponse[];
 }
 
 export interface InvitationResponse {
   id: number;
   token: string;
   invitedEmail: string;
+  invitedUserDisplayName?: string | null;
+  invitedByDisplayName?: string | null;
   status: string;
   expiresAt: string;
 }

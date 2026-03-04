@@ -9,3 +9,5 @@ export const inviteToLedger = (id: number, body: InviteUserRequest) =>
 export const acceptInvitation = (token: string) => api.patch<LedgerResponse>(`/ledgers/invitations/${token}/accept`);
 export const declineInvitation = (token: string) =>
   api.patch<InvitationResponse>(`/ledgers/invitations/${token}/decline`);
+export const cancelInvitation = (token: string) =>
+  api.patch<InvitationResponse>(`/ledgers/invitations/${token}/cancel`);

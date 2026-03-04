@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { CategoryBreakdownChart } from "@/components/dashboard/CategoryBreakdownChart";
 import { CoupleSplitPanel } from "@/components/dashboard/CoupleSplitPanel";
 import { ExpenseTrendChart } from "@/components/dashboard/ExpenseTrendChart";
@@ -20,6 +21,7 @@ import { useAuthStore } from "@/lib/store/auth.store";
 const filterClassName = "elevated h-12 min-w-[176px] px-4 text-sm text-[var(--text-primary)]";
 
 export default function DashboardPage() {
+  const router = useRouter();
   const [yearMonth, setYearMonth] = useState(() => {
     const now = new Date();
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
@@ -58,10 +60,19 @@ export default function DashboardPage() {
 
   if (!activeLedgerId) {
     return (
-      <EmptyState
-        title="Fatura nao configurada"
-        description="Crie ou selecione uma fatura em /onboarding para carregar o dashboard."
-      />
+      <div className="space-y-5">
+        <div className="flex justify-end">
+          <div className="flex flex-col gap-2">
+            <span className="block text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">Alertas</span>
+            <NotificationBell />
+          </div>
+        </div>
+        <EmptyState
+          title="Fatura nao configurada"
+          description="Voce ainda nao criou uma fatura. Continue navegando ou crie uma em /onboarding para liberar o dashboard completo."
+          action={{ label: "Criar fatura", onClick: () => router.push("/onboarding") }}
+        />
+      </div>
     );
   }
 

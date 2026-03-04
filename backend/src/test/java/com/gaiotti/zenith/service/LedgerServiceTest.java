@@ -99,6 +99,8 @@ class LedgerServiceTest {
         when(ledgerRepository.save(any(Ledger.class))).thenReturn(testLedger);
         when(ledgerMemberRepository.save(any(LedgerMember.class))).thenReturn(testMember);
         when(ledgerMemberRepository.findByLedgerId(testLedger.getId())).thenReturn(List.of(testMember));
+        when(invitationRepository.findByLedgerIdAndStatusOrderByCreatedAtDesc(testLedger.getId(), Invitation.InvitationStatus.PENDING))
+                .thenReturn(List.of());
 
         LedgerResponse response = ledgerService.createLedger("Test Ledger", testUser);
 
@@ -120,6 +122,7 @@ class LedgerServiceTest {
                 testLedger.getId(), targetUser.getEmail(), Invitation.InvitationStatus.PENDING)).thenReturn(false);
         when(ledgerRepository.findById(testLedger.getId())).thenReturn(Optional.of(testLedger));
         when(invitationRepository.save(any(Invitation.class))).thenReturn(testInvitation);
+        when(userRepository.findByEmail(targetUser.getEmail())).thenReturn(Optional.of(targetUser));
 
         InvitationResponse response = ledgerService.inviteUser(testLedger.getId(), testUser, targetUser.getEmail());
 
@@ -168,6 +171,8 @@ class LedgerServiceTest {
         when(ledgerMemberRepository.save(any(LedgerMember.class))).thenReturn(testMember);
         when(invitationRepository.save(any(Invitation.class))).thenReturn(testInvitation);
         when(ledgerMemberRepository.findByLedgerId(testLedger.getId())).thenReturn(List.of(testMember));
+        when(invitationRepository.findByLedgerIdAndStatusOrderByCreatedAtDesc(testLedger.getId(), Invitation.InvitationStatus.PENDING))
+                .thenReturn(List.of());
 
         LedgerResponse response = ledgerService.acceptInvitation(testInvitation.getToken(), targetUser);
 
@@ -274,6 +279,44 @@ class LedgerServiceTest {
     }
 
     @Test
+    void cancelInvitation_Success() {
+        when(invitationRepository.findByToken(testInvitation.getToken())).thenReturn(Optional.of(testInvitation));
+        when(invitationRepository.save(any(Invitation.class))).thenAnswer(i -> i.getArgument(0));
+        when(userRepository.findByEmail(targetUser.getEmail())).thenReturn(Optional.of(targetUser));
+
+        InvitationResponse response = ledgerService.cancelInvitation(testInvitation.getToken(), testUser);
+
+        assertNotNull(response);
+        assertEquals(Invitation.InvitationStatus.CANCELED.name(), response.getStatus());
+        verify(invitationRepository).save(any(Invitation.class));
+    }
+
+    @Test
+    void cancelInvitation_WrongUser_ThrowsAccessDeniedException() {
+        when(invitationRepository.findByToken(testInvitation.getToken())).thenReturn(Optional.of(testInvitation));
+
+        assertThrows(AccessDeniedException.class, () ->
+                ledgerService.cancelInvitation(testInvitation.getToken(), targetUser));
+    }
+
+    @Test
+    void cancelInvitation_NotPending_ThrowsIllegalArgumentException() {
+        testInvitation.setStatus(Invitation.InvitationStatus.ACCEPTED);
+        when(invitationRepository.findByToken(testInvitation.getToken())).thenReturn(Optional.of(testInvitation));
+
+        assertThrows(IllegalArgumentException.class, () ->
+                ledgerService.cancelInvitation(testInvitation.getToken(), testUser));
+    }
+
+    @Test
+    void cancelInvitation_InvitationNotFound_ThrowsResourceNotFoundException() {
+        when(invitationRepository.findByToken("nonexistent")).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () ->
+                ledgerService.cancelInvitation("nonexistent", testUser));
+    }
+
+    @Test
     void getLedgerDetails_Success() {
         LedgerMember secondMember = LedgerMember.builder()
                 .id(2L)
@@ -285,6 +328,9 @@ class LedgerServiceTest {
         when(ledgerRepository.findById(testLedger.getId())).thenReturn(Optional.of(testLedger));
         when(ledgerMemberRepository.existsByLedgerIdAndUserId(testLedger.getId(), testUser.getId())).thenReturn(true);
         when(ledgerMemberRepository.findByLedgerId(testLedger.getId())).thenReturn(List.of(testMember, secondMember));
+        when(invitationRepository.findByLedgerIdAndStatusOrderByCreatedAtDesc(testLedger.getId(), Invitation.InvitationStatus.PENDING))
+                .thenReturn(List.of(testInvitation));
+        when(userRepository.findByEmail(targetUser.getEmail())).thenReturn(Optional.of(targetUser));
 
         LedgerResponse response = ledgerService.getLedgerDetails(testLedger.getId(), testUser);
 
@@ -292,6 +338,7 @@ class LedgerServiceTest {
         assertEquals(testLedger.getId(), response.getId());
         assertEquals(testLedger.getName(), response.getName());
         assertEquals(2, response.getMembers().size());
+        assertEquals(1, response.getPendingInvitations().size());
     }
 
     @Test
@@ -343,6 +390,8 @@ class LedgerServiceTest {
     void getCurrentUserLedger_Success() {
         when(ledgerMemberRepository.findFirstByUserId(testUser.getId())).thenReturn(Optional.of(testMember));
         when(ledgerMemberRepository.findByLedgerId(testLedger.getId())).thenReturn(List.of(testMember));
+        when(invitationRepository.findByLedgerIdAndStatusOrderByCreatedAtDesc(testLedger.getId(), Invitation.InvitationStatus.PENDING))
+                .thenReturn(List.of());
 
         Optional<LedgerResponse> response = ledgerService.getCurrentUserLedger(testUser);
 
