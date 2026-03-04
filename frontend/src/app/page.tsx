@@ -9,7 +9,6 @@ export default function Home() {
   const hydrated = useAuthStore((state) => state.hydrated);
   const authResolved = useAuthStore((state) => state.authResolved);
   const accessToken = useAuthStore((state) => state.accessToken);
-  const activeLedgerId = useAuthStore((state) => state.activeLedgerId);
 
   useEffect(() => {
     if (!hydrated || !authResolved) return;
@@ -19,8 +18,8 @@ export default function Home() {
       return;
     }
 
-    router.replace(activeLedgerId ? "/dashboard" : "/onboarding");
-  }, [accessToken, activeLedgerId, authResolved, hydrated, router]);
+    router.replace("/dashboard");
+  }, [accessToken, authResolved, hydrated, router]);
 
   return (
     <main className="flex min-h-screen items-center justify-center">

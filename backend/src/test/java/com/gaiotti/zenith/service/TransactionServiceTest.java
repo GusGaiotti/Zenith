@@ -52,6 +52,9 @@ class TransactionServiceTest {
     @Mock
     private CategoryRepository categoryRepository;
 
+    @Mock
+    private NotificationService notificationService;
+
     @InjectMocks
     private TransactionService transactionService;
 
@@ -109,6 +112,7 @@ class TransactionServiceTest {
 
         assertNotNull(result);
         verify(transactionRepository).save(any(Transaction.class));
+        verify(notificationService).createTransactionNotifications(any(Transaction.class), eq(testUser));
     }
 
     @Test

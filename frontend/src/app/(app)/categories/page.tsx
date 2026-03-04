@@ -2,12 +2,14 @@
 
 import { AxiosError } from "axios";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { CategoryFormModal } from "@/components/categories/CategoryFormModal";
 import { CategoryGrid } from "@/components/categories/CategoryGrid";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { LoadingSkeleton } from "@/components/shared/LoadingSkeleton";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { useCategories, useCreateCategory, useDeleteCategory, useUpdateCategory } from "@/hooks/useCategories";
+import { useAuthStore } from "@/lib/store/auth.store";
 import type { CategoryResponse } from "@/types/api";
 
 function extractErrorMessage(error: unknown, fallback: string) {
@@ -23,11 +25,13 @@ function extractErrorMessage(error: unknown, fallback: string) {
 }
 
 export default function CategoriesPage() {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState<CategoryResponse | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [deleteErrorMessage, setDeleteErrorMessage] = useState<string | null>(null);
   const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
+  const activeLedgerId = useAuthStore((state) => state.activeLedgerId);
   const categories = useCategories();
   const createCategory = useCreateCategory();
   const updateCategory = useUpdateCategory();
@@ -35,6 +39,22 @@ export default function CategoriesPage() {
 
   const isEditing = Boolean(editingCategory);
   const isSubmitting = createCategory.isPending || updateCategory.isPending;
+
+  if (!activeLedgerId) {
+    return (
+      <div className="pb-20 md:pb-6">
+        <PageHeader
+          title="Categorias"
+          subtitle="Organize gastos com categorias por cor."
+        />
+        <EmptyState
+          title="Nenhuma fatura ativa"
+          description="As categorias ficam disponiveis assim que voce criar uma fatura ou aceitar um convite."
+          action={{ label: "Criar fatura", onClick: () => router.push("/onboarding") }}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="pb-20 md:pb-6">

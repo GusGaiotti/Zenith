@@ -34,14 +34,35 @@ export interface LedgerResponse {
   name: string;
   createdAt: string;
   members: MemberResponse[];
+  pendingInvitations: InvitationResponse[];
 }
 
 export interface InvitationResponse {
   id: number;
   token: string;
   invitedEmail: string;
+  invitedUserDisplayName?: string | null;
+  invitedByDisplayName?: string | null;
   status: string;
   expiresAt: string;
+}
+
+export interface NotificationResponse {
+  id: number;
+  type: "TRANSACTION_CREATED" | "INVITATION_RECEIVED";
+  title: string;
+  body: string;
+  actorDisplayName: string | null;
+  referenceType: "TRANSACTION" | "INVITATION" | null;
+  referenceId: number | null;
+  invitationToken: string | null;
+  createdAt: string;
+  seenAt: string | null;
+}
+
+export interface NotificationListResponse {
+  unreadCount: number;
+  items: NotificationResponse[];
 }
 
 export interface CategoryResponse {
@@ -202,4 +223,8 @@ export interface TransactionParams {
   type?: TransactionType;
   page?: number;
   size?: number;
+}
+
+export interface MarkNotificationsSeenRequest {
+  ids: number[];
 }

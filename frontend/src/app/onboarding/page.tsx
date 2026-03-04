@@ -79,6 +79,13 @@ export default function OnboardingPage() {
             {createLedgerMutation.isError ? (
               <p className="text-sm text-red-300">Nao foi possivel criar a fatura.</p>
             ) : null}
+            <button
+              type="button"
+              className="focusable rounded-md border px-4 py-2 text-sm"
+              onClick={() => router.push("/dashboard")}
+            >
+              Pular por agora
+            </button>
           </form>
         ) : (
           <div className="space-y-4">
