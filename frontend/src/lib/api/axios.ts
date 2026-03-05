@@ -51,6 +51,7 @@ const processQueue = (error: unknown, token: string | null) => {
 api.interceptors.request.use((config) => {
   const token = useAuthStore.getState().accessToken;
   if (token) {
+    config.headers = config.headers ?? {};
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
@@ -77,6 +78,7 @@ api.interceptors.response.use(
       return new Promise((resolve, reject) => {
         failedQueue.push({
           resolve: (token) => {
+            originalRequest.headers = originalRequest.headers ?? {};
             originalRequest.headers.Authorization = `Bearer ${token}`;
             resolve(api(originalRequest));
           },
@@ -101,6 +103,7 @@ api.interceptors.response.use(
       });
 
       processQueue(null, next.accessToken);
+      originalRequest.headers = originalRequest.headers ?? {};
       originalRequest.headers.Authorization = `Bearer ${next.accessToken}`;
       return api(originalRequest);
     } catch (refreshError) {

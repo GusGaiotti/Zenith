@@ -1,6 +1,7 @@
 package com.gaiotti.zenith.controller;
 
 import com.gaiotti.zenith.config.SecurityConfig;
+import com.gaiotti.zenith.config.AllowedOriginsProvider;
 import com.gaiotti.zenith.model.User;
 import com.gaiotti.zenith.security.AuthUtils;
 import com.gaiotti.zenith.security.AuthCookieService;
@@ -41,6 +42,9 @@ class UserControllerTest {
 
     @MockBean
     private AuthCookieService authCookieService;
+
+    @MockBean
+    private AllowedOriginsProvider allowedOriginsProvider;
 
     @Test
     void logout_WithoutToken_Returns401() throws Exception {

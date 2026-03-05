@@ -312,4 +312,40 @@ class TransactionServiceTest {
             assertNull(sheet.getRow(1));
         }
     }
+
+    @Test
+    void exportTransactionsXlsx_InvalidDateRange_ThrowsIllegalArgumentException() {
+        when(ledgerRepository.existsById(1L)).thenReturn(true);
+        when(ledgerMemberRepository.existsByLedgerIdAndUserId(1L, 1L)).thenReturn(true);
+
+        assertThrows(IllegalArgumentException.class, () ->
+                transactionService.exportTransactionsXlsx(
+                        1L,
+                        testUser,
+                        LocalDate.of(2026, 3, 10),
+                        LocalDate.of(2026, 3, 1),
+                        null
+                ));
+    }
+
+    @Test
+    void exportTransactionsXlsx_CreatedByNotMember_ThrowsAccessDeniedException() {
+        when(ledgerRepository.existsById(1L)).thenReturn(true);
+        when(ledgerMemberRepository.existsByLedgerIdAndUserId(1L, 1L)).thenReturn(true);
+        when(ledgerMemberRepository.existsByLedgerIdAndUserId(1L, 2L)).thenReturn(false);
+
+        assertThrows(AccessDeniedException.class, () ->
+                transactionService.exportTransactionsXlsx(1L, testUser, null, null, 2L));
+    }
+
+    @Test
+    void exportTransactionsXlsx_ExceedsRowLimit_ThrowsIllegalArgumentException() {
+        Page<Transaction> page = new PageImpl<>(List.of(testTransaction), PageRequest.of(0, 10_000), 10_001);
+        when(ledgerRepository.existsById(1L)).thenReturn(true);
+        when(ledgerMemberRepository.existsByLedgerIdAndUserId(1L, 1L)).thenReturn(true);
+        when(transactionRepository.findAll(any(Specification.class), any(PageRequest.class))).thenReturn(page);
+
+        assertThrows(IllegalArgumentException.class, () ->
+                transactionService.exportTransactionsXlsx(1L, testUser, null, null, null));
+    }
 }

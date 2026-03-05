@@ -1,6 +1,7 @@
 package com.gaiotti.zenith.controller;
 
 import com.gaiotti.zenith.config.SecurityConfig;
+import com.gaiotti.zenith.config.AllowedOriginsProvider;
 import com.gaiotti.zenith.dto.request.CreateLedgerRequest;
 import com.gaiotti.zenith.dto.request.InviteUserRequest;
 import com.gaiotti.zenith.dto.request.UpdateLedgerRequest;
@@ -59,6 +60,9 @@ class LedgerControllerTest {
 
     @MockBean
     private AuthUtils authUtils;
+
+    @MockBean
+    private AllowedOriginsProvider allowedOriginsProvider;
 
     private User createTestUser() {
         return User.builder()

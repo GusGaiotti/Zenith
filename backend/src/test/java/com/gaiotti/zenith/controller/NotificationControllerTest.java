@@ -1,6 +1,7 @@
 package com.gaiotti.zenith.controller;
 
 import com.gaiotti.zenith.config.SecurityConfig;
+import com.gaiotti.zenith.config.AllowedOriginsProvider;
 import com.gaiotti.zenith.dto.response.NotificationListResponse;
 import com.gaiotti.zenith.dto.response.NotificationResponse;
 import com.gaiotti.zenith.model.User;
@@ -47,6 +48,9 @@ class NotificationControllerTest {
 
     @MockBean
     private NotificationService notificationService;
+
+    @MockBean
+    private AllowedOriginsProvider allowedOriginsProvider;
 
     @Test
     @WithMockUser

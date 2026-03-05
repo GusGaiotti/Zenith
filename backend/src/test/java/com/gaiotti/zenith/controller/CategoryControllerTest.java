@@ -1,6 +1,7 @@
 package com.gaiotti.zenith.controller;
 
 import com.gaiotti.zenith.config.SecurityConfig;
+import com.gaiotti.zenith.config.AllowedOriginsProvider;
 import com.gaiotti.zenith.dto.request.CreateCategoryRequest;
 import com.gaiotti.zenith.dto.response.CategoryResponse;
 import com.gaiotti.zenith.model.User;
@@ -46,6 +47,9 @@ class CategoryControllerTest {
 
     @MockBean
     private AuthUtils authUtils;
+
+    @MockBean
+    private AllowedOriginsProvider allowedOriginsProvider;
 
     @MockBean
     private CategoryService categoryService;

@@ -1,6 +1,7 @@
 package com.gaiotti.zenith.controller;
 
 import com.gaiotti.zenith.config.SecurityConfig;
+import com.gaiotti.zenith.config.AllowedOriginsProvider;
 import com.gaiotti.zenith.dto.request.CreateTransactionRequest;
 import com.gaiotti.zenith.dto.request.UpdateTransactionRequest;
 import com.gaiotti.zenith.dto.response.PageResponse;
@@ -57,6 +58,9 @@ class TransactionControllerTest {
 
     @MockBean
     private TransactionService transactionService;
+
+    @MockBean
+    private AllowedOriginsProvider allowedOriginsProvider;
 
     @Test
     void listTransactions_Unauthenticated_Returns401() throws Exception {
