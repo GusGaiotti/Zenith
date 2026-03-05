@@ -2,6 +2,7 @@ package com.gaiotti.zenith.controller;
 
 import com.gaiotti.zenith.dto.request.CreateLedgerRequest;
 import com.gaiotti.zenith.dto.request.InviteUserRequest;
+import com.gaiotti.zenith.dto.request.UpdateLedgerRequest;
 import com.gaiotti.zenith.dto.response.InvitationResponse;
 import com.gaiotti.zenith.dto.response.LedgerResponse;
 import com.gaiotti.zenith.model.User;
@@ -34,6 +35,15 @@ public class LedgerController {
     public ResponseEntity<LedgerResponse> getLedgerDetails(@PathVariable Long id) {
         User authenticatedUser = authUtils.getAuthenticatedUser();
         LedgerResponse response = ledgerService.getLedgerDetails(id, authenticatedUser);
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<LedgerResponse> updateLedger(
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateLedgerRequest request) {
+        User authenticatedUser = authUtils.getAuthenticatedUser();
+        LedgerResponse response = ledgerService.updateLedgerName(id, request.getName(), authenticatedUser);
         return ResponseEntity.ok(response);
     }
 

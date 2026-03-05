@@ -3,9 +3,11 @@ package com.gaiotti.zenith.controller;
 import com.gaiotti.zenith.config.SecurityConfig;
 import com.gaiotti.zenith.dto.request.CreateLedgerRequest;
 import com.gaiotti.zenith.dto.request.InviteUserRequest;
+import com.gaiotti.zenith.dto.request.UpdateLedgerRequest;
 import com.gaiotti.zenith.dto.response.InvitationResponse;
 import com.gaiotti.zenith.dto.response.LedgerResponse;
 import com.gaiotti.zenith.dto.response.MemberResponse;
+import com.gaiotti.zenith.exception.AccessDeniedException;
 import com.gaiotti.zenith.model.User;
 import com.gaiotti.zenith.repository.RefreshTokenRepository;
 import com.gaiotti.zenith.security.AuthUtils;
@@ -276,5 +278,66 @@ class LedgerControllerTest {
                         .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("CANCELED"));
+    }
+
+    @Test
+    @WithMockUser
+    void updateLedger_Success() throws Exception {
+        User testUser = createTestUser();
+        UpdateLedgerRequest request = new UpdateLedgerRequest();
+        request.setName("Novo Nome");
+
+        LedgerResponse response = LedgerResponse.builder()
+                .id(1L)
+                .name("Novo Nome")
+                .createdAt(LocalDateTime.now())
+                .members(List.of(MemberResponse.builder()
+                        .userId(1L)
+                        .email("test@example.com")
+                        .displayName("Test User")
+                        .joinedAt(LocalDateTime.now())
+                        .build()))
+                .build();
+
+        when(authUtils.getAuthenticatedUser()).thenReturn(testUser);
+        when(ledgerService.updateLedgerName(eq(1L), eq("Novo Nome"), any(User.class))).thenReturn(response);
+
+        mockMvc.perform(patch("/api/v1/ledgers/1")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Novo Nome"));
+    }
+
+    @Test
+    @WithMockUser
+    void updateLedger_ValidationError_Returns400() throws Exception {
+        UpdateLedgerRequest request = new UpdateLedgerRequest();
+        request.setName(" ");
+
+        mockMvc.perform(patch("/api/v1/ledgers/1")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser
+    void updateLedger_NotMember_Returns403() throws Exception {
+        User testUser = createTestUser();
+        UpdateLedgerRequest request = new UpdateLedgerRequest();
+        request.setName("Novo Nome");
+
+        when(authUtils.getAuthenticatedUser()).thenReturn(testUser);
+        when(ledgerService.updateLedgerName(eq(1L), eq("Novo Nome"), any(User.class)))
+                .thenThrow(new AccessDeniedException("You are not a member of this ledger"));
+
+        mockMvc.perform(patch("/api/v1/ledgers/1")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isForbidden());
     }
 }

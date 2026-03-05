@@ -20,12 +20,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -251,5 +253,60 @@ class TransactionServiceTest {
 
         assertNotNull(result);
         assertEquals(1, result.getContent().size());
+    }
+
+    @Test
+    void exportTransactionsXlsx_MapsColumnsAndRows() throws Exception {
+        Page<Transaction> page = new PageImpl<>(List.of(testTransaction), PageRequest.of(0, 10_000), 1);
+        when(ledgerRepository.existsById(1L)).thenReturn(true);
+        when(ledgerMemberRepository.existsByLedgerIdAndUserId(1L, 1L)).thenReturn(true);
+        when(transactionRepository.findAll(any(Specification.class), any(PageRequest.class))).thenReturn(page);
+
+        byte[] bytes = transactionService.exportTransactionsXlsx(1L, testUser, LocalDate.now().minusDays(1), LocalDate.now(), null);
+
+        assertTrue(bytes.length > 0);
+        try (var workbook = WorkbookFactory.create(new ByteArrayInputStream(bytes))) {
+            var sheet = workbook.getSheetAt(0);
+            assertEquals("Date", sheet.getRow(0).getCell(0).getStringCellValue());
+            assertEquals("Amount", sheet.getRow(0).getCell(1).getStringCellValue());
+            assertEquals(String.valueOf(testTransaction.getDate()), sheet.getRow(1).getCell(0).getStringCellValue());
+            assertEquals("100", sheet.getRow(1).getCell(1).getStringCellValue());
+            assertEquals("Food", sheet.getRow(1).getCell(2).getStringCellValue());
+        }
+    }
+
+    @Test
+    void exportTransactionsXlsx_SanitizesFormulaInjection() throws Exception {
+        testTransaction.setDescription("=SUM(1,1)");
+        testTransaction.getCreatedBy().setDisplayName("+User");
+
+        Page<Transaction> page = new PageImpl<>(List.of(testTransaction), PageRequest.of(0, 10_000), 1);
+        when(ledgerRepository.existsById(1L)).thenReturn(true);
+        when(ledgerMemberRepository.existsByLedgerIdAndUserId(1L, 1L)).thenReturn(true);
+        when(transactionRepository.findAll(any(Specification.class), any(PageRequest.class))).thenReturn(page);
+
+        byte[] bytes = transactionService.exportTransactionsXlsx(1L, testUser, null, null, null);
+
+        try (var workbook = WorkbookFactory.create(new ByteArrayInputStream(bytes))) {
+            var row = workbook.getSheetAt(0).getRow(1);
+            assertEquals("'+User", row.getCell(3).getStringCellValue());
+            assertEquals("'=SUM(1,1)", row.getCell(4).getStringCellValue());
+        }
+    }
+
+    @Test
+    void exportTransactionsXlsx_EmptyDataset_StillProducesValidFile() throws Exception {
+        Page<Transaction> page = new PageImpl<>(List.of(), PageRequest.of(0, 10_000), 0);
+        when(ledgerRepository.existsById(1L)).thenReturn(true);
+        when(ledgerMemberRepository.existsByLedgerIdAndUserId(1L, 1L)).thenReturn(true);
+        when(transactionRepository.findAll(any(Specification.class), any(PageRequest.class))).thenReturn(page);
+
+        byte[] bytes = transactionService.exportTransactionsXlsx(1L, testUser, null, null, null);
+
+        try (var workbook = WorkbookFactory.create(new ByteArrayInputStream(bytes))) {
+            var sheet = workbook.getSheetAt(0);
+            assertNotNull(sheet.getRow(0));
+            assertNull(sheet.getRow(1));
+        }
     }
 }

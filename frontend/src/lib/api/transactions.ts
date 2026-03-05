@@ -18,3 +18,15 @@ export const updateTransaction = (ledgerId: number, id: number, body: UpdateTran
 
 export const deleteTransaction = (ledgerId: number, id: number) =>
   api.delete<void>(`/ledgers/${ledgerId}/transactions/${id}`);
+
+export const exportTransactionsExcel = (
+  ledgerId: number,
+  params: { startDate?: string; endDate?: string; createdBy?: number },
+) =>
+  api.get<Blob>(`/ledgers/${ledgerId}/transactions/export.xlsx`, {
+    params,
+    responseType: "blob",
+    headers: {
+      Accept: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    },
+  });

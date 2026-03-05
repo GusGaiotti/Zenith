@@ -1,7 +1,9 @@
 "use client";
 
 import { Suspense, useMemo, useState } from "react";
+import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
 import { CategoryBreakdownChart } from "@/components/dashboard/CategoryBreakdownChart";
 import { CoupleSplitPanel } from "@/components/dashboard/CoupleSplitPanel";
 import { ExpenseTrendChart } from "@/components/dashboard/ExpenseTrendChart";
@@ -15,10 +17,17 @@ import { MonthPicker } from "@/components/shared/MonthPicker";
 import { SelectMenu } from "@/components/shared/SelectMenu";
 import { useDashboardCategoriesBreakdown, useDashboardCoupleSplit, useDashboardOverview, useDashboardPulse, useDashboardTrends } from "@/hooks/useDashboard";
 import { useLedger } from "@/hooks/useLedger";
+import { exportTransactionsExcel } from "@/lib/api/transactions";
 import { useTransactions } from "@/hooks/useTransactions";
 import { useAuthStore } from "@/lib/store/auth.store";
 
-const filterClassName = "elevated h-12 min-w-[176px] px-4 text-sm text-[var(--text-primary)]";
+const filterClassName = "elevated h-12 w-full px-4 text-sm text-[var(--text-primary)] sm:min-w-[176px] sm:w-auto";
+
+function parseFilename(header?: string) {
+  if (!header) return null;
+  const match = /filename=\"?([^\";]+)\"?/i.exec(header);
+  return match?.[1] ?? null;
+}
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -27,6 +36,7 @@ export default function DashboardPage() {
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
   });
   const [memberFilter, setMemberFilter] = useState<string>("all");
+  const [exportError, setExportError] = useState<string | null>(null);
   const createdByUserId = memberFilter === "all" ? undefined : Number(memberFilter);
 
   const activeLedgerId = useAuthStore((state) => state.activeLedgerId);
@@ -45,6 +55,33 @@ export default function DashboardPage() {
   }, [yearMonth]);
 
   const transactions = useTransactions({ size: 5, startDate, endDate, createdBy: createdByUserId });
+  const exportMutation = useMutation({
+    mutationFn: () =>
+      exportTransactionsExcel(activeLedgerId as number, {
+        startDate,
+        endDate,
+        createdBy: createdByUserId,
+      }),
+    onSuccess: (response) => {
+      setExportError(null);
+      const filename = parseFilename(response.headers["content-disposition"]) ?? `zenith-${yearMonth}.xlsx`;
+      const blobUrl = URL.createObjectURL(response.data);
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(blobUrl);
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        setExportError((error.response?.data as { message?: string } | undefined)?.message ?? "Falha ao exportar arquivo.");
+        return;
+      }
+      setExportError("Falha ao exportar arquivo.");
+    },
+  });
 
   const recent = transactions.data?.pages.flatMap((page) => page.content) ?? [];
   const loading = overview.isLoading || trends.isLoading || split.isLoading || categories.isLoading || pulse.isLoading;
@@ -107,15 +144,26 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-5">
-      <div className="flex flex-wrap items-end justify-between gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between">
         <div>
           <p className="font-display text-3xl italic text-[var(--text-primary)]">Dashboard</p>
           <p className="mt-1 text-sm text-[var(--text-secondary)]">Resumo mensal da fatura compartilhada.</p>
         </div>
-        <div className="flex flex-wrap items-end gap-3">
+        <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:flex-wrap sm:items-end">
           <div className="flex flex-col gap-2">
             <span className="block text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">Alertas</span>
             <NotificationBell />
+          </div>
+          <div className="flex flex-col gap-2">
+            <span className="block text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">Exportar</span>
+            <button
+              type="button"
+              disabled={!activeLedgerId || exportMutation.isPending}
+              className="focusable elevated h-12 w-full rounded-xl px-4 text-sm text-[var(--text-primary)] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+              onClick={() => exportMutation.mutate()}
+            >
+              {exportMutation.isPending ? "Exportando..." : "Exportar Excel"}
+            </button>
           </div>
           <MonthPicker
             label="Mes"
@@ -134,6 +182,10 @@ export default function DashboardPage() {
           />
         </div>
       </div>
+
+      {exportError ? (
+        <div className="rounded-md border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">{exportError}</div>
+      ) : null}
 
       {hasError ? (
         <div className="rounded-md border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">

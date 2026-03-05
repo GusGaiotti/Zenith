@@ -1,8 +1,9 @@
 ﻿import api from "@/lib/api/axios";
-import type { CreateLedgerRequest, InvitationResponse, InviteUserRequest, LedgerResponse } from "@/types/api";
+import type { CreateLedgerRequest, InvitationResponse, InviteUserRequest, LedgerResponse, UpdateLedgerRequest } from "@/types/api";
 
 export const createLedger = (body: CreateLedgerRequest) => api.post<LedgerResponse>("/ledgers", body);
 export const getLedger = (id: number) => api.get<LedgerResponse>(`/ledgers/${id}`);
+export const updateLedger = (id: number, body: UpdateLedgerRequest) => api.patch<LedgerResponse>(`/ledgers/${id}`, body);
 export const getMyLedger = () => api.get<LedgerResponse>("/ledgers/me");
 export const inviteToLedger = (id: number, body: InviteUserRequest) =>
   api.post<InvitationResponse>(`/ledgers/${id}/invitations`, body);
