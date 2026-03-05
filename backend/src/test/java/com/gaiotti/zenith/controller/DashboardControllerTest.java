@@ -1,6 +1,7 @@
 package com.gaiotti.zenith.controller;
 
 import com.gaiotti.zenith.config.SecurityConfig;
+import com.gaiotti.zenith.config.AllowedOriginsProvider;
 import com.gaiotti.zenith.dto.response.*;
 import com.gaiotti.zenith.exception.AccessDeniedException;
 import com.gaiotti.zenith.model.User;
@@ -44,6 +45,9 @@ class DashboardControllerTest {
 
     @MockBean
     private DashboardService dashboardService;
+
+    @MockBean
+    private AllowedOriginsProvider allowedOriginsProvider;
 
     @Test
     void getDashboard_Unauthenticated_Returns401() throws Exception {
@@ -376,4 +380,3 @@ class DashboardControllerTest {
                 .andExpect(jsonPath("$.currentSpendingStreak").value(3));
     }
 }
-

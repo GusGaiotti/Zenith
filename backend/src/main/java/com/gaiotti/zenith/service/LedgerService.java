@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 public class LedgerService {
 
     private static final int MAX_MEMBERS = 2;
+    private static final int MAX_LEDGER_NAME_LENGTH = 120;
 
     private final LedgerRepository ledgerRepository;
     private final LedgerMemberRepository ledgerMemberRepository;
@@ -41,8 +42,10 @@ public class LedgerService {
             throw new IllegalArgumentException("User already belongs to a ledger");
         }
 
+        String normalizedName = normalizeLedgerName(name);
+
         Ledger ledger = Ledger.builder()
-                .name(name)
+                .name(normalizedName)
                 .build();
         ledger = ledgerRepository.save(ledger);
 
@@ -191,6 +194,22 @@ public class LedgerService {
         return buildLedgerResponse(ledger);
     }
 
+    @Transactional
+    public LedgerResponse updateLedgerName(Long ledgerId, String name, User authenticatedUser) {
+        String normalizedName = normalizeLedgerName(name);
+
+        Ledger ledger = ledgerRepository.findByIdWithLock(ledgerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Ledger not found"));
+
+        if (!ledgerMemberRepository.existsByLedgerIdAndUserId(ledgerId, authenticatedUser.getId())) {
+            throw new AccessDeniedException("You are not a member of this ledger");
+        }
+
+        ledger.setName(normalizedName);
+        ledgerRepository.save(ledger);
+        return buildLedgerResponse(ledger);
+    }
+
     @Transactional(readOnly = true)
     public Optional<LedgerResponse> getCurrentUserLedger(User authenticatedUser) {
         return ledgerMemberRepository.findFirstByUserId(authenticatedUser.getId())
@@ -236,5 +255,21 @@ public class LedgerService {
                 .status(invitation.getStatus().name())
                 .expiresAt(invitation.getExpiresAt())
                 .build();
+    }
+
+    private String normalizeLedgerName(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("Ledger name is required");
+        }
+
+        String normalized = name.trim().replaceAll("\\s+", " ");
+        if (normalized.isBlank()) {
+            throw new IllegalArgumentException("Ledger name is required");
+        }
+        if (normalized.length() > MAX_LEDGER_NAME_LENGTH) {
+            throw new IllegalArgumentException("Ledger name must have at most 120 characters");
+        }
+
+        return normalized;
     }
 }

@@ -1,6 +1,7 @@
 package com.gaiotti.zenith.controller;
 
 import com.gaiotti.zenith.config.SecurityConfig;
+import com.gaiotti.zenith.config.AllowedOriginsProvider;
 import com.gaiotti.zenith.dto.request.LoginRequest;
 import com.gaiotti.zenith.dto.request.RegisterRequest;
 import com.gaiotti.zenith.dto.response.AuthResponse;
@@ -10,6 +11,7 @@ import com.gaiotti.zenith.security.JwtService;
 import com.gaiotti.zenith.security.UserDetailsServiceImpl;
 import com.gaiotti.zenith.service.AuthService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -18,6 +20,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -49,6 +53,14 @@ class AuthControllerTest {
 
     @MockBean
     private RefreshTokenRepository refreshTokenRepository;
+
+    @MockBean
+    private AllowedOriginsProvider allowedOriginsProvider;
+
+    @BeforeEach
+    void setUpCorsDefaults() {
+        when(allowedOriginsProvider.getAllowedOrigins()).thenReturn(List.of("http://localhost:3000"));
+    }
 
     @Test
     void register_Success() throws Exception {
@@ -136,7 +148,6 @@ class AuthControllerTest {
                 .thenReturn(org.springframework.http.ResponseCookie.from("refresh_token", "newRefreshToken").path("/").build());
 
         mockMvc.perform(post("/api/v1/auth/refresh")
-                        .header(HttpHeaders.ORIGIN, "http://localhost:3000")
                         .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.accessToken").value("newAccessToken"))
@@ -149,13 +160,14 @@ class AuthControllerTest {
     void refresh_MissingCookie_ReturnsBadRequest() throws Exception {
         when(authCookieService.extractRefreshToken(any())).thenReturn(java.util.Optional.empty());
         mockMvc.perform(post("/api/v1/auth/refresh")
-                        .header(HttpHeaders.ORIGIN, "http://localhost:3000")
                         .with(csrf()))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     void refresh_InvalidOrigin_ReturnsForbidden() throws Exception {
+        when(allowedOriginsProvider.isAllowedOrigin("https://evil.example")).thenReturn(false);
+
         mockMvc.perform(post("/api/v1/auth/refresh")
                         .header(HttpHeaders.ORIGIN, "https://evil.example")
                         .with(csrf()))
@@ -169,7 +181,6 @@ class AuthControllerTest {
                 .thenReturn(org.springframework.http.ResponseCookie.from("refresh_token", "").path("/").maxAge(0).build());
 
         mockMvc.perform(post("/api/v1/auth/logout")
-                        .header(HttpHeaders.ORIGIN, "http://localhost:3000")
                         .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("Logged out successfully"))
@@ -178,10 +189,27 @@ class AuthControllerTest {
 
     @Test
     void logout_InvalidRefererOrigin_ReturnsBadRequest() throws Exception {
+        when(allowedOriginsProvider.extractOrigin("https://evil.example/attack")).thenReturn("https://evil.example");
+        when(allowedOriginsProvider.isAllowedOrigin("https://evil.example")).thenReturn(false);
+
         mockMvc.perform(post("/api/v1/auth/logout")
                         .header(HttpHeaders.REFERER, "https://evil.example/attack")
                         .with(csrf()))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void logout_ValidRefererOrigin_ReturnsOk() throws Exception {
+        when(allowedOriginsProvider.extractOrigin("http://localhost:3000/app")).thenReturn("http://localhost:3000");
+        when(allowedOriginsProvider.isAllowedOrigin("http://localhost:3000")).thenReturn(true);
+        when(authCookieService.buildClearRefreshTokenCookie())
+                .thenReturn(org.springframework.http.ResponseCookie.from("refresh_token", "").path("/").maxAge(0).build());
+
+        mockMvc.perform(post("/api/v1/auth/logout")
+                        .header(HttpHeaders.REFERER, "http://localhost:3000/app")
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("Logged out successfully"));
     }
 
     private AuthService.AuthSession buildSession(String accessToken, String refreshToken) {
