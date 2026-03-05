@@ -29,6 +29,25 @@ function parseFilename(header?: string) {
   return match?.[1] ?? null;
 }
 
+function DownloadIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="1.8"
+      viewBox="0 0 24 24"
+    >
+      <path d="M12 4v10" />
+      <path d="m8 10 4 4 4-4" />
+      <path d="M5 18h14" />
+    </svg>
+  );
+}
+
 export default function DashboardPage() {
   const router = useRouter();
   const [yearMonth, setYearMonth] = useState(() => {
@@ -158,11 +177,12 @@ export default function DashboardPage() {
             <span className="block text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">Exportar</span>
             <button
               type="button"
+              aria-label="Exportar Excel"
               disabled={!activeLedgerId || exportMutation.isPending}
-              className="focusable elevated h-12 w-full rounded-xl px-4 text-sm text-[var(--text-primary)] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+              className="focusable elevated grid h-12 w-full place-items-center rounded-xl px-4 text-sm text-[var(--text-primary)] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
               onClick={() => exportMutation.mutate()}
             >
-              {exportMutation.isPending ? "Exportando..." : "Exportar Excel"}
+              <DownloadIcon className={`h-5 w-5 ${exportMutation.isPending ? "animate-pulse" : ""}`} />
             </button>
           </div>
           <MonthPicker

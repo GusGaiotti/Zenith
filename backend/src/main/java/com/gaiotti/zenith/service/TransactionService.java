@@ -29,6 +29,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -37,6 +38,8 @@ import java.util.List;
 public class TransactionService {
 
     private static final int EXPORT_ROW_LIMIT = 10_000;
+    private static final DateTimeFormatter EXPORT_DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private static final DateTimeFormatter EXPORT_DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     private final TransactionRepository transactionRepository;
     private final LedgerRepository ledgerRepository;
@@ -251,45 +254,33 @@ public class TransactionService {
              ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             Sheet sheet = workbook.createSheet("Transactions");
             Row header = sheet.createRow(0);
-            header.createCell(0).setCellValue("Date");
-            header.createCell(1).setCellValue("Amount");
-            header.createCell(2).setCellValue("Category");
-            header.createCell(3).setCellValue("Person");
-            header.createCell(4).setCellValue("Description");
-            header.createCell(5).setCellValue("Type");
-            header.createCell(6).setCellValue("Transaction ID");
-            header.createCell(7).setCellValue("Ledger ID");
-            header.createCell(8).setCellValue("Category ID");
-            header.createCell(9).setCellValue("Created At");
+            header.createCell(0).setCellValue("Data");
+            header.createCell(1).setCellValue("Valor");
+            header.createCell(2).setCellValue("Categoria");
+            header.createCell(3).setCellValue("Pessoa");
+            header.createCell(4).setCellValue("Descricao");
+            header.createCell(5).setCellValue("Tipo");
+            header.createCell(6).setCellValue("Criado em");
 
             int rowIndex = 1;
             for (Transaction transaction : transactions) {
                 Row row = sheet.createRow(rowIndex++);
-                row.createCell(0).setCellValue(sanitizeCellValue(String.valueOf(transaction.getDate())));
+                row.createCell(0).setCellValue(sanitizeCellValue(formatDate(transaction.getDate())));
                 row.createCell(1).setCellValue(transaction.getAmount() != null ? transaction.getAmount().toPlainString() : "");
                 row.createCell(2).setCellValue(sanitizeCellValue(
-                        transaction.getCategory() != null ? transaction.getCategory().getName() : ""
+                        transaction.getCategory() != null ? transaction.getCategory().getName() : "Sem categoria"
                 ));
                 row.createCell(3).setCellValue(sanitizeCellValue(
-                        transaction.getCreatedBy() != null ? transaction.getCreatedBy().getDisplayName() : ""
+                        transaction.getCreatedBy() != null ? transaction.getCreatedBy().getDisplayName() : "-"
                 ));
-                row.createCell(4).setCellValue(sanitizeCellValue(transaction.getDescription()));
+                row.createCell(4).setCellValue(sanitizeCellValue(
+                        transaction.getDescription() != null ? transaction.getDescription() : "Sem descricao"
+                ));
                 row.createCell(5).setCellValue(sanitizeCellValue(
-                        transaction.getType() != null ? transaction.getType().name() : ""
+                        mapTypeLabel(transaction.getType())
                 ));
-                row.createCell(6).setCellValue(transaction.getId() != null ? String.valueOf(transaction.getId()) : "");
-                row.createCell(7).setCellValue(
-                        transaction.getLedger() != null && transaction.getLedger().getId() != null
-                                ? String.valueOf(transaction.getLedger().getId())
-                                : ""
-                );
-                row.createCell(8).setCellValue(
-                        transaction.getCategory() != null && transaction.getCategory().getId() != null
-                                ? String.valueOf(transaction.getCategory().getId())
-                                : ""
-                );
-                row.createCell(9).setCellValue(sanitizeCellValue(
-                        transaction.getCreatedAt() != null ? transaction.getCreatedAt().toString() : ""
+                row.createCell(6).setCellValue(sanitizeCellValue(
+                        formatDateTime(transaction.getCreatedAt())
                 ));
             }
 
@@ -313,5 +304,20 @@ public class TransactionService {
             return "'" + trimmed;
         }
         return trimmed;
+    }
+
+    private String formatDate(LocalDate value) {
+        return value != null ? value.format(EXPORT_DATE_FORMAT) : "";
+    }
+
+    private String formatDateTime(java.time.LocalDateTime value) {
+        return value != null ? value.format(EXPORT_DATE_TIME_FORMAT) : "";
+    }
+
+    private String mapTypeLabel(Transaction.TransactionType type) {
+        if (type == null) {
+            return "";
+        }
+        return type == Transaction.TransactionType.INCOME ? "Entrada" : "Saida";
     }
 }

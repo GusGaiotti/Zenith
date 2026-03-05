@@ -31,6 +31,7 @@ import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,6 +42,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class TransactionServiceTest {
+    private static final DateTimeFormatter EXPORT_DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     @Mock
     private TransactionRepository transactionRepository;
@@ -267,11 +269,12 @@ class TransactionServiceTest {
         assertTrue(bytes.length > 0);
         try (var workbook = WorkbookFactory.create(new ByteArrayInputStream(bytes))) {
             var sheet = workbook.getSheetAt(0);
-            assertEquals("Date", sheet.getRow(0).getCell(0).getStringCellValue());
-            assertEquals("Amount", sheet.getRow(0).getCell(1).getStringCellValue());
-            assertEquals(String.valueOf(testTransaction.getDate()), sheet.getRow(1).getCell(0).getStringCellValue());
+            assertEquals("Data", sheet.getRow(0).getCell(0).getStringCellValue());
+            assertEquals("Valor", sheet.getRow(0).getCell(1).getStringCellValue());
+            assertEquals(testTransaction.getDate().format(EXPORT_DATE_FORMAT), sheet.getRow(1).getCell(0).getStringCellValue());
             assertEquals("100", sheet.getRow(1).getCell(1).getStringCellValue());
             assertEquals("Food", sheet.getRow(1).getCell(2).getStringCellValue());
+            assertEquals("Saida", sheet.getRow(1).getCell(5).getStringCellValue());
         }
     }
 
