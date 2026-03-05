@@ -100,7 +100,7 @@ export function NotificationBell() {
       </button>
 
       {open ? (
-        <div className="absolute right-0 top-[calc(100%+0.5rem)] z-40 w-[340px] rounded-2xl border border-[var(--surface-edge)] bg-[rgba(24,22,19,0.98)] p-3 shadow-[0_20px_60px_rgba(0,0,0,0.42)] backdrop-blur">
+        <div className="absolute right-0 top-[calc(100%+0.5rem)] z-40 w-[min(340px,calc(100vw-1.5rem))] rounded-2xl border border-[var(--surface-edge)] bg-[rgba(24,22,19,0.98)] p-3 shadow-[0_20px_60px_rgba(0,0,0,0.42)] backdrop-blur">
           <div className="mb-3 flex items-center justify-between">
             <p className="text-sm font-medium text-[var(--text-primary)]">Notificacoes</p>
             <span className="text-[11px] uppercase tracking-[0.08em] text-[var(--text-muted)]">7 dias</span>

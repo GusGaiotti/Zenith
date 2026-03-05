@@ -127,18 +127,18 @@ export default function TransactionsPage() {
         title="Transacoes"
         subtitle="Acompanhe cada movimentacao do espaco compartilhado."
         actions={
-          <div className="flex items-center gap-2">
-            <MonthPicker value={yearMonth} onChange={setYearMonth} buttonClassName="min-w-[140px] px-3 py-2" />
+          <div className="flex w-full flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-end">
+            <MonthPicker value={yearMonth} onChange={setYearMonth} buttonClassName="w-full px-3 py-2 sm:min-w-[140px] sm:w-auto" />
             <SelectMenu
               value={memberFilter}
               options={memberOptions}
               onChange={setMemberFilter}
               placeholder="Filtrar por pessoa"
-              buttonClassName="min-w-[190px] px-3 py-2"
+              buttonClassName="w-full px-3 py-2 sm:min-w-[190px] sm:w-auto"
               align="right"
             />
             <button
-              className="focusable rounded-md bg-[var(--accent)] px-3 py-2 text-sm font-medium text-black"
+              className="focusable w-full rounded-md bg-[var(--accent)] px-3 py-2 text-sm font-medium text-black sm:w-auto"
               onClick={() => {
                 setEditingTransaction(null);
                 setErrorMessage(null);

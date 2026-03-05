@@ -13,7 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,6 +46,34 @@ public class TransactionController {
                 ledgerId, authenticatedUser, startDate, endDate, categoryId, createdBy, type, pageable
         );
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/export.xlsx")
+    public ResponseEntity<byte[]> exportTransactions(
+            @PathVariable Long ledgerId,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @RequestParam(required = false) Long createdBy
+    ) {
+        User authenticatedUser = authUtils.getAuthenticatedUser();
+        byte[] file = transactionService.exportTransactionsXlsx(
+                ledgerId,
+                authenticatedUser,
+                startDate,
+                endDate,
+                createdBy
+        );
+
+        String start = startDate != null ? startDate.toString() : "all";
+        String end = endDate != null ? endDate.toString() : "all";
+        String filename = "ledger-" + ledgerId + "-transactions-" + start + "-to-" + end + ".xlsx";
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                ))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
+                .body(file);
     }
 
     @GetMapping("/months/{yearMonth}")

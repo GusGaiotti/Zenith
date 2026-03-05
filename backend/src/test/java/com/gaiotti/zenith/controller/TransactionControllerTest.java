@@ -1,6 +1,7 @@
 package com.gaiotti.zenith.controller;
 
 import com.gaiotti.zenith.config.SecurityConfig;
+import com.gaiotti.zenith.config.AllowedOriginsProvider;
 import com.gaiotti.zenith.dto.request.CreateTransactionRequest;
 import com.gaiotti.zenith.dto.request.UpdateTransactionRequest;
 import com.gaiotti.zenith.dto.response.PageResponse;
@@ -37,6 +38,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 
 @WebMvcTest(TransactionController.class)
 @Import(SecurityConfig.class)
@@ -56,6 +58,9 @@ class TransactionControllerTest {
 
     @MockBean
     private TransactionService transactionService;
+
+    @MockBean
+    private AllowedOriginsProvider allowedOriginsProvider;
 
     @Test
     void listTransactions_Unauthenticated_Returns401() throws Exception {
@@ -310,5 +315,45 @@ class TransactionControllerTest {
 
         mockMvc.perform(get("/api/v1/ledgers/1/transactions/months/not-a-date"))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser
+    void exportTransactions_Authorized_ReturnsXlsx() throws Exception {
+        User testUser = User.builder()
+                .id(1L)
+                .email("test@example.com")
+                .displayName("Test User")
+                .build();
+
+        when(authUtils.getAuthenticatedUser()).thenReturn(testUser);
+        when(transactionService.exportTransactionsXlsx(eq(1L), any(User.class), any(), any(), any()))
+                .thenReturn(new byte[] {1, 2, 3});
+
+        mockMvc.perform(get("/api/v1/ledgers/1/transactions/export.xlsx")
+                        .param("startDate", "2026-03-01")
+                        .param("endDate", "2026-03-31"))
+                .andExpect(status().isOk())
+                .andExpect(header().string("Content-Type",
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .andExpect(header().string("Content-Disposition",
+                        "attachment; filename=\"ledger-1-transactions-2026-03-01-to-2026-03-31.xlsx\""));
+    }
+
+    @Test
+    @WithMockUser
+    void exportTransactions_NotMember_Returns403() throws Exception {
+        User testUser = User.builder()
+                .id(1L)
+                .email("test@example.com")
+                .displayName("Test User")
+                .build();
+
+        when(authUtils.getAuthenticatedUser()).thenReturn(testUser);
+        when(transactionService.exportTransactionsXlsx(eq(1L), any(User.class), any(), any(), any()))
+                .thenThrow(new AccessDeniedException("You are not a member of this ledger"));
+
+        mockMvc.perform(get("/api/v1/ledgers/1/transactions/export.xlsx"))
+                .andExpect(status().isForbidden());
     }
 }

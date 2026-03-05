@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gaiotti.zenith.security.JwtAuthFilter;
 import com.gaiotti.zenith.security.JwtAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -29,11 +28,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.net.URI;
-import java.util.Arrays;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -44,9 +40,7 @@ public class SecurityConfig {
     private final UserDetailsService userDetailsService;
     private final ObjectMapper objectMapper;
     private final Environment environment;
-
-    @Value("${cors.allowed-origins:}")
-    private String corsAllowedOrigins;
+    private final AllowedOriginsProvider allowedOriginsProvider;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -87,11 +81,16 @@ public class SecurityConfig {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        boolean isProd = environment.acceptsProfiles(Profiles.of("prod"));
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(parseAllowedOrigins(isProd));
+        configuration.setAllowedOrigins(allowedOriginsProvider.getAllowedOrigins());
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
-        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With"));
+        configuration.setAllowedHeaders(List.of(
+                "Authorization",
+                "Content-Type",
+                "X-Requested-With",
+                "X-CSRF-TOKEN",
+                "X-XSRF-TOKEN"
+        ));
         configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L);
 
@@ -116,42 +115,5 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    private List<String> parseAllowedOrigins(boolean isProd) {
-        if (corsAllowedOrigins == null || corsAllowedOrigins.isBlank()) {
-            if (isProd) {
-                throw new IllegalStateException("CORS_ALLOWED_ORIGINS must be configured when the prod profile is active");
-            }
-            return List.of("http://localhost:3000");
-        }
-
-        List<String> origins = Arrays.stream(corsAllowedOrigins.split(","))
-                .map(String::trim)
-                .filter(origin -> !origin.isEmpty())
-                .peek(origin -> {
-                    if ("*".equals(origin)) {
-                        throw new IllegalStateException("Wildcard CORS origins are not allowed when credentials are enabled");
-                    }
-
-                    URI parsed = URI.create(origin);
-                    if (parsed.getScheme() == null || parsed.getHost() == null) {
-                        throw new IllegalStateException("CORS origin must include a valid scheme and host: " + origin);
-                    }
-
-                    if (!"http".equalsIgnoreCase(parsed.getScheme()) && !"https".equalsIgnoreCase(parsed.getScheme())) {
-                        throw new IllegalStateException("CORS origin must use http or https: " + origin);
-                    }
-                })
-                .collect(Collectors.collectingAndThen(
-                        Collectors.toCollection(LinkedHashSet::new),
-                        List::copyOf
-                ));
-
-        if (origins.isEmpty() && isProd) {
-            throw new IllegalStateException("CORS_ALLOWED_ORIGINS must contain at least one origin when the prod profile is active");
-        }
-
-        return origins;
     }
 }

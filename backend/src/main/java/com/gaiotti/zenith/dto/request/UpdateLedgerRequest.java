@@ -5,7 +5,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class CreateLedgerRequest {
+public class UpdateLedgerRequest {
+
     @NotBlank(message = "Name is required")
     @Size(max = 120, message = "Name must have at most 120 characters")
     private String name;

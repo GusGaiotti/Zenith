@@ -407,4 +407,24 @@ class LedgerServiceTest {
 
         assertTrue(response.isEmpty());
     }
+
+    @Test
+    void updateLedgerName_WithTrimmedWhitespace_Success() {
+        when(ledgerRepository.findByIdWithLock(testLedger.getId())).thenReturn(Optional.of(testLedger));
+        when(ledgerMemberRepository.existsByLedgerIdAndUserId(testLedger.getId(), testUser.getId())).thenReturn(true);
+        when(ledgerRepository.save(any(Ledger.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(ledgerMemberRepository.findByLedgerId(testLedger.getId())).thenReturn(List.of(testMember));
+        when(invitationRepository.findByLedgerIdAndStatusOrderByCreatedAtDesc(testLedger.getId(), Invitation.InvitationStatus.PENDING))
+                .thenReturn(List.of());
+
+        LedgerResponse response = ledgerService.updateLedgerName(testLedger.getId(), "   Casa   Principal   ", testUser);
+
+        assertEquals("Casa Principal", response.getName());
+    }
+
+    @Test
+    void updateLedgerName_BlankName_ThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () ->
+                ledgerService.updateLedgerName(testLedger.getId(), "   ", testUser));
+    }
 }

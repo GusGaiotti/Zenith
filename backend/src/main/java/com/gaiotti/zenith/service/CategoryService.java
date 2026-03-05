@@ -30,12 +30,7 @@ public class CategoryService {
 
     @Transactional(readOnly = true)
     public List<CategoryResponse> listCategories(Long ledgerId, User authenticatedUser) {
-        Ledger ledger = ledgerRepository.findById(ledgerId)
-                .orElseThrow(() -> new ResourceNotFoundException("Ledger not found"));
-
-        if (!ledgerMemberRepository.existsByLedgerIdAndUserId(ledgerId, authenticatedUser.getId())) {
-            throw new AccessDeniedException("You are not a member of this ledger");
-        }
+        requireLedgerMembership(ledgerId, authenticatedUser);
 
         return categoryRepository.findByLedgerId(ledgerId).stream()
                 .map(this::mapToResponse)
@@ -43,12 +38,7 @@ public class CategoryService {
     }
 
     public CategoryResponse createCategory(Long ledgerId, CreateCategoryRequest request, User authenticatedUser) {
-        Ledger ledger = ledgerRepository.findById(ledgerId)
-                .orElseThrow(() -> new ResourceNotFoundException("Ledger not found"));
-
-        if (!ledgerMemberRepository.existsByLedgerIdAndUserId(ledgerId, authenticatedUser.getId())) {
-            throw new AccessDeniedException("You are not a member of this ledger");
-        }
+        Ledger ledger = requireLedgerMembership(ledgerId, authenticatedUser);
 
         Category category = Category.builder()
                 .ledger(ledger)
@@ -62,12 +52,7 @@ public class CategoryService {
     }
 
     public CategoryResponse updateCategory(Long ledgerId, Long categoryId, UpdateCategoryRequest request, User authenticatedUser) {
-        ledgerRepository.findById(ledgerId)
-                .orElseThrow(() -> new ResourceNotFoundException("Ledger not found"));
-
-        if (!ledgerMemberRepository.existsByLedgerIdAndUserId(ledgerId, authenticatedUser.getId())) {
-            throw new AccessDeniedException("You are not a member of this ledger");
-        }
+        requireLedgerMembership(ledgerId, authenticatedUser);
 
         Category category = categoryRepository.findByIdAndLedgerId(categoryId, ledgerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
@@ -80,12 +65,7 @@ public class CategoryService {
     }
 
     public void deleteCategory(Long ledgerId, Long categoryId, User authenticatedUser) {
-        ledgerRepository.findById(ledgerId)
-                .orElseThrow(() -> new ResourceNotFoundException("Ledger not found"));
-
-        if (!ledgerMemberRepository.existsByLedgerIdAndUserId(ledgerId, authenticatedUser.getId())) {
-            throw new AccessDeniedException("You are not a member of this ledger");
-        }
+        requireLedgerMembership(ledgerId, authenticatedUser);
 
         Category category = categoryRepository.findByIdAndLedgerId(categoryId, ledgerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
@@ -106,5 +86,16 @@ public class CategoryService {
                 .createdByUserId(category.getCreatedBy().getId())
                 .createdByDisplayName(category.getCreatedBy().getDisplayName())
                 .build();
+    }
+
+    private Ledger requireLedgerMembership(Long ledgerId, User authenticatedUser) {
+        Ledger ledger = ledgerRepository.findById(ledgerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Ledger not found"));
+
+        if (!ledgerMemberRepository.existsByLedgerIdAndUserId(ledgerId, authenticatedUser.getId())) {
+            throw new AccessDeniedException("You are not a member of this ledger");
+        }
+
+        return ledger;
     }
 }

@@ -7,23 +7,52 @@ import { MemberCard } from "@/components/ledger/MemberCard";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { LoadingSkeleton } from "@/components/shared/LoadingSkeleton";
 import { PageHeader } from "@/components/shared/PageHeader";
-import { useCancelInvitation, useInviteMember, useLedger } from "@/hooks/useLedger";
+import { useCancelInvitation, useInviteMember, useLedger, useUpdateLedgerName } from "@/hooks/useLedger";
 import { formatDateTime } from "@/lib/utils/date";
 import { useAuthStore } from "@/lib/store/auth.store";
 
 export default function LedgerPage() {
   const router = useRouter();
-  const [name, setName] = useState("Fatura da Casa");
+  const [draftName, setDraftName] = useState("");
   const [editing, setEditing] = useState(false);
+  const [nameError, setNameError] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
 
   const activeLedgerId = useAuthStore((state) => state.activeLedgerId);
   const ledger = useLedger();
   const inviteMember = useInviteMember();
   const cancelInvitation = useCancelInvitation();
+  const updateLedgerName = useUpdateLedgerName();
   const members = ledger.data?.members ?? [];
   const pendingInvitations = ledger.data?.pendingInvitations ?? [];
   const canInvite = members.length < 2 && pendingInvitations.length === 0;
+
+  const currentName = ledger.data?.name ?? "Fatura da Casa";
+
+  function handleStartEdit() {
+    setDraftName(currentName);
+    setNameError(null);
+    setEditing(true);
+  }
+
+  function handleCancelEdit() {
+    setDraftName(currentName);
+    setNameError(null);
+    setEditing(false);
+  }
+
+  function handleSaveName() {
+    setNameError(null);
+    updateLedgerName.mutate(draftName, {
+      onSuccess: () => {
+        setEditing(false);
+      },
+      onError: (error) => {
+        const response = (error as { response?: { data?: { message?: string } } }).response;
+        setNameError(response?.data?.message ?? "Nao foi possivel atualizar o nome da fatura.");
+      },
+    });
+  }
 
   if (!activeLedgerId) {
     return (
@@ -49,16 +78,44 @@ export default function LedgerPage() {
       <section className="surface p-6">
         <h2 className="text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">Informacoes da fatura</h2>
         {editing ? (
-          <input
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-            onBlur={() => setEditing(false)}
-            className="focusable mt-3 w-full rounded-md border bg-[var(--bg-elevated)] px-3 py-2 text-lg text-[var(--text-primary)] outline-none"
-          />
+          <div className="mt-3 space-y-3">
+            <input
+              value={draftName}
+              onChange={(event) => setDraftName(event.target.value)}
+              maxLength={120}
+              className="focusable w-full rounded-md border bg-[var(--bg-elevated)] px-3 py-2 text-lg text-[var(--text-primary)] outline-none"
+            />
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                disabled={updateLedgerName.isPending}
+                className="focusable rounded-md bg-[var(--accent)] px-3 py-2 text-sm font-medium text-black disabled:cursor-not-allowed disabled:opacity-60"
+                onClick={handleSaveName}
+              >
+                {updateLedgerName.isPending ? "Salvando..." : "Salvar"}
+              </button>
+              <button
+                type="button"
+                disabled={updateLedgerName.isPending}
+                className="focusable rounded-md border px-3 py-2 text-sm text-[var(--text-secondary)] disabled:cursor-not-allowed disabled:opacity-60"
+                onClick={handleCancelEdit}
+              >
+                Cancelar
+              </button>
+            </div>
+            {nameError ? <p className="text-sm text-red-300">{nameError}</p> : null}
+          </div>
         ) : (
-          <button className="mt-3 text-left text-2xl font-semibold" onClick={() => setEditing(true)}>
-            {ledger.data?.name ?? name}
-          </button>
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <p className="text-2xl font-semibold">{currentName}</p>
+            <button
+              type="button"
+              className="focusable rounded-md border px-2.5 py-1 text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+              onClick={handleStartEdit}
+            >
+              Editar
+            </button>
+          </div>
         )}
         <p className="mt-2 text-sm text-[var(--text-secondary)]">
           Criado em {ledger.data?.createdAt ? formatDateTime(ledger.data.createdAt) : "-"}

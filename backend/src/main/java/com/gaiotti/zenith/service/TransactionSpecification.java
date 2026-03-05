@@ -7,6 +7,9 @@ import java.time.LocalDate;
 
 public class TransactionSpecification {
 
+    private TransactionSpecification() {
+    }
+
     public static Specification<Transaction> withFilters(
             Long ledgerId,
             LocalDate startDate,
@@ -15,12 +18,14 @@ public class TransactionSpecification {
             Long createdByUserId,
             Transaction.TransactionType type
     ) {
-        return Specification.where(hasLedgerId(ledgerId))
-                .and(hasStartDate(startDate))
-                .and(hasEndDate(endDate))
-                .and(hasCategoryId(categoryId))
-                .and(hasCreatedByUserId(createdByUserId))
-                .and(hasType(type));
+        return Specification.allOf(
+                hasLedgerId(ledgerId),
+                hasStartDate(startDate),
+                hasEndDate(endDate),
+                hasCategoryId(categoryId),
+                hasCreatedByUserId(createdByUserId),
+                hasType(type)
+        );
     }
 
     private static Specification<Transaction> hasLedgerId(Long ledgerId) {

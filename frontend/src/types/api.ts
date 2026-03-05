@@ -185,6 +185,10 @@ export interface CreateLedgerRequest {
   name: string;
 }
 
+export interface UpdateLedgerRequest {
+  name: string;
+}
+
 export interface InviteUserRequest {
   email: string;
 }

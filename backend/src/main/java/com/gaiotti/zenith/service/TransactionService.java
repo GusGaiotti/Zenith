@@ -15,19 +15,31 @@ import com.gaiotti.zenith.repository.LedgerMemberRepository;
 import com.gaiotti.zenith.repository.LedgerRepository;
 import com.gaiotti.zenith.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class TransactionService {
+
+    private static final int EXPORT_ROW_LIMIT = 10_000;
+    private static final DateTimeFormatter EXPORT_DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private static final DateTimeFormatter EXPORT_DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     private final TransactionRepository transactionRepository;
     private final LedgerRepository ledgerRepository;
@@ -156,6 +168,44 @@ public class TransactionService {
         transactionRepository.delete(transaction);
     }
 
+    @Transactional(readOnly = true)
+    public byte[] exportTransactionsXlsx(
+            Long ledgerId,
+            User authenticatedUser,
+            LocalDate startDate,
+            LocalDate endDate,
+            Long createdByUserId
+    ) {
+        assertLedgerExists(ledgerId);
+        assertMembership(ledgerId, authenticatedUser);
+
+        if (createdByUserId != null) {
+            assertMembershipByUserId(ledgerId, createdByUserId);
+        }
+        if (startDate != null && endDate != null && startDate.isAfter(endDate)) {
+            throw new IllegalArgumentException("startDate cannot be after endDate");
+        }
+
+        var spec = TransactionSpecification.withFilters(
+                ledgerId,
+                startDate,
+                endDate,
+                null,
+                createdByUserId,
+                null
+        );
+        var page = transactionRepository.findAll(
+                spec,
+                PageRequest.of(0, EXPORT_ROW_LIMIT, Sort.by(Sort.Order.desc("date"), Sort.Order.desc("id")))
+        );
+
+        if (page.hasNext()) {
+            throw new IllegalArgumentException("Export exceeds maximum supported rows");
+        }
+
+        return writeExportWorkbook(page.getContent());
+    }
+
     private void assertLedgerExists(Long ledgerId) {
         if (!ledgerRepository.existsById(ledgerId)) {
             throw new ResourceNotFoundException("Ledger not found");
@@ -163,7 +213,11 @@ public class TransactionService {
     }
 
     private void assertMembership(Long ledgerId, User user) {
-        if (!ledgerMemberRepository.existsByLedgerIdAndUserId(ledgerId, user.getId())) {
+        assertMembershipByUserId(ledgerId, user.getId());
+    }
+
+    private void assertMembershipByUserId(Long ledgerId, Long userId) {
+        if (!ledgerMemberRepository.existsByLedgerIdAndUserId(ledgerId, userId)) {
             throw new AccessDeniedException("You are not a member of this ledger");
         }
     }
@@ -193,5 +247,77 @@ public class TransactionService {
                 .createdByDisplayName(transaction.getCreatedBy().getDisplayName())
                 .createdAt(transaction.getCreatedAt())
                 .build();
+    }
+
+    private byte[] writeExportWorkbook(List<Transaction> transactions) {
+        try (XSSFWorkbook workbook = new XSSFWorkbook();
+             ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            Sheet sheet = workbook.createSheet("Transactions");
+            Row header = sheet.createRow(0);
+            header.createCell(0).setCellValue("Data");
+            header.createCell(1).setCellValue("Valor");
+            header.createCell(2).setCellValue("Categoria");
+            header.createCell(3).setCellValue("Pessoa");
+            header.createCell(4).setCellValue("Descricao");
+            header.createCell(5).setCellValue("Tipo");
+            header.createCell(6).setCellValue("Criado em");
+
+            int rowIndex = 1;
+            for (Transaction transaction : transactions) {
+                Row row = sheet.createRow(rowIndex++);
+                row.createCell(0).setCellValue(sanitizeCellValue(formatDate(transaction.getDate())));
+                row.createCell(1).setCellValue(transaction.getAmount() != null ? transaction.getAmount().toPlainString() : "");
+                row.createCell(2).setCellValue(sanitizeCellValue(
+                        transaction.getCategory() != null ? transaction.getCategory().getName() : "Sem categoria"
+                ));
+                row.createCell(3).setCellValue(sanitizeCellValue(
+                        transaction.getCreatedBy() != null ? transaction.getCreatedBy().getDisplayName() : "-"
+                ));
+                row.createCell(4).setCellValue(sanitizeCellValue(
+                        transaction.getDescription() != null ? transaction.getDescription() : "Sem descricao"
+                ));
+                row.createCell(5).setCellValue(sanitizeCellValue(
+                        mapTypeLabel(transaction.getType())
+                ));
+                row.createCell(6).setCellValue(sanitizeCellValue(
+                        formatDateTime(transaction.getCreatedAt())
+                ));
+            }
+
+            workbook.write(outputStream);
+            return outputStream.toByteArray();
+        } catch (IOException ex) {
+            throw new IllegalStateException("Failed to generate export file", ex);
+        }
+    }
+
+    private String sanitizeCellValue(String value) {
+        if (value == null) {
+            return "";
+        }
+        String trimmed = value.trim();
+        if (trimmed.isEmpty()) {
+            return "";
+        }
+        char firstChar = trimmed.charAt(0);
+        if (firstChar == '=' || firstChar == '+' || firstChar == '-' || firstChar == '@') {
+            return "'" + trimmed;
+        }
+        return trimmed;
+    }
+
+    private String formatDate(LocalDate value) {
+        return value != null ? value.format(EXPORT_DATE_FORMAT) : "";
+    }
+
+    private String formatDateTime(java.time.LocalDateTime value) {
+        return value != null ? value.format(EXPORT_DATE_TIME_FORMAT) : "";
+    }
+
+    private String mapTypeLabel(Transaction.TransactionType type) {
+        if (type == null) {
+            return "";
+        }
+        return type == Transaction.TransactionType.INCOME ? "Entrada" : "Saida";
     }
 }
