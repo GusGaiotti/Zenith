@@ -27,3 +27,6 @@ logging:
   level:
     com.gaiotti.zenith: DEBUG
     org.springframework.security: DEBUG
+
+ai:
+  mode: ${AI_MODE:local}

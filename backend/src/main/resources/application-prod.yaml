@@ -24,3 +24,6 @@ auth:
   refresh-cookie:
     secure: true
     same-site: Strict
+
+ai:
+  mode: ${AI_MODE:openai}
