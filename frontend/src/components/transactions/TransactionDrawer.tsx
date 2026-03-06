@@ -93,9 +93,9 @@ function TransactionDrawerContent({
         aria-modal="true"
         aria-labelledby={titleId}
         tabIndex={-1}
-        className="surface w-full max-w-lg p-6"
+        className="surface w-full max-w-lg p-6 shadow-[0_24px_60px_rgba(5,10,24,0.6)]"
       >
-        <h2 id={titleId} className="font-display text-3xl italic">
+        <h2 id={titleId} className="font-display text-3xl">
           {isEditing ? "Editar transacao" : "Nova transacao"}
         </h2>
         <form
@@ -125,7 +125,7 @@ function TransactionDrawerContent({
               value={amountInput ? formatCurrency(amountValue) : "R$ 0,00"}
               onChange={(event) => setAmountInput(normalizeCurrencyInput(event.target.value))}
               required
-              className="focusable w-full rounded-md border bg-[var(--bg-elevated)] px-3 py-2 font-mono text-[var(--text-primary)] outline-none"
+              className="focusable h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-3.5 font-mono text-[var(--text-primary)] outline-none"
             />
           </label>
           <div className="grid gap-2 sm:grid-cols-2">
@@ -144,7 +144,7 @@ function TransactionDrawerContent({
                   type="button"
                   key={value}
                   aria-pressed={active}
-                  className={`focusable rounded-full border px-3 py-2 text-sm transition-colors duration-150 ${semanticClassName}`}
+                  className={`focusable rounded-full border px-3 py-2 text-sm font-medium transition-colors duration-150 ${semanticClassName}`}
                   onClick={() => setType(value)}
                 >
                   {value === "INCOME" ? "Entrada" : "Saida"}
@@ -160,7 +160,7 @@ function TransactionDrawerContent({
               required
               value={date}
               onChange={(event) => setDate(event.target.value)}
-              className="focusable w-full rounded-md border bg-[var(--bg-elevated)] px-3 py-2 text-[var(--text-primary)] outline-none"
+              className="focusable h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-3.5 text-[var(--text-primary)] outline-none"
             />
           </label>
           <SelectMenu
@@ -177,17 +177,21 @@ function TransactionDrawerContent({
               value={description}
               onChange={(event) => setDescription(event.target.value)}
               placeholder="Descricao"
-              className="focusable w-full rounded-md border bg-[var(--bg-elevated)] px-3 py-2 text-[var(--text-primary)] outline-none placeholder:text-[var(--text-secondary)]"
+              className="focusable h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-3.5 text-[var(--text-primary)] outline-none placeholder:text-[var(--text-secondary)]"
             />
           </label>
           <div className="flex gap-2">
             <button
               disabled={isSubmitting || amountValue <= 0}
-              className="focusable flex-1 rounded-md bg-[var(--accent)] px-4 py-2 font-medium text-black transition-all duration-150 hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-40"
+              className="focusable h-11 flex-1 rounded-xl bg-[var(--accent)] px-4 font-semibold text-white shadow-[0_8px_24px_rgba(79,124,255,0.35)] transition-all duration-150 hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-40"
             >
               {isSubmitting ? "Salvando..." : isEditing ? "Salvar alteracoes" : "Salvar transacao"}
             </button>
-            <button type="button" className="focusable rounded-md border px-4 py-2 text-sm" onClick={onClose}>
+            <button
+              type="button"
+              className="focusable h-11 rounded-xl border border-[var(--border)] px-4 py-2 text-sm text-[var(--text-secondary)] transition-colors duration-150 hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)]"
+              onClick={onClose}
+            >
               Fechar
             </button>
           </div>

@@ -25,7 +25,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             key={item.href}
             className={`rounded-xl px-2 py-2 text-center transition-colors duration-150 ${
               pathname.startsWith(item.href)
-                ? "bg-[var(--accent-muted)] text-[var(--accent)]"
+                ? "bg-[var(--accent-muted)] text-[var(--accent-hover)]"
                 : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
             }`}
             href={item.href}

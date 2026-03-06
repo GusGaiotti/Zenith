@@ -138,7 +138,7 @@ export default function TransactionsPage() {
               align="right"
             />
             <button
-              className="focusable w-full rounded-md bg-[var(--accent)] px-3 py-2 text-sm font-medium text-black sm:w-auto"
+              className="focusable h-11 w-full rounded-xl bg-[var(--accent)] px-4 text-sm font-semibold text-white shadow-[0_8px_24px_rgba(79,124,255,0.35)] transition-colors duration-150 hover:bg-[var(--accent-hover)] sm:w-auto"
               onClick={() => {
                 setEditingTransaction(null);
                 setErrorMessage(null);
@@ -152,12 +152,12 @@ export default function TransactionsPage() {
       />
 
       {errorMessage ? (
-        <div className="mb-4 rounded-md border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+        <div className="mb-4 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
           {errorMessage}
         </div>
       ) : null}
 
-      <div className="mb-4 grid gap-2 rounded-lg border border-[var(--border)] bg-white/5 p-4 text-sm md:grid-cols-3">
+      <div className="surface mb-4 grid gap-2 p-4 text-sm md:grid-cols-3">
         <p>
           Entradas <span className="ml-2 font-mono text-[var(--income)]">{formatCurrency(totals.income)}</span>
         </p>
@@ -175,7 +175,7 @@ export default function TransactionsPage() {
       {Object.keys(totals.expenseByPerson).length ? (
         <div className="mb-4 flex flex-wrap gap-2">
           {Object.entries(totals.expenseByPerson).map(([name, total]) => (
-            <span key={name} className="rounded-full border border-[var(--border)] bg-white/5 px-3 py-1 text-xs text-[var(--text-secondary)]">
+            <span key={name} className="rounded-full border border-[var(--border)] bg-[var(--bg-elevated)] px-3 py-1 text-xs text-[var(--text-secondary)]">
               {name}: <span className="font-mono text-[var(--expense)]">{formatCurrency(total)}</span>
             </span>
           ))}
@@ -216,7 +216,7 @@ export default function TransactionsPage() {
         <button
           disabled={!transactions.hasNextPage || transactions.isFetchingNextPage}
           onClick={() => transactions.fetchNextPage()}
-          className="focusable rounded-md border px-3 py-2 text-sm text-[var(--text-secondary)] transition-all duration-150 hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40"
+          className="focusable rounded-xl border border-[var(--border)] px-3 py-2 text-sm text-[var(--text-secondary)] transition-all duration-150 hover:bg-[var(--bg-elevated)] disabled:cursor-not-allowed disabled:opacity-40"
         >
           {transactions.isFetchingNextPage ? "Carregando..." : "Carregar mais"}
         </button>

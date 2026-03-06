@@ -105,7 +105,7 @@ export function SelectMenu({
         aria-haspopup="listbox"
         aria-controls={listboxId}
         className={cn(
-          "focusable flex w-full items-center justify-between gap-3 rounded-xl border border-[var(--surface-edge)] bg-[rgba(35,33,25,0.94)] px-4 py-3 text-left text-sm text-[var(--text-primary)] transition-colors duration-150 hover:border-[var(--accent)]",
+          "focusable flex w-full items-center justify-between gap-3 rounded-xl border border-[var(--surface-edge)] bg-[var(--bg-elevated)] px-4 py-3 text-left text-sm text-[var(--text-primary)] transition-colors duration-150 hover:border-[var(--accent)]",
           buttonClassName,
         )}
         onClick={() => {
@@ -133,7 +133,7 @@ export function SelectMenu({
         <span className={cn("truncate", !selectedOption && "text-[var(--text-secondary)]")}>
           {selectedOption?.label ?? placeholder}
         </span>
-        <span className="grid h-7 w-7 place-items-center rounded-md border border-[var(--surface-edge)] bg-white/5 text-[var(--text-secondary)]">
+        <span className="grid h-7 w-7 place-items-center rounded-md border border-[var(--surface-edge)] bg-[var(--bg-muted)] text-[var(--text-secondary)]">
           <Chevron open={open} />
         </span>
       </button>
@@ -141,7 +141,7 @@ export function SelectMenu({
         <div
           id={listboxId}
           className={cn(
-            "absolute top-[calc(100%+0.5rem)] z-40 min-w-full overflow-hidden rounded-2xl border border-[var(--surface-edge)] bg-[rgba(24,22,19,0.98)] p-2 shadow-[0_20px_60px_rgba(0,0,0,0.42)] backdrop-blur",
+            "absolute top-[calc(100%+0.5rem)] z-40 min-w-full overflow-hidden rounded-2xl border border-[var(--surface-edge)] bg-[rgba(11,18,36,0.98)] p-2 shadow-[0_20px_60px_rgba(0,0,0,0.42)] backdrop-blur",
             align === "right" ? "right-0" : "left-0",
           )}
           role="listbox"
@@ -198,8 +198,8 @@ export function SelectMenu({
                 className={cn(
                   "flex w-full items-center justify-between rounded-xl px-3 py-2 text-sm transition-colors duration-150",
                   active
-                    ? "bg-[var(--accent-muted)] text-[var(--accent)]"
-                    : "text-[var(--text-secondary)] hover:bg-white/5 hover:text-[var(--text-primary)]",
+                    ? "bg-[var(--accent-muted)] text-[var(--accent-hover)]"
+                    : "text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)]",
                 )}
                 onClick={() => {
                   onChange(option.value);

@@ -21,12 +21,12 @@ export function Sidebar({ collapsed, onCollapsedChange }: SidebarProps) {
   return (
     <aside
       className={cn(
-        "fixed left-4 top-4 z-30 hidden h-[calc(100vh-2rem)] flex-col rounded-2xl border border-[var(--border)] bg-[var(--bg-surface)]/90 p-3 backdrop-blur md:flex",
+        "fixed left-4 top-4 z-30 hidden h-[calc(100vh-2rem)] flex-col rounded-2xl border border-[var(--border)] bg-[var(--bg-surface)]/92 p-3 shadow-[0_18px_40px_rgba(2,8,22,0.48)] backdrop-blur md:flex",
         collapsed ? "w-[96px]" : "w-[260px]",
       )}
     >
       <div className={cn("px-2 py-3", collapsed && "text-center")}>
-        <p className="font-display text-2xl italic text-[var(--accent)]">{collapsed ? "C" : "Zenith"}</p>
+        <p className="font-display text-2xl text-[var(--accent-hover)]">{collapsed ? "C" : "Zenith"}</p>
       </div>
 
       <nav className="flex-1 space-y-2 px-1">
@@ -42,11 +42,11 @@ export function Sidebar({ collapsed, onCollapsedChange }: SidebarProps) {
                 "focusable flex rounded-xl border py-3 text-sm transition-colors duration-150",
                 collapsed ? "items-center justify-center px-0" : "items-center gap-3 px-4",
                 active
-                  ? "border-[var(--accent)] bg-[var(--accent-muted)] text-[var(--accent)]"
-                  : "border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--accent)] hover:bg-white/5 hover:text-[var(--text-primary)]",
+                  ? "border-[var(--accent)] bg-[var(--accent-muted)] text-[var(--accent-hover)]"
+                  : "border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--accent)] hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)]",
               )}
             >
-              <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-white/4">
+              <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-[var(--bg-elevated)]">
                 <NavigationIcon name={item.icon} />
               </span>
               {!collapsed ? <span>{item.label}</span> : null}
@@ -58,7 +58,7 @@ export function Sidebar({ collapsed, onCollapsedChange }: SidebarProps) {
       <div className={cn("space-y-2 border-t border-[var(--border)] px-2 pt-3", collapsed && "text-center")}>
         {!collapsed ? (
           <>
-            <div className="rounded-xl bg-[var(--accent-muted)] px-3 py-2 text-xs text-[var(--accent)]">Fatura ativa</div>
+            <div className="rounded-xl bg-[var(--accent-muted)] px-3 py-2 text-xs text-[var(--accent-hover)]">Fatura ativa</div>
             <p className="text-xs text-[var(--text-secondary)]">Logado como {user?.displayName ?? "-"}</p>
           </>
         ) : (
@@ -67,7 +67,7 @@ export function Sidebar({ collapsed, onCollapsedChange }: SidebarProps) {
         <button
           title={collapsed ? "Expandir menu" : undefined}
           className={cn(
-            "focusable w-full rounded-xl border border-[var(--border)] py-3 text-sm text-[var(--text-secondary)] transition-colors duration-150 hover:border-[var(--accent)] hover:bg-white/5 hover:text-[var(--text-primary)]",
+            "focusable w-full rounded-xl border border-[var(--border)] py-3 text-sm text-[var(--text-secondary)] transition-colors duration-150 hover:border-[var(--accent)] hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)]",
             collapsed ? "px-0 text-center" : "px-4 text-left",
           )}
           onClick={() => onCollapsedChange(!collapsed)}

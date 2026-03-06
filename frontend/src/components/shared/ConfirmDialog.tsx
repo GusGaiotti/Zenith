@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 interface ConfirmDialogProps {
   title: string;
@@ -24,7 +24,7 @@ export function ConfirmDialog({
         className={`focusable mt-4 rounded-md px-3 py-2 text-sm font-medium transition-all duration-150 ${
           destructive
             ? "bg-red-500/15 text-red-300 hover:bg-red-500/25"
-            : "bg-[var(--accent)] text-black hover:bg-[var(--accent-hover)]"
+            : "bg-[var(--accent)] text-white hover:bg-[var(--accent-hover)]"
         }`}
       >
         {confirmLabel}
@@ -32,4 +32,5 @@ export function ConfirmDialog({
     </div>
   );
 }
+
 

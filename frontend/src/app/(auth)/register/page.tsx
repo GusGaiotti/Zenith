@@ -87,7 +87,7 @@ export default function RegisterPage() {
           ) : null}
           <button
             disabled={registerMutation.isPending || cooldownSeconds > 0}
-            className="focusable w-full rounded-md bg-[var(--accent)] px-4 py-2 font-medium text-black transition-all duration-150 hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-40"
+            className="focusable w-full rounded-md bg-[var(--accent)] px-4 py-2 font-medium text-white transition-all duration-150 hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-40"
           >
             {registerMutation.isPending
               ? "Cadastrando..."
@@ -103,3 +103,4 @@ export default function RegisterPage() {
     </main>
   );
 }
+

@@ -12,7 +12,7 @@ interface TransactionTableProps {
 export function TransactionTable({ items, onEdit, onDelete, deletingId }: TransactionTableProps) {
   return (
     <div className="surface overflow-hidden">
-      <div className="hidden grid-cols-6 gap-3 border-b border-[var(--border)] px-4 py-3 text-xs uppercase tracking-[0.08em] text-[var(--text-muted)] md:grid">
+      <div className="hidden grid-cols-6 gap-3 border-b border-[var(--border)] bg-[var(--bg-elevated)] px-4 py-3 text-xs uppercase tracking-[0.08em] text-[var(--text-muted)] md:grid">
         <span>Data</span>
         <span>Descricao</span>
         <span>Categoria</span>
@@ -47,7 +47,7 @@ export function TransactionTable({ items, onEdit, onDelete, deletingId }: Transa
               <div className="flex gap-2 text-xs">
                 <button
                   type="button"
-                  className="focusable rounded-full border border-[var(--surface-edge)] px-3 py-1 text-[var(--text-secondary)] transition-colors duration-150 hover:border-[var(--accent)] hover:text-[var(--text-primary)]"
+                  className="focusable rounded-full border border-[var(--surface-edge)] px-3 py-1 text-[var(--text-secondary)] transition-colors duration-150 hover:border-[var(--accent)] hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)]"
                   onClick={() => onEdit(item)}
                 >
                   Editar
@@ -74,7 +74,7 @@ export function TransactionTable({ items, onEdit, onDelete, deletingId }: Transa
               <span className="flex justify-end gap-2 text-xs">
                 <button
                   type="button"
-                  className="focusable rounded-full border border-[var(--surface-edge)] px-3 py-1 text-[var(--text-secondary)] transition-colors duration-150 hover:border-[var(--accent)] hover:text-[var(--text-primary)]"
+                  className="focusable rounded-full border border-[var(--surface-edge)] px-3 py-1 text-[var(--text-secondary)] transition-colors duration-150 hover:border-[var(--accent)] hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)]"
                   onClick={() => onEdit(item)}
                 >
                   Editar

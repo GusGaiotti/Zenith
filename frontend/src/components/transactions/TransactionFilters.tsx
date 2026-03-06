@@ -25,14 +25,14 @@ export function TransactionFilters({ active, onChange }: TransactionFiltersProps
               ? "border-red-400/80 bg-red-500/15 text-red-200"
               : "border-red-500/25 bg-red-500/5 text-red-300 hover:border-red-400/50 hover:bg-red-500/10"
             : isActive
-              ? "border-[var(--accent)] bg-[var(--accent-muted)] text-[var(--accent)]"
-              : "border-[var(--surface-edge)] bg-white/5 text-[var(--text-secondary)] hover:bg-white/10";
+              ? "border-[var(--accent)] bg-[var(--accent-muted)] text-[var(--accent-hover)]"
+              : "border-[var(--surface-edge)] bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:bg-[var(--bg-muted)]";
 
         return (
           <button
             key={option}
             onClick={() => onChange(option)}
-            className={`focusable rounded-full border px-3 py-1.5 text-xs transition-all duration-150 ${className}`}
+            className={`focusable rounded-full border px-3 py-1.5 text-xs font-medium transition-all duration-150 ${className}`}
           >
             {labels[option]}
           </button>

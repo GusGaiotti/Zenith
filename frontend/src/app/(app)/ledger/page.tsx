@@ -89,7 +89,7 @@ export default function LedgerPage() {
               <button
                 type="button"
                 disabled={updateLedgerName.isPending}
-                className="focusable rounded-md bg-[var(--accent)] px-3 py-2 text-sm font-medium text-black disabled:cursor-not-allowed disabled:opacity-60"
+                className="focusable rounded-md bg-[var(--accent)] px-3 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-60"
                 onClick={handleSaveName}
               >
                 {updateLedgerName.isPending ? "Salvando..." : "Salvar"}
@@ -127,7 +127,7 @@ export default function LedgerPage() {
           <h2 className="font-display text-3xl italic">Membros</h2>
           {canInvite ? (
             <button
-              className="focusable rounded-md bg-[var(--accent)] px-3 py-2 text-sm font-medium text-black"
+              className="focusable rounded-md bg-[var(--accent)] px-3 py-2 text-sm font-medium text-white"
               onClick={() => setOpen(true)}
             >
               Convidar parceiro(a)
@@ -181,3 +181,4 @@ export default function LedgerPage() {
     </div>
   );
 }
+

@@ -39,7 +39,7 @@ export default function JoinLedgerPage() {
           </p>
           <div className="mt-6 flex gap-2">
             <button
-              className="focusable rounded-md bg-[var(--accent)] px-4 py-2 text-black"
+              className="focusable rounded-md bg-[var(--accent)] px-4 py-2 text-white"
               onClick={() => router.push("/dashboard")}
             >
               Ir para dashboard
@@ -63,7 +63,7 @@ export default function JoinLedgerPage() {
         <div className="mt-6 flex gap-2">
           <button
             disabled={acceptMutation.isPending}
-            className="focusable rounded-md bg-[var(--accent)] px-4 py-2 text-black disabled:cursor-not-allowed disabled:opacity-40"
+            className="focusable rounded-md bg-[var(--accent)] px-4 py-2 text-white disabled:cursor-not-allowed disabled:opacity-40"
             onClick={() =>
               acceptMutation.mutate(token, {
                 onSuccess: () => router.push("/dashboard"),

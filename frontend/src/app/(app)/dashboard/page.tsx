@@ -165,7 +165,7 @@ export default function DashboardPage() {
     <div className="space-y-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between">
         <div>
-          <p className="font-display text-3xl italic text-[var(--text-primary)]">Dashboard</p>
+          <p className="font-display text-3xl text-[var(--text-primary)]">Dashboard</p>
           <p className="mt-1 text-sm text-[var(--text-secondary)]">Resumo mensal da fatura compartilhada.</p>
         </div>
         <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:flex-wrap sm:items-end">
@@ -179,7 +179,7 @@ export default function DashboardPage() {
               type="button"
               aria-label="Exportar Excel"
               disabled={!activeLedgerId || exportMutation.isPending}
-              className="focusable elevated grid h-12 w-full place-items-center rounded-xl px-4 text-sm text-[var(--text-primary)] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+              className="focusable elevated grid h-12 w-full place-items-center rounded-xl px-4 text-sm text-[var(--text-primary)] shadow-[0_8px_22px_rgba(7,12,30,0.35)] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
               onClick={() => exportMutation.mutate()}
             >
               <DownloadIcon className={`h-5 w-5 ${exportMutation.isPending ? "animate-pulse" : ""}`} />
@@ -204,11 +204,11 @@ export default function DashboardPage() {
       </div>
 
       {exportError ? (
-        <div className="rounded-md border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">{exportError}</div>
+        <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">{exportError}</div>
       ) : null}
 
       {hasError ? (
-        <div className="rounded-md border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
+        <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
           Algumas secoes nao carregaram. Verifique permissao da fatura e disponibilidade da API.
         </div>
       ) : null}

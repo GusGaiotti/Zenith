@@ -62,7 +62,7 @@ export default function CategoriesPage() {
         title="Categorias"
         subtitle="Organize gastos com categorias por cor."
         actions={
-          <button className="focusable rounded-md bg-[var(--accent)] px-3 py-2 text-sm font-medium text-black" onClick={() => {
+          <button className="focusable rounded-md bg-[var(--accent)] px-3 py-2 text-sm font-medium text-white" onClick={() => {
             setEditingCategory(null);
             setErrorMessage(null);
             setOpen(true);
@@ -173,7 +173,7 @@ export default function CategoriesPage() {
             <div className="mt-5 flex justify-end">
               <button
                 type="button"
-                className="focusable rounded-md bg-[var(--accent)] px-4 py-2 font-medium text-black"
+                className="focusable rounded-md bg-[var(--accent)] px-4 py-2 font-medium text-white"
                 onClick={() => setDeleteErrorMessage(null)}
               >
                 Fechar
@@ -185,3 +185,4 @@ export default function CategoriesPage() {
     </div>
   );
 }
+
