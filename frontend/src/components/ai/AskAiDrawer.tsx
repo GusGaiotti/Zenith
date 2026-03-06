@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useState } from "react";
 import { MonthPicker } from "@/components/shared/MonthPicker";
+import { InfoTooltip } from "@/components/shared/InfoTooltip";
 import { useAskAi, useAskAiUsage } from "@/hooks/useAskAi";
 import { askAiSchema } from "@/lib/validators/ai.schemas";
 import type { AskAiResponse } from "@/types/api";
@@ -17,6 +18,24 @@ function getCurrentYearMonth() {
   return `${now.getFullYear()}-${month}`;
 }
 
+function getContextLabel(level?: AskAiResponse["contextLevelUsed"]) {
+  switch (level) {
+    case "EXTENDED":
+      return "Comparativo de meses";
+    case "SAMPLED_TRANSACTIONS":
+      return "Resumo com amostra de lancamentos";
+    case "SUMMARY":
+    default:
+      return "Resumo do mes";
+  }
+}
+
+function getModeLabel(mode?: string) {
+  if (mode === "openai") return "OpenAI (producao)";
+  if (mode === "off") return "Desligado (fallback seguro)";
+  return "Ollama local (baixo custo)";
+}
+
 export function AskAiDrawer({ open, onClose }: AskAiDrawerProps) {
   const titleId = useId();
   const [question, setQuestion] = useState("");
@@ -29,7 +48,6 @@ export function AskAiDrawer({ open, onClose }: AskAiDrawerProps) {
   const usage = usageQuery.data;
 
   const blockedByAccess = usage ? !usage.accessAllowed : false;
-  const modeLabel = usage?.mode === "openai" ? "OpenAI" : usage?.mode === "off" ? "Off" : "Ollama local";
 
   useEffect(() => {
     if (!open) {
@@ -71,7 +89,7 @@ export function AskAiDrawer({ open, onClose }: AskAiDrawerProps) {
               Perguntar para IA
             </h2>
             <p className="mt-2 text-sm text-[var(--text-secondary)]">
-              Resposta baseada em contexto financeiro resumido. A IA pode cometer erros.
+              Resposta baseada em contexto financeiro. Revise sempre antes de decidir.
             </p>
           </div>
           <button
@@ -84,16 +102,31 @@ export function AskAiDrawer({ open, onClose }: AskAiDrawerProps) {
         </div>
 
         <div className="mt-5 space-y-2 rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] p-4 text-sm text-[var(--text-secondary)]">
-          <p className="text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">Uso e modo</p>
+          <div className="flex items-center gap-2 text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">
+            <span>Uso e modo</span>
+            <InfoTooltip
+              text="Aqui voce ve como a IA esta configurada hoje e quanto voce ainda pode usar. Cota diaria e por usuario."
+            />
+          </div>
           <p>
-            Modo atual: <span className="font-semibold text-[var(--text-primary)]">{modeLabel}</span>
+            Modo atual: <span className="font-semibold text-[var(--text-primary)]">{getModeLabel(usage?.mode)}</span>
           </p>
           {usage ? (
             <>
-              <p>
-                Cota diaria: <span className="font-semibold text-[var(--text-primary)]">{usage.perUserDailyRemaining}/{usage.perUserDailyQuota}</span> restantes.
+              <p className="flex items-center gap-2">
+                <span>
+                  Cota diaria: <span className="font-semibold text-[var(--text-primary)]">{usage.perUserDailyRemaining}/{usage.perUserDailyQuota}</span> restantes.
+                </span>
+                <InfoTooltip
+                  text="A cota diaria e por usuario. Exemplo: 50/dia significa que cada pessoa autenticada pode fazer ate 50 perguntas por dia."
+                />
               </p>
-              <p>Janela por minuto (usuario): {usage.perUserCurrentMinuteUsed}/{usage.perUserPerMinuteLimit}</p>
+              <p className="flex items-center gap-2">
+                <span>Janela por minuto (usuario): {usage.perUserCurrentMinuteUsed}/{usage.perUserPerMinuteLimit}</span>
+                <InfoTooltip
+                  text="Protecao de rajada. Limita quantas perguntas um mesmo usuario pode fazer dentro de 1 minuto para evitar abuso e custo inesperado."
+                />
+              </p>
               <p>{usage.note}</p>
               {!usage.accessAllowed ? (
                 <p className="text-red-200">Acesso a IA bloqueado para seu usuario neste ambiente.</p>
@@ -104,17 +137,19 @@ export function AskAiDrawer({ open, onClose }: AskAiDrawerProps) {
           )}
         </div>
 
-        <div className="mt-4 space-y-2 rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] p-4 text-sm text-[var(--text-secondary)]">
-          <p className="text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">Niveis de contexto</p>
-          <p><span className="font-semibold text-[var(--text-primary)]">SUMMARY:</span> resumo mensal (menor custo).</p>
+        <div className="mt-4 space-y-3 rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] p-4 text-sm text-[var(--text-secondary)]">
+          <p className="text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">Como escolher o tipo de analise</p>
           <p>
-            <span className="font-semibold text-[var(--text-primary)]">EXTENDED:</span> comparacao de varios meses.
-            O mes escolhido e a ancora final. Exemplo: selecionar 2026-03 e perguntar compare ultimos 3 meses
-            usa 2026-01, 2026-02 e 2026-03.
+            <span className="font-semibold text-[var(--text-primary)]">Resumo do mes:</span> melhor para perguntas rapidas e custo menor.
+            Exemplo: Onde posso economizar neste mes?
           </p>
           <p>
-            <span className="font-semibold text-[var(--text-primary)]">SAMPLED_TRANSACTIONS:</span> inclui amostra
-            limitada de transacoes (ate 50) para analise mais detalhada.
+            <span className="font-semibold text-[var(--text-primary)]">Comparativo de meses:</span> ideal para tendencia.
+            Exemplo: Compare ultimos 3 meses. O mes selecionado e a ancora final.
+          </p>
+          <p>
+            <span className="font-semibold text-[var(--text-primary)]">Resumo com amostra de lancamentos:</span> mais detalhe de comportamento.
+            Exemplo: Existe padrao de gastos altos no fim de semana?
           </p>
         </div>
 
@@ -164,7 +199,12 @@ export function AskAiDrawer({ open, onClose }: AskAiDrawerProps) {
               onChange={(event) => setIncludeTransactions(event.target.checked)}
               className="h-4 w-4"
             />
-            Incluir amostra limitada de transacoes
+            <span className="flex items-center gap-2">
+              Incluir amostra automatica de lancamentos
+              <InfoTooltip
+                text="Nao precisa selecionar transacoes manualmente. O backend escolhe automaticamente uma amostra limitada (ate 50) do periodo para dar mais contexto."
+              />
+            </span>
           </label>
 
           <div className="flex gap-2">
@@ -199,7 +239,7 @@ export function AskAiDrawer({ open, onClose }: AskAiDrawerProps) {
           <div className="mt-5 space-y-3 rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] p-4">
             <p className="text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">Resposta</p>
             <p className="text-sm leading-6 text-[var(--text-primary)]">{result.answer}</p>
-            <p className="text-xs text-[var(--text-secondary)]">Nivel de contexto: {result.contextLevelUsed}</p>
+            <p className="text-xs text-[var(--text-secondary)]">Tipo de analise usada: {getContextLabel(result.contextLevelUsed)}</p>
             {result.disclaimer ? <p className="text-xs text-[var(--text-secondary)]">{result.disclaimer}</p> : null}
           </div>
         ) : null}
