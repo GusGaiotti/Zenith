@@ -20,12 +20,18 @@ public class AiAccessControlService {
     private final AiProperties aiProperties;
 
     public void assertAiAccess(User user) {
+        if (!isAiAllowed(user)) {
+            throw new AccessDeniedException("AI access is not enabled for this user");
+        }
+    }
+
+    public boolean isAiAllowed(User user) {
         if (!environment.acceptsProfiles(Profiles.of("prod"))) {
-            return;
+            return true;
         }
 
         if (user.isAiEnabled()) {
-            return;
+            return true;
         }
 
         Set<String> allowlistedEmails = Arrays.stream(aiProperties.getAccess().getProductionAllowlistEmails().split(","))
@@ -34,10 +40,6 @@ public class AiAccessControlService {
                 .map(String::toLowerCase)
                 .collect(Collectors.toSet());
 
-        if (allowlistedEmails.contains(user.getEmail().toLowerCase())) {
-            return;
-        }
-
-        throw new AccessDeniedException("AI access is not enabled for this user");
+        return allowlistedEmails.contains(user.getEmail().toLowerCase());
     }
 }

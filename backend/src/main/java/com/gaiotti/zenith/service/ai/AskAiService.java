@@ -3,6 +3,7 @@ package com.gaiotti.zenith.service.ai;
 import com.gaiotti.zenith.config.AiProperties;
 import com.gaiotti.zenith.dto.request.AskAiRequest;
 import com.gaiotti.zenith.dto.response.AskAiResponse;
+import com.gaiotti.zenith.dto.response.AskAiUsageResponse;
 import com.gaiotti.zenith.exception.AccessDeniedException;
 import com.gaiotti.zenith.exception.ResourceNotFoundException;
 import com.gaiotti.zenith.model.User;
@@ -75,6 +76,32 @@ public class AskAiService {
                     .disclaimer("IA indisponivel no momento. Exibindo resumo seguro sem gerar custo adicional.")
                     .build();
         }
+    }
+
+    public AskAiUsageResponse getUsage(Long ledgerId, User authenticatedUser, String clientIp) {
+        validateLedgerAccess(ledgerId, authenticatedUser);
+        boolean accessAllowed = aiAccessControlService.isAiAllowed(authenticatedUser);
+        AiUsageGuardService.UsageSnapshot snapshot = aiUsageGuardService.getSnapshot(authenticatedUser.getId(), clientIp);
+
+        String normalizedMode = aiProperties.getMode() == null ? "off" : aiProperties.getMode().trim().toLowerCase(Locale.ROOT);
+        String note = switch (normalizedMode) {
+            case "local", "ollama" -> "Modo local: ideal para desenvolvimento com menor custo.";
+            case "openai" -> "Modo OpenAI: recomendado para producao com conta e chave configuradas.";
+            default -> "Modo off: IA desativada. O endpoint retorna fallback seguro.";
+        };
+
+        return AskAiUsageResponse.builder()
+                .mode(normalizedMode)
+                .accessAllowed(accessAllowed)
+                .perUserPerMinuteLimit(Math.max(1, aiProperties.getLimits().getPerUserPerMinute()))
+                .perIpPerMinuteLimit(Math.max(1, aiProperties.getLimits().getPerIpPerMinute()))
+                .perUserDailyQuota(Math.max(1, aiProperties.getLimits().getPerUserDailyQuota()))
+                .perUserCurrentMinuteUsed(snapshot.perUserCurrentMinuteUsed())
+                .perIpCurrentMinuteUsed(snapshot.perIpCurrentMinuteUsed())
+                .perUserDailyUsed(snapshot.perUserDailyUsed())
+                .perUserDailyRemaining(snapshot.perUserDailyRemaining())
+                .note(note)
+                .build();
     }
 
     private void validateLedgerAccess(Long ledgerId, User authenticatedUser) {

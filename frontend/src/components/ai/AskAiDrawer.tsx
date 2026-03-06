@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useState } from "react";
 import { MonthPicker } from "@/components/shared/MonthPicker";
-import { useAskAi } from "@/hooks/useAskAi";
+import { useAskAi, useAskAiUsage } from "@/hooks/useAskAi";
 import { askAiSchema } from "@/lib/validators/ai.schemas";
 import type { AskAiResponse } from "@/types/api";
 
@@ -25,6 +25,11 @@ export function AskAiDrawer({ open, onClose }: AskAiDrawerProps) {
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<AskAiResponse | null>(null);
   const askMutation = useAskAi();
+  const usageQuery = useAskAiUsage(open);
+  const usage = usageQuery.data;
+
+  const blockedByAccess = usage ? !usage.accessAllowed : false;
+  const modeLabel = usage?.mode === "openai" ? "OpenAI" : usage?.mode === "off" ? "Off" : "Ollama local";
 
   useEffect(() => {
     if (!open) {
@@ -78,6 +83,41 @@ export function AskAiDrawer({ open, onClose }: AskAiDrawerProps) {
           </button>
         </div>
 
+        <div className="mt-5 space-y-2 rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] p-4 text-sm text-[var(--text-secondary)]">
+          <p className="text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">Uso e modo</p>
+          <p>
+            Modo atual: <span className="font-semibold text-[var(--text-primary)]">{modeLabel}</span>
+          </p>
+          {usage ? (
+            <>
+              <p>
+                Cota diaria: <span className="font-semibold text-[var(--text-primary)]">{usage.perUserDailyRemaining}/{usage.perUserDailyQuota}</span> restantes.
+              </p>
+              <p>Janela por minuto (usuario): {usage.perUserCurrentMinuteUsed}/{usage.perUserPerMinuteLimit}</p>
+              <p>{usage.note}</p>
+              {!usage.accessAllowed ? (
+                <p className="text-red-200">Acesso a IA bloqueado para seu usuario neste ambiente.</p>
+              ) : null}
+            </>
+          ) : (
+            <p>Carregando status de cota...</p>
+          )}
+        </div>
+
+        <div className="mt-4 space-y-2 rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] p-4 text-sm text-[var(--text-secondary)]">
+          <p className="text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">Niveis de contexto</p>
+          <p><span className="font-semibold text-[var(--text-primary)]">SUMMARY:</span> resumo mensal (menor custo).</p>
+          <p>
+            <span className="font-semibold text-[var(--text-primary)]">EXTENDED:</span> comparacao de varios meses.
+            O mes escolhido e a ancora final. Exemplo: selecionar 2026-03 e perguntar compare ultimos 3 meses
+            usa 2026-01, 2026-02 e 2026-03.
+          </p>
+          <p>
+            <span className="font-semibold text-[var(--text-primary)]">SAMPLED_TRANSACTIONS:</span> inclui amostra
+            limitada de transacoes (ate 50) para analise mais detalhada.
+          </p>
+        </div>
+
         <form
           className="mt-6 space-y-4"
           onSubmit={(event) => {
@@ -93,6 +133,7 @@ export function AskAiDrawer({ open, onClose }: AskAiDrawerProps) {
             askMutation.mutate(parsed.data, {
               onSuccess: (data) => {
                 setResult(data);
+                usageQuery.refetch();
               },
               onError: (requestError) => {
                 setResult(null);
@@ -129,7 +170,7 @@ export function AskAiDrawer({ open, onClose }: AskAiDrawerProps) {
           <div className="flex gap-2">
             <button
               type="submit"
-              disabled={askMutation.isPending}
+              disabled={askMutation.isPending || blockedByAccess}
               className="focusable h-11 rounded-xl bg-[var(--accent)] px-4 font-semibold text-white shadow-[0_8px_24px_rgba(79,124,255,0.35)] transition-all duration-150 hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-40"
             >
               {askMutation.isPending ? "Consultando..." : "Enviar pergunta"}

@@ -4,6 +4,7 @@ import com.gaiotti.zenith.config.AllowedOriginsProvider;
 import com.gaiotti.zenith.config.SecurityConfig;
 import com.gaiotti.zenith.dto.request.AskAiRequest;
 import com.gaiotti.zenith.dto.response.AskAiResponse;
+import com.gaiotti.zenith.dto.response.AskAiUsageResponse;
 import com.gaiotti.zenith.exception.AccessDeniedException;
 import com.gaiotti.zenith.exception.QuotaExceededException;
 import com.gaiotti.zenith.exception.RateLimitExceededException;
@@ -26,6 +27,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -160,5 +162,36 @@ class AskAiControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"question\":\"Como economizar?\"}"))
                 .andExpect(status().isTooManyRequests());
+    }
+
+    @Test
+    @WithMockUser
+    void usage_Authenticated_Returns200() throws Exception {
+        User testUser = User.builder()
+                .id(1L)
+                .email("user@example.com")
+                .displayName("User")
+                .build();
+
+        AskAiUsageResponse usageResponse = AskAiUsageResponse.builder()
+                .mode("local")
+                .accessAllowed(true)
+                .perUserPerMinuteLimit(8)
+                .perIpPerMinuteLimit(20)
+                .perUserDailyQuota(50)
+                .perUserCurrentMinuteUsed(1)
+                .perIpCurrentMinuteUsed(1)
+                .perUserDailyUsed(3)
+                .perUserDailyRemaining(47)
+                .note("Modo local")
+                .build();
+
+        when(authUtils.getAuthenticatedUser()).thenReturn(testUser);
+        when(askAiService.getUsage(eq(1L), any(User.class), anyString())).thenReturn(usageResponse);
+
+        mockMvc.perform(get("/api/v1/ledgers/1/ai/usage"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.mode").value("local"))
+                .andExpect(jsonPath("$.perUserDailyRemaining").value(47));
     }
 }

@@ -195,6 +195,19 @@ export interface AskAiResponse {
   disclaimer?: string;
 }
 
+export interface AskAiUsageResponse {
+  mode: "local" | "ollama" | "openai" | "off" | string;
+  accessAllowed: boolean;
+  perUserPerMinuteLimit: number;
+  perIpPerMinuteLimit: number;
+  perUserDailyQuota: number;
+  perUserCurrentMinuteUsed: number;
+  perIpCurrentMinuteUsed: number;
+  perUserDailyUsed: number;
+  perUserDailyRemaining: number;
+  note: string;
+}
+
 export interface CreateLedgerRequest {
   name: string;
 }
