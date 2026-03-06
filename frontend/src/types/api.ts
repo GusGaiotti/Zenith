@@ -181,6 +181,20 @@ export interface DashboardPulseResponse {
   currentSpendingStreak: number;
 }
 
+export type AskAiContextLevel = "SUMMARY" | "EXTENDED" | "SAMPLED_TRANSACTIONS";
+
+export interface AskAiRequest {
+  question: string;
+  yearMonth?: string;
+  includeTransactions?: boolean;
+}
+
+export interface AskAiResponse {
+  answer: string;
+  contextLevelUsed: AskAiContextLevel;
+  disclaimer?: string;
+}
+
 export interface CreateLedgerRequest {
   name: string;
 }
