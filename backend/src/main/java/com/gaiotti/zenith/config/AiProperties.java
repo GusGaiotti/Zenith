@@ -17,6 +17,8 @@ public class AiProperties {
 
     private Ollama ollama = new Ollama();
     private OpenAi openai = new OpenAi();
+    private Access access = new Access();
+    private Limits limits = new Limits();
 
     @Getter
     @Setter
@@ -31,5 +33,20 @@ public class AiProperties {
         private String baseUrl = "https://api.openai.com/v1";
         private String apiKey = "";
         private String model = "gpt-4o-mini";
+    }
+
+    @Getter
+    @Setter
+    public static class Access {
+        private String productionAllowlistEmails = "";
+    }
+
+    @Getter
+    @Setter
+    public static class Limits {
+        private boolean enabled = true;
+        private int perUserPerMinute = 8;
+        private int perIpPerMinute = 20;
+        private int perUserDailyQuota = 50;
     }
 }
