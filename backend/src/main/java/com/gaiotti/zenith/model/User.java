@@ -26,6 +26,10 @@ public class User {
     @Column(name = "display_name", nullable = false)
     private String displayName;
 
+    @Builder.Default
+    @Column(name = "ai_enabled", nullable = false)
+    private boolean aiEnabled = false;
+
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 

@@ -122,6 +122,20 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler({RateLimitExceededException.class, QuotaExceededException.class})
+    public ResponseEntity<ErrorResponse> handleTooManyRequests(
+            RuntimeException ex, HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(
+                new ErrorResponse(
+                        LocalDateTime.now(),
+                        HttpStatus.TOO_MANY_REQUESTS.value(),
+                        "Too Many Requests",
+                        ex.getMessage(),
+                        request.getRequestURI()
+                )
+        );
+    }
+
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatch(
             MethodArgumentTypeMismatchException ex, HttpServletRequest request) {

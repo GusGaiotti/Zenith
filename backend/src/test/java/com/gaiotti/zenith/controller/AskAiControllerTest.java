@@ -5,6 +5,8 @@ import com.gaiotti.zenith.config.SecurityConfig;
 import com.gaiotti.zenith.dto.request.AskAiRequest;
 import com.gaiotti.zenith.dto.response.AskAiResponse;
 import com.gaiotti.zenith.exception.AccessDeniedException;
+import com.gaiotti.zenith.exception.QuotaExceededException;
+import com.gaiotti.zenith.exception.RateLimitExceededException;
 import com.gaiotti.zenith.model.User;
 import com.gaiotti.zenith.security.AuthUtils;
 import com.gaiotti.zenith.security.JwtService;
@@ -21,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -72,7 +75,7 @@ class AskAiControllerTest {
                 .build();
 
         when(authUtils.getAuthenticatedUser()).thenReturn(testUser);
-        when(askAiService.ask(eq(1L), any(User.class), any(AskAiRequest.class))).thenReturn(response);
+        when(askAiService.ask(eq(1L), any(User.class), any(AskAiRequest.class), anyString())).thenReturn(response);
 
         mockMvc.perform(post("/api/v1/ledgers/1/ai/ask")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -112,12 +115,50 @@ class AskAiControllerTest {
                 .build();
 
         when(authUtils.getAuthenticatedUser()).thenReturn(testUser);
-        when(askAiService.ask(eq(1L), any(User.class), any(AskAiRequest.class)))
+        when(askAiService.ask(eq(1L), any(User.class), any(AskAiRequest.class), anyString()))
                 .thenThrow(new AccessDeniedException("You are not a member of this ledger"));
 
         mockMvc.perform(post("/api/v1/ledgers/1/ai/ask")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"question\":\"Como economizar?\"}"))
                 .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser
+    void ask_RateLimitExceeded_Returns429() throws Exception {
+        User testUser = User.builder()
+                .id(1L)
+                .email("user@example.com")
+                .displayName("User")
+                .build();
+
+        when(authUtils.getAuthenticatedUser()).thenReturn(testUser);
+        when(askAiService.ask(eq(1L), any(User.class), any(AskAiRequest.class), anyString()))
+                .thenThrow(new RateLimitExceededException("AI rate limit exceeded for this user"));
+
+        mockMvc.perform(post("/api/v1/ledgers/1/ai/ask")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"question\":\"Como economizar?\"}"))
+                .andExpect(status().isTooManyRequests());
+    }
+
+    @Test
+    @WithMockUser
+    void ask_QuotaExceeded_Returns429() throws Exception {
+        User testUser = User.builder()
+                .id(1L)
+                .email("user@example.com")
+                .displayName("User")
+                .build();
+
+        when(authUtils.getAuthenticatedUser()).thenReturn(testUser);
+        when(askAiService.ask(eq(1L), any(User.class), any(AskAiRequest.class), anyString()))
+                .thenThrow(new QuotaExceededException("Daily AI quota exceeded for this user"));
+
+        mockMvc.perform(post("/api/v1/ledgers/1/ai/ask")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"question\":\"Como economizar?\"}"))
+                .andExpect(status().isTooManyRequests());
     }
 }
