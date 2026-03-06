@@ -35,6 +35,20 @@ public class AiUsageGuardService {
         checkDailyQuota(userId, aiProperties.getLimits().getPerUserDailyQuota());
     }
 
+    public UsageSnapshot getSnapshot(Long userId, String clientIp) {
+        int perUserMinuteUsed = getWindowCount(userRateCounters, "u:" + userId);
+        int perIpMinuteUsed = getWindowCount(ipRateCounters, "ip:" + clientIp);
+        int dailyUsed = getDailyCount(userId);
+        int dailyLimit = Math.max(1, aiProperties.getLimits().getPerUserDailyQuota());
+
+        return new UsageSnapshot(
+                perUserMinuteUsed,
+                perIpMinuteUsed,
+                dailyUsed,
+                Math.max(0, dailyLimit - dailyUsed)
+        );
+    }
+
     private void checkWindowCounter(
             ConcurrentHashMap<String, WindowCounter> counters,
             String key,
@@ -72,6 +86,37 @@ public class AiUsageGuardService {
         }
     }
 
+    private int getWindowCount(ConcurrentHashMap<String, WindowCounter> counters, String key) {
+        WindowCounter counter = counters.get(key);
+        if (counter == null) {
+            return 0;
+        }
+
+        long now = Instant.now().toEpochMilli();
+        synchronized (counter) {
+            if (now - counter.windowStart >= 60_000L) {
+                counter.windowStart = now;
+                counter.count = 0;
+            }
+            return counter.count;
+        }
+    }
+
+    private int getDailyCount(Long userId) {
+        DailyCounter counter = userDailyQuota.get(userId);
+        if (counter == null) {
+            return 0;
+        }
+
+        synchronized (counter) {
+            if (!counter.day.equals(LocalDate.now())) {
+                counter.day = LocalDate.now();
+                counter.count = 0;
+            }
+            return counter.count;
+        }
+    }
+
     private static final class WindowCounter {
         private long windowStart;
         private int count;
@@ -91,4 +136,11 @@ public class AiUsageGuardService {
             this.count = 0;
         }
     }
+
+    public record UsageSnapshot(
+            int perUserCurrentMinuteUsed,
+            int perIpCurrentMinuteUsed,
+            int perUserDailyUsed,
+            int perUserDailyRemaining
+    ) {}
 }
