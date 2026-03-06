@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DM_Mono, Geist, Instrument_Serif } from "next/font/google";
+import { DM_Mono, Inter } from "next/font/google";
 import { AuthBootstrap } from "@/components/providers/AuthBootstrap";
 import { QueryProvider } from "@/components/providers/QueryProvider";
 import "./globals.css";
@@ -22,15 +22,10 @@ function resolveMetadataBase() {
   }
 }
 
-const display = Instrument_Serif({
-  variable: "--font-display",
-  subsets: ["latin"],
-  weight: "400",
-});
-
-const body = Geist({
+const body = Inter({
   variable: "--font-body",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
 const mono = DM_Mono({
@@ -65,7 +60,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body className={`${display.variable} ${body.variable} ${mono.variable} antialiased`}>
+      <body className={`${body.variable} ${mono.variable} antialiased`}>
         <QueryProvider>
           <AuthBootstrap />
           {children}

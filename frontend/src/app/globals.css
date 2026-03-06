@@ -1,25 +1,25 @@
 @import "tailwindcss";
 
 :root {
-  --bg-base: #0f0e0d;
-  --bg-surface: #1a1916;
-  --bg-elevated: #232119;
-  --bg-muted: #2c2a25;
-  --accent: #c8873a;
-  --accent-muted: #c8873a26;
-  --accent-hover: #d9944a;
+  --bg-base: #070c1a;
+  --bg-surface: #0f172a;
+  --bg-elevated: #16213d;
+  --bg-muted: #21335a;
+  --accent: #4f7cff;
+  --accent-muted: #4f7cff2a;
+  --accent-hover: #7095ff;
   --income: #4ade80;
   --expense: #f87171;
   --neutral: #94a3b8;
-  --text-primary: #f5f0e8;
-  --text-secondary: #a09880;
-  --text-muted: #6b6352;
-  --border: rgba(255, 255, 255, 0.07);
-  --border-focus: rgba(200, 135, 58, 0.5);
-  --surface-edge: rgba(245, 240, 232, 0.14);
-  --radius-sm: 6px;
+  --text-primary: #f8fbff;
+  --text-secondary: #b4c3e6;
+  --text-muted: #7d93c0;
+  --border: rgba(155, 179, 240, 0.18);
+  --border-focus: rgba(79, 124, 255, 0.55);
+  --surface-edge: rgba(147, 174, 239, 0.2);
+  --radius-sm: 8px;
   --radius-md: 10px;
-  --radius-lg: 16px;
+  --radius-lg: 12px;
 }
 
 @theme inline {
@@ -38,8 +38,9 @@ body {
   min-height: 100vh;
   color: var(--text-primary);
   background:
-    radial-gradient(circle at 15% -10%, rgba(200, 135, 58, 0.12), transparent 28%),
-    radial-gradient(circle at 82% 0%, rgba(200, 135, 58, 0.06), transparent 22%),
+    radial-gradient(circle at 12% -8%, rgba(79, 124, 255, 0.26), transparent 32%),
+    radial-gradient(circle at 88% 2%, rgba(76, 118, 255, 0.15), transparent 24%),
+    radial-gradient(circle at 50% 100%, rgba(35, 62, 120, 0.35), transparent 52%),
     var(--bg-base);
   font-family: var(--font-body), sans-serif;
 }
@@ -49,14 +50,16 @@ body::before {
   pointer-events: none;
   position: fixed;
   inset: 0;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 0);
+  background-image: radial-gradient(rgba(210, 225, 255, 0.045) 1px, transparent 0);
   background-size: 3px 3px;
-  opacity: 0.35;
+  opacity: 0.32;
   z-index: -1;
 }
 
 .font-display {
-  font-family: var(--font-display), serif;
+  font-family: var(--font-body), sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
 
 .font-body {
@@ -68,13 +71,13 @@ body::before {
 }
 
 .surface {
-  background: linear-gradient(180deg, rgba(26, 25, 22, 0.96), rgba(20, 19, 17, 0.92));
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.92), rgba(11, 18, 36, 0.9));
   border: 1px solid var(--surface-edge);
   border-radius: var(--radius-lg);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    0 0 0 1px rgba(200, 135, 58, 0.05),
-    0 12px 24px rgba(0, 0, 0, 0.2);
+    inset 0 1px 0 rgba(225, 236, 255, 0.06),
+    0 0 0 1px rgba(76, 112, 205, 0.1),
+    0 18px 42px rgba(5, 12, 28, 0.4);
 }
 
 .futura-card {
@@ -92,11 +95,11 @@ body::before {
   align-items: center;
   gap: 4px;
   padding: 4px 8px;
-  border: 1px solid var(--border);
+  border: 1px solid rgba(173, 194, 244, 0.2);
   border-radius: 999px;
   font-size: 11px;
   color: var(--text-secondary);
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(173, 194, 244, 0.1);
 }
 
 .hover-grow {
@@ -116,7 +119,7 @@ body::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.06) 45%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, rgba(178, 202, 255, 0.11) 45%, transparent 100%);
   transform: translateX(-100%);
   animation: skeleton-shimmer 2.4s ease-in-out infinite;
 }
@@ -158,10 +161,12 @@ body::before {
 }
 
 .elevated {
-  background: linear-gradient(180deg, rgba(35, 33, 25, 0.96), rgba(28, 26, 21, 0.94));
-  border: 1px solid rgba(245, 240, 232, 0.1);
+  background: linear-gradient(180deg, rgba(24, 35, 63, 0.92), rgba(17, 27, 50, 0.9));
+  border: 1px solid rgba(152, 178, 242, 0.16);
   border-radius: var(--radius-md);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  box-shadow:
+    inset 0 1px 0 rgba(222, 234, 255, 0.06),
+    0 10px 24px rgba(6, 12, 28, 0.24);
 }
 
 .focusable:focus-visible {

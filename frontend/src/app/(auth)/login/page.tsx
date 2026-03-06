@@ -55,52 +55,77 @@ export default function LoginPage() {
   });
 
   return (
-    <main className="flex min-h-screen items-center justify-center p-4">
-      <section className="surface w-full max-w-md p-8">
-        <h1 className="font-display text-4xl italic">Bem-vindo de volta</h1>
-        <p className="mt-2 text-sm text-[var(--text-secondary)]">Entre para continuar na sua fatura compartilhada.</p>
-        <form className="mt-6 space-y-4" onSubmit={onSubmit}>
-          <label className="block text-sm">
-            <span className="mb-1 block text-[var(--text-secondary)]">Email</span>
-            <input
-              type="email"
-              className="focusable w-full rounded-md border bg-[var(--bg-elevated)] px-3 py-2 outline-none"
-              {...form.register("email")}
-            />
-            {form.formState.errors.email ? (
-              <span className="mt-1 block text-xs text-red-300">{form.formState.errors.email.message}</span>
-            ) : null}
-          </label>
-          <label className="block text-sm">
-            <span className="mb-1 block text-[var(--text-secondary)]">Senha</span>
-            <input
-              type="password"
-              className="focusable w-full rounded-md border bg-[var(--bg-elevated)] px-3 py-2 outline-none"
-              {...form.register("password")}
-            />
-            {form.formState.errors.password ? (
-              <span className="mt-1 block text-xs text-red-300">{form.formState.errors.password.message}</span>
-            ) : null}
-          </label>
-          {loginMutation.isError ? (
-            <p className="rounded-md bg-red-500/10 px-3 py-2 text-sm text-red-300">
-              Credenciais invalidas ou servidor indisponivel.
-            </p>
-          ) : null}
-          <button
-            disabled={loginMutation.isPending || cooldownSeconds > 0}
-            className="focusable w-full rounded-md bg-[var(--accent)] px-4 py-2 font-medium text-black transition-all duration-150 hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-40"
-          >
-            {loginMutation.isPending
-              ? "Entrando..."
-              : cooldownSeconds > 0
-                ? `Tente novamente em ${cooldownSeconds}s`
-                : "Entrar"}
-          </button>
-        </form>
-        <p className="mt-4 text-sm text-[var(--text-secondary)]">
-          Nao tem conta? <Link className="text-[var(--accent)]" href="/register">Cadastre-se</Link>
-        </p>
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden p-4 sm:p-6">
+      <section className="surface relative w-full max-w-5xl overflow-hidden p-0">
+        <div className="grid min-h-[620px] lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="relative hidden flex-col justify-between bg-gradient-to-br from-[#14244a] to-[#0d1733] p-10 lg:flex">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-200/90">Zenith</p>
+              <h1 className="mt-4 max-w-sm text-4xl font-semibold leading-tight text-white">
+                Controle financeiro compartilhado com clareza e seguranca.
+              </h1>
+            </div>
+            <ul className="space-y-3 text-sm text-blue-100/90">
+              <li className="rounded-xl border border-blue-200/20 bg-blue-100/8 px-4 py-3">Saldo consolidado do casal em tempo real.</li>
+              <li className="rounded-xl border border-blue-200/20 bg-blue-100/8 px-4 py-3">Transacoes organizadas por pessoa e categoria.</li>
+              <li className="rounded-xl border border-blue-200/20 bg-blue-100/8 px-4 py-3">Exportacao de relatorios para fechamento mensal.</li>
+            </ul>
+          </div>
+
+          <div className="p-6 sm:p-10">
+            <div className="mx-auto w-full max-w-md">
+              <p className="text-xs font-semibold uppercase tracking-[0.15em] text-[var(--text-muted)]">Acesso seguro</p>
+              <h2 className="mt-3 font-display text-3xl leading-tight text-[var(--text-primary)]">Entrar na sua conta</h2>
+              <p className="mt-2 text-sm text-[var(--text-secondary)]">Use seu email e senha para continuar.</p>
+
+              <form className="mt-8 space-y-5" onSubmit={onSubmit}>
+                <label className="block text-sm">
+                  <span className="mb-1.5 block font-medium text-[var(--text-secondary)]">Email</span>
+                  <input
+                    type="email"
+                    className="focusable h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-3.5 outline-none transition-colors duration-150"
+                    {...form.register("email")}
+                  />
+                  {form.formState.errors.email ? (
+                    <span className="mt-1.5 block text-xs text-red-300">{form.formState.errors.email.message}</span>
+                  ) : null}
+                </label>
+                <label className="block text-sm">
+                  <span className="mb-1.5 block font-medium text-[var(--text-secondary)]">Senha</span>
+                  <input
+                    type="password"
+                    className="focusable h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-3.5 outline-none transition-colors duration-150"
+                    {...form.register("password")}
+                  />
+                  {form.formState.errors.password ? (
+                    <span className="mt-1.5 block text-xs text-red-300">{form.formState.errors.password.message}</span>
+                  ) : null}
+                </label>
+                {loginMutation.isError ? (
+                  <p className="rounded-xl border border-red-500/25 bg-red-500/10 px-3 py-2.5 text-sm text-red-300">
+                    Credenciais invalidas ou servidor indisponivel.
+                  </p>
+                ) : null}
+                <button
+                  disabled={loginMutation.isPending || cooldownSeconds > 0}
+                  className="focusable h-11 w-full rounded-xl bg-[var(--accent)] px-4 font-semibold text-white shadow-[0_8px_24px_rgba(79,124,255,0.35)] transition-all duration-150 hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-45"
+                >
+                  {loginMutation.isPending
+                    ? "Entrando..."
+                    : cooldownSeconds > 0
+                      ? `Tente novamente em ${cooldownSeconds}s`
+                      : "Entrar"}
+                </button>
+              </form>
+              <p className="mt-5 text-sm text-[var(--text-secondary)]">
+                Nao tem conta?{" "}
+                <Link className="font-semibold text-[var(--accent-hover)]" href="/register">
+                  Cadastre-se
+                </Link>
+              </p>
+            </div>
+          </div>
+        </div>
       </section>
     </main>
   );

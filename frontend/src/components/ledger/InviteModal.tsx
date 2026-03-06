@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { FormEvent, useState } from "react";
 
@@ -35,7 +35,7 @@ export function InviteModal({ open, onClose, onSubmit, isSubmitting = false }: I
           <div className="flex gap-2">
             <button
               disabled={isSubmitting}
-              className="focusable rounded-md bg-[var(--accent)] px-4 py-2 font-medium text-black disabled:cursor-not-allowed disabled:opacity-40"
+              className="focusable rounded-md bg-[var(--accent)] px-4 py-2 font-medium text-white disabled:cursor-not-allowed disabled:opacity-40"
             >
               {isSubmitting ? "Enviando..." : "Enviar convite"}
             </button>
@@ -48,3 +48,4 @@ export function InviteModal({ open, onClose, onSubmit, isSubmitting = false }: I
     </div>
   );
 }
+

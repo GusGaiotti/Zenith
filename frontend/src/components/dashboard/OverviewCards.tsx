@@ -33,11 +33,11 @@ function getNetBalanceClassName(value: number) {
 function DeltaBadge({ value, description }: { value: string; description: string }) {
   return (
     <div className="group relative inline-flex items-center">
-      <span className="cursor-help rounded-full border border-[var(--surface-edge)] bg-white/5 px-2 py-1 text-xs text-[var(--text-secondary)]">
+      <span className="cursor-help rounded-full border border-[var(--surface-edge)] bg-white/6 px-2.5 py-1 text-xs font-medium text-[var(--text-secondary)]">
         {value}
       </span>
       <div
-        className="pointer-events-none absolute bottom-full left-0 z-50 mb-3 w-64 translate-y-1 rounded-xl border border-[var(--surface-edge)] bg-[rgba(28,26,23,0.98)] px-3 py-2 text-left text-xs leading-5 text-[var(--text-primary)] opacity-0 shadow-[0_18px_50px_rgba(0,0,0,0.45)] transition-all duration-150 group-hover:translate-y-0 group-hover:opacity-100"
+        className="pointer-events-none absolute bottom-full left-0 z-50 mb-3 w-64 translate-y-1 rounded-xl border border-[var(--surface-edge)] bg-[rgba(16,26,49,0.98)] px-3 py-2 text-left text-xs leading-5 text-[var(--text-primary)] opacity-0 shadow-[0_18px_50px_rgba(0,0,0,0.45)] transition-all duration-150 group-hover:translate-y-0 group-hover:opacity-100"
         role="tooltip"
       >
         {description}

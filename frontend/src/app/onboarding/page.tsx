@@ -72,7 +72,7 @@ export default function OnboardingPage() {
             />
             <button
               disabled={createLedgerMutation.isPending}
-              className="focusable rounded-md bg-[var(--accent)] px-4 py-2 font-medium text-black transition-all duration-150 hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-40"
+              className="focusable rounded-md bg-[var(--accent)] px-4 py-2 font-medium text-white transition-all duration-150 hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-40"
             >
               {createLedgerMutation.isPending ? "Criando..." : "Criar fatura"}
             </button>
@@ -98,7 +98,7 @@ export default function OnboardingPage() {
             />
             <div className="flex gap-2">
               <button
-                className="focusable rounded-md bg-[var(--accent)] px-4 py-2 font-medium text-black transition-all duration-150 hover:bg-[var(--accent-hover)]"
+                className="focusable rounded-md bg-[var(--accent)] px-4 py-2 font-medium text-white transition-all duration-150 hover:bg-[var(--accent-hover)]"
                 onClick={sendInvite}
               >
                 Enviar convite
@@ -113,3 +113,4 @@ export default function OnboardingPage() {
     </main>
   );
 }
+

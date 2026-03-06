@@ -114,7 +114,7 @@ function CategoryFormContent({
           <div className="flex gap-2">
             <button
               disabled={isSubmitting || !name.trim()}
-              className="focusable rounded-md bg-[var(--accent)] px-4 py-2 font-medium text-black disabled:cursor-not-allowed disabled:opacity-40"
+              className="focusable rounded-md bg-[var(--accent)] px-4 py-2 font-medium text-white disabled:cursor-not-allowed disabled:opacity-40"
             >
               {isSubmitting ? "Salvando..." : submitLabel}
             </button>
@@ -153,3 +153,4 @@ export function CategoryFormModal({
     />
   );
 }
+
