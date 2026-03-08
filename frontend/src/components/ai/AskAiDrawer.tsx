@@ -105,6 +105,7 @@ export function AskAiDrawer({ open, onClose }: AskAiDrawerProps) {
           <div className="flex items-center gap-2 text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">
             <span>Uso e modo</span>
             <InfoTooltip
+              align="left"
               text="Aqui voce ve como a IA esta configurada hoje e quanto voce ainda pode usar. Cota diaria e por usuario."
             />
           </div>
@@ -118,18 +119,20 @@ export function AskAiDrawer({ open, onClose }: AskAiDrawerProps) {
                   Cota diaria: <span className="font-semibold text-[var(--text-primary)]">{usage.perUserDailyRemaining}/{usage.perUserDailyQuota}</span> restantes.
                 </span>
                 <InfoTooltip
+                  align="left"
                   text="A cota diaria e por usuario. Exemplo: 50/dia significa que cada pessoa autenticada pode fazer ate 50 perguntas por dia."
                 />
               </p>
               <p className="flex items-center gap-2">
                 <span>Janela por minuto (usuario): {usage.perUserCurrentMinuteUsed}/{usage.perUserPerMinuteLimit}</span>
                 <InfoTooltip
+                  align="left"
                   text="Protecao de rajada. Limita quantas perguntas um mesmo usuario pode fazer dentro de 1 minuto para evitar abuso e custo inesperado."
                 />
               </p>
-              <p>{usage.note}</p>
+              <p className="break-words">{usage.note}</p>
               {!usage.accessAllowed ? (
-                <p className="text-red-200">Acesso a IA bloqueado para seu usuario neste ambiente.</p>
+                <p className="break-words text-red-200">Acesso a IA bloqueado para seu usuario neste ambiente.</p>
               ) : null}
             </>
           ) : (
@@ -202,6 +205,7 @@ export function AskAiDrawer({ open, onClose }: AskAiDrawerProps) {
             <span className="flex items-center gap-2">
               Incluir amostra automatica de lancamentos
               <InfoTooltip
+                align="left"
                 text="Nao precisa selecionar transacoes manualmente. O backend escolhe automaticamente uma amostra limitada (ate 50) do periodo para dar mais contexto."
               />
             </span>
@@ -232,7 +236,7 @@ export function AskAiDrawer({ open, onClose }: AskAiDrawerProps) {
         </form>
 
         {error ? (
-          <div className="mt-5 rounded-xl border border-red-400/40 bg-red-500/10 px-4 py-3 text-sm text-red-200">{error}</div>
+          <div className="mt-5 rounded-xl border border-red-400/40 bg-red-500/10 px-4 py-3 text-sm text-red-200 break-words">{error}</div>
         ) : null}
 
         {result ? (
