@@ -19,7 +19,8 @@ export function Sidebar({ collapsed, onCollapsedChange }: SidebarProps) {
   const router = useRouter();
   const logoutMutation = useLogout();
   const user = useAuthStore((state) => state.user);
-  const askAiLocked = user ? !user.aiAccessAllowed : false;
+  const authResolved = useAuthStore((state) => state.authResolved);
+  const askAiLocked = authResolved && user ? !user.aiAccessAllowed : false;
 
   return (
     <aside

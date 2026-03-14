@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Mono, Plus_Jakarta_Sans, Space_Grotesk } from "next/font/google";
+import { IBM_Plex_Mono, Manrope, Sora } from "next/font/google";
 import { AuthBootstrap } from "@/components/providers/AuthBootstrap";
 import { QueryProvider } from "@/components/providers/QueryProvider";
 import "./globals.css";
@@ -22,13 +22,13 @@ function resolveMetadataBase() {
   }
 }
 
-const body = Plus_Jakarta_Sans({
+const body = Manrope({
   variable: "--font-body",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
 
-const display = Space_Grotesk({
+const display = Sora({
   variable: "--font-display",
   subsets: ["latin"],
   weight: ["500", "600", "700"],

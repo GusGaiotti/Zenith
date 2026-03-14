@@ -87,9 +87,9 @@ export default function LoginPage() {
               </h1>
             </div>
             <ul className="space-y-3 text-sm text-[var(--text-secondary)]">
-              <li className="rounded-xl border border-[color-mix(in_srgb,var(--accent)_18%,transparent)] bg-[color-mix(in_srgb,var(--accent)_10%,var(--card-strong))] px-4 py-3 shadow-[var(--elevated-shadow)]">Saldo consolidado do casal em tempo real.</li>
-              <li className="rounded-xl border border-[color-mix(in_srgb,var(--accent-emerald)_18%,transparent)] bg-[color-mix(in_srgb,var(--accent-emerald)_10%,var(--card-strong))] px-4 py-3 shadow-[var(--elevated-shadow)]">Transacoes organizadas por pessoa e categoria.</li>
-              <li className="rounded-xl border border-[color-mix(in_srgb,var(--accent-amber)_18%,transparent)] bg-[color-mix(in_srgb,var(--accent-amber)_10%,var(--card-strong))] px-4 py-3 shadow-[var(--elevated-shadow)]">Visoes rapidas para o fechamento do mes.</li>
+              <li className="rounded-xl border border-[color-mix(in_srgb,var(--accent)_18%,transparent)] bg-[color-mix(in_srgb,var(--accent)_10%,var(--panel-bg))] px-4 py-3 shadow-[var(--elevated-shadow)]">Saldo consolidado do casal em tempo real.</li>
+              <li className="rounded-xl border border-[color-mix(in_srgb,var(--accent-emerald)_18%,transparent)] bg-[color-mix(in_srgb,var(--accent-emerald)_10%,var(--panel-bg))] px-4 py-3 shadow-[var(--elevated-shadow)]">Transacoes organizadas por pessoa e categoria.</li>
+              <li className="rounded-xl border border-[color-mix(in_srgb,var(--accent-amber)_18%,transparent)] bg-[color-mix(in_srgb,var(--accent-amber)_10%,var(--panel-bg))] px-4 py-3 shadow-[var(--elevated-shadow)]">Visoes rapidas para o fechamento do mes.</li>
             </ul>
           </div>
 

@@ -13,7 +13,8 @@ export function AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const user = useAuthStore((state) => state.user);
-  const askAiLocked = user ? !user.aiAccessAllowed : false;
+  const authResolved = useAuthStore((state) => state.authResolved);
+  const askAiLocked = authResolved && user ? !user.aiAccessAllowed : false;
 
   return (
     <div className="min-h-screen md:flex">
