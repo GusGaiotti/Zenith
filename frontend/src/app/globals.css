@@ -7,7 +7,9 @@
   --bg-muted: #21335a;
   --accent: #4f7cff;
   --accent-muted: #4f7cff2a;
-  --accent-hover: #7095ff;
+  --accent-hover: #89a8ff;
+  --accent-emerald: #38bdf8;
+  --accent-amber: #f59e0b;
   --income: #4ade80;
   --expense: #f87171;
   --neutral: #94a3b8;
@@ -38,9 +40,10 @@ body {
   min-height: 100vh;
   color: var(--text-primary);
   background:
-    radial-gradient(circle at 12% -8%, rgba(79, 124, 255, 0.26), transparent 32%),
-    radial-gradient(circle at 88% 2%, rgba(76, 118, 255, 0.15), transparent 24%),
-    radial-gradient(circle at 50% 100%, rgba(35, 62, 120, 0.35), transparent 52%),
+    radial-gradient(circle at 12% -8%, rgba(79, 124, 255, 0.28), transparent 32%),
+    radial-gradient(circle at 88% 2%, rgba(56, 189, 248, 0.12), transparent 24%),
+    radial-gradient(circle at 50% 100%, rgba(35, 62, 120, 0.36), transparent 52%),
+    radial-gradient(circle at 82% 72%, rgba(245, 158, 11, 0.09), transparent 26%),
     var(--bg-base);
   font-family: var(--font-body), sans-serif;
 }

@@ -10,6 +10,7 @@ import java.util.List;
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
     long countByRecipientUserIdAndSeenAtIsNull(Long recipientUserId);
+    long countByRecipientUserIdAndSeenAtIsNullAndCreatedAtAfter(Long recipientUserId, LocalDateTime createdAfter);
     List<Notification> findByRecipientUserIdAndCreatedAtAfterOrderByCreatedAtDesc(Long recipientUserId, LocalDateTime createdAfter);
     List<Notification> findByRecipientUserIdAndSeenAtIsNullAndCreatedAtAfterOrderByCreatedAtDesc(Long recipientUserId, LocalDateTime createdAfter);
     List<Notification> findByIdInAndRecipientUserId(List<Long> ids, Long recipientUserId);
