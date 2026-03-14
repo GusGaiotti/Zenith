@@ -39,7 +39,11 @@ export function InviteModal({ open, onClose, onSubmit, isSubmitting = false }: I
             >
               {isSubmitting ? "Enviando..." : "Enviar convite"}
             </button>
-            <button type="button" onClick={onClose} className="focusable rounded-md border px-4 py-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className="focusable rounded-md border border-red-400/30 bg-red-500/10 px-4 py-2 text-red-200 transition-colors duration-150 hover:border-red-300 hover:bg-red-500/20"
+            >
               Cancelar
             </button>
           </div>

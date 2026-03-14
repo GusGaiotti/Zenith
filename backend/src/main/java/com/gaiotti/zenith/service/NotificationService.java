@@ -44,7 +44,10 @@ public class NotificationService {
         Map<Long, Invitation> invitationsById = loadInvitations(notifications);
 
         return NotificationListResponse.builder()
-                .unreadCount(notificationRepository.countByRecipientUserIdAndSeenAtIsNull(authenticatedUser.getId()))
+                .unreadCount(notificationRepository.countByRecipientUserIdAndSeenAtIsNullAndCreatedAtAfter(
+                        authenticatedUser.getId(),
+                        createdAfter
+                ))
                 .items(notifications.stream()
                         .map(notification -> mapToResponse(notification, invitationsById))
                         .toList())
