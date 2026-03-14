@@ -98,6 +98,7 @@ api.interceptors.response.use(
           id: next.userId,
           email: next.email,
           displayName: next.displayName,
+          aiAccessAllowed: next.aiAccessAllowed,
         },
         accessToken: next.accessToken,
       });

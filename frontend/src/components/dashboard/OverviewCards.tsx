@@ -92,16 +92,16 @@ export function OverviewCards({ overview }: OverviewCardsProps) {
       {stats.map((stat, index) => (
         <article
           key={stat.label}
-          className="surface futura-card data-reveal flex min-h-[172px] flex-col p-5"
+          className="surface futura-card data-reveal relative flex min-h-[172px] flex-col p-5"
           style={{ animationDelay: `${index * 80}ms` }}
         >
+          <div className="absolute right-5 top-5">
+            <InfoTooltip text={stat.infoText} />
+          </div>
           <div className={`inline-flex w-fit items-center rounded-full border px-3 py-1 text-[11px] uppercase tracking-[0.08em] text-[var(--text-secondary)] ${stat.toneClassName}`}>
             {stat.label}
           </div>
-          <div className="mt-4 flex items-center justify-between gap-3">
-            <InfoTooltip text={stat.infoText} />
-          </div>
-          <p className={`mt-2.5 font-mono text-3xl whitespace-nowrap xl:text-[2.15rem] ${stat.color}`}>
+          <p className={`mt-5 font-mono text-3xl whitespace-nowrap xl:text-[2.15rem] ${stat.color}`}>
             {stat.format === "currency" ? formatCurrency(stat.value) : formatPercentage(stat.value)}
           </p>
           <div className="mt-auto pt-3">

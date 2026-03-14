@@ -8,6 +8,7 @@ import com.gaiotti.zenith.model.User;
 import com.gaiotti.zenith.repository.RefreshTokenRepository;
 import com.gaiotti.zenith.repository.UserRepository;
 import com.gaiotti.zenith.security.JwtService;
+import com.gaiotti.zenith.service.ai.AiAccessControlService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -46,6 +47,9 @@ class AuthServiceTest {
     @Mock
     private AuthenticationManager authenticationManager;
 
+    @Mock
+    private AiAccessControlService aiAccessControlService;
+
     @InjectMocks
     private AuthService authService;
 
@@ -80,6 +84,7 @@ class AuthServiceTest {
         when(jwtService.generateAccessToken(anyLong(), anyString())).thenReturn("accessToken");
         when(jwtService.generateRefreshToken(anyLong(), anyString())).thenReturn("refreshToken");
         when(refreshTokenRepository.save(any(RefreshToken.class))).thenAnswer(i -> i.getArgument(0));
+        when(aiAccessControlService.isAiAllowed(any(User.class))).thenReturn(true);
 
         AuthService.AuthSession session = authService.register(registerRequest);
         AuthResponse response = session.response();
@@ -106,6 +111,7 @@ class AuthServiceTest {
         when(jwtService.generateAccessToken(anyLong(), anyString())).thenReturn("accessToken");
         when(jwtService.generateRefreshToken(anyLong(), anyString())).thenReturn("refreshToken");
         when(refreshTokenRepository.save(any(RefreshToken.class))).thenAnswer(i -> i.getArgument(0));
+        when(aiAccessControlService.isAiAllowed(any(User.class))).thenReturn(true);
 
         authService.register(registerRequest);
 
@@ -129,6 +135,7 @@ class AuthServiceTest {
         when(jwtService.generateAccessToken(anyLong(), anyString())).thenReturn("accessToken");
         when(jwtService.generateRefreshToken(anyLong(), anyString())).thenReturn("refreshToken");
         when(refreshTokenRepository.save(any(RefreshToken.class))).thenAnswer(i -> i.getArgument(0));
+        when(aiAccessControlService.isAiAllowed(any(User.class))).thenReturn(true);
 
         AuthService.AuthSession session = authService.login(loginRequest);
         AuthResponse response = session.response();
@@ -149,6 +156,7 @@ class AuthServiceTest {
         when(jwtService.generateAccessToken(anyLong(), anyString())).thenReturn("accessToken");
         when(jwtService.generateRefreshToken(anyLong(), anyString())).thenReturn("refreshToken");
         when(refreshTokenRepository.save(any(RefreshToken.class))).thenAnswer(i -> i.getArgument(0));
+        when(aiAccessControlService.isAiAllowed(any(User.class))).thenReturn(true);
 
         authService.login(loginRequest);
 
@@ -194,6 +202,7 @@ class AuthServiceTest {
         when(jwtService.generateAccessToken(anyLong(), anyString())).thenReturn("newAccessToken");
         when(jwtService.generateRefreshToken(anyLong(), anyString())).thenReturn("newRefreshToken");
         when(refreshTokenRepository.save(any(RefreshToken.class))).thenAnswer(i -> i.getArgument(0));
+        when(aiAccessControlService.isAiAllowed(any(User.class))).thenReturn(true);
 
         AuthService.AuthSession session = authService.refresh(refreshToken);
         AuthResponse response = session.response();

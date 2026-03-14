@@ -1,17 +1,17 @@
 # Zenith
 
-Aplicacao de finanças compartilhadas em monorepo, com dashboard financeiro, fluxo colaborativo entre duas pessoas e assistente contextual para leitura rápida do mês.
+Monorepo de financas compartilhadas com foco em um produto realista: autenticacao segura, dashboard mensal, colaboracao entre duas pessoas e um assistente contextual para leitura rapida do mes.
 
 - `backend/`: Spring Boot, Java 21, PostgreSQL
 - `frontend/`: Next.js, React, TypeScript
 
-## O que entrega
+## Principais fluxos
 
-- autenticação com access token + refresh token
+- autenticacao com access token, refresh token e renovacao de sessao
 - ledger compartilhado entre duas pessoas
-- categorias, transações e dashboard financeiro
+- dashboard com entradas, saidas, categorias, tendencia e leitura de contribuicao
 - convites entre membros
-- assistente com contexto financeiro e limites de uso
+- assistente com contexto financeiro, cotas e fallback seguro
 
 ## Stack
 
@@ -21,6 +21,13 @@ Aplicacao de finanças compartilhadas em monorepo, com dashboard financeiro, flu
 - Next.js 16
 - React 19
 - Tailwind CSS 4
+
+## Estrutura
+
+- `backend/src/main`: API, regras de negocio, seguranca e integracao com IA
+- `backend/src/test`: testes unitarios e de controller
+- `frontend/src/app`: rotas e layouts
+- `frontend/src/components`: interface, dashboard, autenticacao e IA
 
 ## Rodando localmente
 
@@ -54,13 +61,7 @@ npm.cmd install
 npm.cmd run dev
 ```
 
-## Ambientes
-
-- desenvolvimento com IA local ou desativada
-- produção compatível com Vercel, Render e Neon
-- `OPENAI_API_KEY` configurada apenas no backend
-
-## Variáveis importantes
+## Variaveis principais
 
 Backend:
 - `DB_URL`
@@ -76,7 +77,7 @@ Frontend:
 - `API_URL`
 - `SITE_URL`
 
-## Validação
+## Validacao
 
 Backend:
 

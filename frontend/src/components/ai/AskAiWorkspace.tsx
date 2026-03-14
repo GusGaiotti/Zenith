@@ -165,14 +165,14 @@ export function AskAiWorkspace() {
 
           <div ref={timelineRef} className="flex-1 space-y-4 overflow-y-auto px-5 py-5">
             {messages.length === 0 ? (
-              <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_280px]">
+              <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_300px]">
                 <div className="elevated p-5">
                   <p className="text-xs uppercase tracking-[0.12em] text-[var(--text-muted)]">Comece por aqui</p>
                   <h2 className="mt-2 text-2xl font-semibold text-[var(--text-primary)]">Use o assistente como uma leitura rapida do seu mes</h2>
                   <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--text-secondary)]">
                     Escolha o mes de referencia, escreva uma pergunta objetiva e receba uma resposta curta com prioridades, achados e proximos passos. Ele considera saldo, categorias e padroes do periodo para evitar respostas soltas.
                   </p>
-                  <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                  <div className="mt-4 grid gap-3 lg:grid-cols-2 2xl:grid-cols-3">
                     <div className="rounded-2xl border border-[color-mix(in_srgb,var(--accent)_20%,transparent)] bg-[color-mix(in_srgb,var(--accent)_7%,white_93%)] px-4 py-4">
                       <p className="text-sm font-semibold text-[var(--text-primary)]">Mes de referencia</p>
                       <p className="mt-1 text-sm leading-6 text-[var(--text-secondary)]">Troque o mes para revisar um fechamento anterior ou comparar comportamentos recentes.</p>
