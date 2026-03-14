@@ -5,6 +5,7 @@ type IconName =
   | "transactions"
   | "categories"
   | "ledger"
+  | "ask-ai"
   | "collapse"
   | "expand";
 
@@ -73,6 +74,14 @@ export function NavigationIcon({ name, className = iconClassName }: { name: Icon
           <path d="M4 10.5h16" />
           <path d="M8 15h3" />
           <path d="M14 15h2" />
+        </IconBase>
+      );
+    case "ask-ai":
+      return (
+        <IconBase className={className}>
+          <path d="M12 3.5c4.97 0 9 3.36 9 7.5 0 2.35-1.3 4.44-3.33 5.82l.33 3.68-3.78-1.84c-.7.13-1.45.2-2.22.2-4.97 0-9-3.36-9-7.5s4.03-7.86 9-7.86Z" />
+          <path d="M9.4 10.2a2.7 2.7 0 0 1 5.2 0c0 1.1-.62 1.73-1.47 2.3-.67.45-1.03.75-1.03 1.5" />
+          <path d="M12 16.2h.01" />
         </IconBase>
       );
     case "collapse":

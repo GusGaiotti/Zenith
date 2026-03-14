@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --webpack",
     "build": "next build --webpack --experimental-build-mode compile && next build --webpack --experimental-build-mode generate-env",
     "start": "next start",
     "lint": "eslint",

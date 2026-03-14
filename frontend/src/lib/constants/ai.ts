@@ -1,0 +1,1 @@
+export const ASK_AI_MAX_QUESTION_LENGTH = 300;

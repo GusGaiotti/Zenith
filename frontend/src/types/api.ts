@@ -181,6 +181,33 @@ export interface DashboardPulseResponse {
   currentSpendingStreak: number;
 }
 
+export type AskAiContextLevel = "SUMMARY" | "EXTENDED" | "SAMPLED_TRANSACTIONS";
+
+export interface AskAiRequest {
+  question: string;
+  yearMonth?: string;
+  includeTransactions?: boolean;
+}
+
+export interface AskAiResponse {
+  answer: string;
+  contextLevelUsed: AskAiContextLevel;
+  disclaimer?: string;
+}
+
+export interface AskAiUsageResponse {
+  mode: "local" | "ollama" | "openai" | "off" | string;
+  accessAllowed: boolean;
+  perUserPerMinuteLimit: number;
+  perIpPerMinuteLimit: number;
+  perUserDailyQuota: number;
+  perUserCurrentMinuteUsed: number;
+  perIpCurrentMinuteUsed: number;
+  perUserDailyUsed: number;
+  perUserDailyRemaining: number;
+  note: string;
+}
+
 export interface CreateLedgerRequest {
   name: string;
 }
