@@ -13,11 +13,21 @@ import { getMyLedger } from "@/lib/api/ledger";
 import { useAuthStore } from "@/lib/store/auth.store";
 import { loginSchema, type LoginSchema } from "@/lib/validators/auth.schemas";
 
+function LockIcon() {
+  return (
+    <svg aria-hidden className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.9" viewBox="0 0 24 24">
+      <rect x="5" y="11" width="14" height="9" rx="2.5" />
+      <path d="M8 11V8.5a4 4 0 1 1 8 0V11" />
+    </svg>
+  );
+}
+
 export default function LoginPage() {
   const router = useRouter();
   const loginMutation = useLogin();
   const setActiveLedger = useAuthStore((state) => state.setActiveLedger);
   const [cooldownSeconds, setCooldownSeconds] = useState(0);
+  const [isPreparingRoute, setIsPreparingRoute] = useState(false);
 
   useEffect(() => {
     if (cooldownSeconds <= 0) return;
@@ -33,10 +43,13 @@ export default function LoginPage() {
   });
 
   const onSubmit = form.handleSubmit((values) => {
+    setIsPreparingRoute(false);
     loginMutation.mutate(values, {
       onSuccess: async () => {
         setCooldownSeconds(0);
+        setIsPreparingRoute(true);
         try {
+          await new Promise((resolve) => setTimeout(resolve, 900));
           const response = await getMyLedger();
           setActiveLedger(response.data.id);
           router.push("/dashboard");
@@ -51,6 +64,7 @@ export default function LoginPage() {
         }
       },
       onError: () => {
+        setIsPreparingRoute(false);
         setCooldownSeconds(5);
       },
     });
@@ -63,23 +77,26 @@ export default function LoginPage() {
       </div>
       <section className="surface relative w-full max-w-5xl overflow-hidden p-0">
         <div className="grid min-h-[620px] lg:grid-cols-[1.1fr_0.9fr]">
-          <div className="relative hidden flex-col justify-between border-r border-[var(--border)] bg-[linear-gradient(145deg,color-mix(in_srgb,var(--accent)_18%,transparent),transparent_52%),linear-gradient(180deg,var(--surface-gradient-start),var(--elevated-gradient-end))] p-10 lg:flex">
+          <div className="relative hidden flex-col justify-between border-r border-[var(--surface-edge)] bg-[linear-gradient(145deg,color-mix(in_srgb,var(--accent)_22%,transparent),transparent_52%),linear-gradient(180deg,var(--surface-gradient-start),var(--elevated-gradient-end))] p-10 lg:flex">
             <div>
-              <BrandWordmark animate labelClassName="text-5xl text-[var(--text-primary)]" />
+              <BrandWordmark animate labelClassName="text-6xl text-[var(--text-primary)]" />
               <h1 className="mt-6 max-w-sm text-4xl font-semibold leading-tight text-[var(--text-primary)]">
                 Controle financeiro compartilhado com clareza, ritmo e tranquilidade.
               </h1>
             </div>
             <ul className="space-y-3 text-sm text-[var(--text-secondary)]">
-              <li className="rounded-xl border border-[var(--border)] bg-[var(--panel-bg)] px-4 py-3">Saldo consolidado do casal em tempo real.</li>
-              <li className="rounded-xl border border-[var(--border)] bg-[var(--panel-bg)] px-4 py-3">Transacoes organizadas por pessoa e categoria.</li>
-              <li className="rounded-xl border border-[var(--border)] bg-[var(--panel-bg)] px-4 py-3">Visoes rapidas para o fechamento do mes.</li>
+              <li className="rounded-xl border border-[color-mix(in_srgb,var(--accent)_18%,transparent)] bg-[color-mix(in_srgb,var(--accent)_8%,white_92%)] px-4 py-3">Saldo consolidado do casal em tempo real.</li>
+              <li className="rounded-xl border border-[color-mix(in_srgb,var(--accent-emerald)_18%,transparent)] bg-[color-mix(in_srgb,var(--accent-emerald)_8%,white_92%)] px-4 py-3">Transacoes organizadas por pessoa e categoria.</li>
+              <li className="rounded-xl border border-[color-mix(in_srgb,var(--accent-amber)_18%,transparent)] bg-[color-mix(in_srgb,var(--accent-amber)_8%,white_92%)] px-4 py-3">Visoes rapidas para o fechamento do mes.</li>
             </ul>
           </div>
 
-          <div className="p-6 sm:p-10">
+          <div className="bg-[linear-gradient(180deg,color-mix(in_srgb,var(--bg-surface)_70%,white_30%),color-mix(in_srgb,var(--panel-bg)_78%,white_22%))] p-6 sm:p-10">
             <div className="mx-auto w-full max-w-md">
-              <p className="text-xs font-semibold uppercase tracking-[0.15em] text-[var(--text-muted)]">Acesso seguro</p>
+              <div className="inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--income)_26%,transparent)] bg-[color-mix(in_srgb,var(--income)_10%,transparent)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-[var(--income)]">
+                <LockIcon />
+                <span>Acesso seguro</span>
+              </div>
               <h2 className="mt-3 font-display text-3xl leading-tight text-[var(--text-primary)]">Entrar na sua conta</h2>
               <p className="mt-2 text-sm text-[var(--text-secondary)]">Use seu email e senha para continuar.</p>
 
@@ -112,11 +129,13 @@ export default function LoginPage() {
                   </p>
                 ) : null}
                 <button
-                  disabled={loginMutation.isPending || cooldownSeconds > 0}
+                  disabled={loginMutation.isPending || isPreparingRoute || cooldownSeconds > 0}
                   className="focusable h-11 w-full rounded-xl bg-[var(--accent)] px-4 font-semibold text-white shadow-[0_8px_24px_rgba(79,124,255,0.35)] transition-all duration-150 hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-45"
                 >
                   {loginMutation.isPending
                     ? "Entrando..."
+                    : isPreparingRoute
+                      ? "Abrindo seu painel..."
                     : cooldownSeconds > 0
                       ? `Tente novamente em ${cooldownSeconds}s`
                       : "Entrar"}
