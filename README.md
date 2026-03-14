@@ -1,33 +1,26 @@
 # Zenith
 
-Monorepo de financas compartilhadas com foco em um produto realista: autenticacao segura, dashboard mensal, colaboracao entre duas pessoas e um assistente contextual para leitura rapida do mes.
+Zenith é um monorepo de finanças compartilhadas pensado como produto real: autenticação segura, dashboard mensal, colaboração entre duas pessoas e um assistente contextual para leitura rápida do mês.
 
-- `backend/`: Spring Boot, Java 21, PostgreSQL
-- `frontend/`: Next.js, React, TypeScript
+## O que o projeto cobre
 
-## Principais fluxos
-
-- autenticacao com access token, refresh token e renovacao de sessao
+- autenticação com access token, refresh token e renovação de sessão
 - ledger compartilhado entre duas pessoas
-- dashboard com entradas, saidas, categorias, tendencia e leitura de contribuicao
+- dashboard com entradas, saídas, categorias, tendência e leitura de contribuição
 - convites entre membros
-- assistente com contexto financeiro, cotas e fallback seguro
+- assistente financeiro com cotas, controle de acesso e fallback seguro
 
 ## Stack
 
-- Java 21
-- Spring Boot
-- PostgreSQL
-- Next.js 16
-- React 19
-- Tailwind CSS 4
+- `backend/`: Java 21, Spring Boot, PostgreSQL
+- `frontend/`: Next.js 16, React 19, TypeScript, Tailwind CSS 4
 
 ## Estrutura
 
-- `backend/src/main`: API, regras de negocio, seguranca e integracao com IA
-- `backend/src/test`: testes unitarios e de controller
-- `frontend/src/app`: rotas e layouts
-- `frontend/src/components`: interface, dashboard, autenticacao e IA
+- `backend/src/main`: API, regras de negócio, segurança e integração com IA
+- `backend/src/test`: testes unitários e de controller
+- `frontend/src/app`: rotas, layouts e páginas
+- `frontend/src/components`: interface, dashboard, autenticação e experiência da IA
 
 ## Rodando localmente
 
@@ -48,7 +41,7 @@ cd backend
 
 Frontend:
 
-Crie `frontend/.env`:
+Crie `frontend/.env` com:
 
 ```env
 API_URL=http://localhost:8080
@@ -61,9 +54,10 @@ npm.cmd install
 npm.cmd run dev
 ```
 
-## Variaveis principais
+## Variáveis principais
 
 Backend:
+
 - `DB_URL`
 - `DB_USERNAME`
 - `DB_PASSWORD`
@@ -74,21 +68,39 @@ Backend:
 - `OPENAI_MODEL`
 
 Frontend:
+
 - `API_URL`
 - `SITE_URL`
 
 ## IA por ambiente
 
-- `AI_MODE=off`: desliga o assistente e mantem apenas o fallback seguro
-- `AI_MODE=local`: usa provider local para desenvolvimento
-- `AI_MODE=openai`: habilita o provider remoto para homologacao ou producao
+O frontend nunca fala diretamente com o provider de IA. Toda chamada passa pelo backend autenticado.
 
-Em producao:
-- a chave `OPENAI_API_KEY` deve existir apenas no backend
-- o acesso pode ser restringido por conta, mesmo com o modo ativo
-- o frontend apenas consome a API autenticada; nao fala diretamente com o provider
+Modos suportados:
 
-## Validacao
+- `AI_MODE=off`: desliga o provider e mantém apenas o fallback seguro
+- `AI_MODE=local`: usa o provider local para desenvolvimento
+- `AI_MODE=openai`: usa o provider remoto para homologação ou produção
+
+Comportamento esperado por ambiente:
+
+- `dev`: pode rodar com `off` ou `local`, sem custo externo
+- `staging`: normalmente usa `openai` com chave própria e limites mais conservadores
+- `prod`: usa `openai`, cotas ativas e acesso controlado por conta
+
+Controle de acesso:
+
+- o backend pode bloquear o assistente por usuário
+- o frontend respeita esse estado e remove o acesso direto na navegação
+- o endpoint continua protegido no servidor, mesmo que alguém tente chamar a API manualmente
+
+Para produção:
+
+- `OPENAI_API_KEY` deve existir apenas no backend
+- `OPENAI_MODEL` define o modelo usado pelo provider remoto
+- o acesso pode ser liberado por allowlist e pelo flag `ai_enabled`, dependendo do perfil ativo
+
+## Validação
 
 Backend:
 
@@ -105,3 +117,9 @@ npm.cmd run lint
 npm.cmd run typecheck
 npm.cmd run build
 ```
+
+## Observações
+
+- o projeto foi estruturado para deploy independente de frontend e backend
+- a camada de IA foi desenhada com fallback seguro para não quebrar a experiência quando o provider estiver indisponível
+- a documentação aqui prioriza uso, contexto técnico e comportamento do sistema sem virar playbook operacional

@@ -60,7 +60,7 @@ export function ThemeToggle({ compact = false }: ThemeToggleProps) {
       aria-pressed={theme === "dark"}
       className={cn(
         "focusable inline-flex items-center rounded-xl border border-[var(--surface-edge)] bg-[var(--card-strong)] text-[var(--text-secondary)] shadow-[var(--elevated-shadow)] transition-all duration-200 hover:border-[var(--accent)] hover:text-[var(--text-primary)]",
-        compact ? "h-11 w-11 justify-center" : "h-12 w-full justify-between px-4 text-sm font-medium",
+        compact ? "h-12 w-12 justify-center" : "h-12 w-full justify-between px-4 text-sm font-medium",
       )}
       onClick={() => {
         const updated = theme === "light" ? "dark" : "light";
@@ -71,7 +71,8 @@ export function ThemeToggle({ compact = false }: ThemeToggleProps) {
       {!compact ? <span className="text-sm font-medium text-[var(--text-primary)]">{theme === "light" ? "Tema claro" : "Tema escuro"}</span> : null}
       <span
         className={cn(
-          "relative inline-flex h-8 w-[58px] items-center rounded-full border transition-all duration-200",
+          "relative inline-flex items-center rounded-full border transition-all duration-200",
+          compact ? "h-7 w-7 justify-center border-transparent bg-transparent" : "h-8 w-[58px]",
           theme === "dark"
             ? "border-[var(--accent)] bg-[color-mix(in_srgb,var(--accent)_24%,transparent)]"
             : "border-[var(--border)] bg-[var(--bg-elevated)]",
@@ -79,10 +80,15 @@ export function ThemeToggle({ compact = false }: ThemeToggleProps) {
       >
         <span
           className={cn(
-            "absolute top-1 grid h-6 w-6 place-items-center rounded-full text-[var(--text-primary)] shadow-[0_8px_18px_rgba(15,23,42,0.18)] transition-all duration-200",
+            "grid place-items-center rounded-full text-[var(--text-primary)] shadow-[0_8px_18px_rgba(15,23,42,0.18)] transition-all duration-200",
+            compact ? "h-7 w-7" : "absolute top-1 h-6 w-6",
             theme === "dark"
-              ? "left-[29px] bg-[var(--accent)] text-white"
-              : "left-1 bg-white",
+              ? compact
+                ? "bg-[var(--accent)] text-white"
+                : "left-[29px] bg-[var(--accent)] text-white"
+              : compact
+                ? "bg-white"
+                : "left-1 bg-white",
           )}
         >
           {theme === "light" ? <SunIcon /> : <MoonIcon />}

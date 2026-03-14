@@ -133,7 +133,7 @@ export function NotificationBell() {
           ) : null}
 
           {notifications.isError ? (
-            <p className="text-sm text-red-300">Nao foi possivel carregar as notificacoes.</p>
+            <p className="text-sm text-red-300">Não foi possível carregar as notificações.</p>
           ) : null}
 
           {!notifications.isLoading && !notifications.isError ? (
@@ -173,7 +173,7 @@ export function NotificationBell() {
           ) : null}
 
           {markSeen.isError ? (
-            <p className="mt-3 text-xs text-amber-300">As notificacoes foram abertas, mas nao foi possivel sincronizar o status.</p>
+            <p className="mt-3 text-xs text-amber-300">As notificações foram abertas, mas não foi possível sincronizar o status.</p>
           ) : null}
         </div>
       ) : null}

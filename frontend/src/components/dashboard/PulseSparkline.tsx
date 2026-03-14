@@ -33,7 +33,7 @@ export function PulseSparkline({ data }: PulseSparklineProps) {
         })}
       </div>
       <div className="mt-4 grid grid-cols-2 gap-2 text-sm text-[var(--text-secondary)]">
-        <p>Media 7 dias: {formatCurrency(data?.sevenDayRollingAverage ?? 0)}</p>
+        <p>Média 7 dias: {formatCurrency(data?.sevenDayRollingAverage ?? 0)}</p>
         <p>Maior dia: {formatCurrency(data?.highestSpendingDay?.amount ?? 0)}</p>
         <p>Dias sem gasto: {data?.zeroSpendingDays ?? 0}</p>
         <p>Sequencia: {data?.currentSpendingStreak ?? 0} dias</p>

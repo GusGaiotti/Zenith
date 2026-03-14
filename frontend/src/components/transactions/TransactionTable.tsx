@@ -14,11 +14,11 @@ export function TransactionTable({ items, onEdit, onDelete, deletingId }: Transa
     <div className="surface overflow-hidden">
       <div className="hidden grid-cols-6 gap-3 border-b border-[var(--border)] bg-[var(--bg-elevated)] px-4 py-3 text-xs uppercase tracking-[0.08em] text-[var(--text-muted)] md:grid">
         <span>Data</span>
-        <span>Descricao</span>
+        <span>Descrição</span>
         <span>Categoria</span>
         <span>Pessoa</span>
         <span className="text-right">Valor</span>
-        <span className="text-right">Acoes</span>
+        <span className="text-right">Ações</span>
       </div>
       <ul>
         {items.map((item) => (

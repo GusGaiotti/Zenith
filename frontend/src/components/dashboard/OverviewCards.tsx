@@ -49,41 +49,41 @@ export function OverviewCards({ overview }: OverviewCardsProps) {
       label: "Total de entradas",
       value: overview?.totalIncome ?? 0,
       delta: renderDelta(overview?.monthOverMonthIncomeChange),
-      deltaDescription: "Variacao percentual das entradas em relacao ao mes anterior.",
+      deltaDescription: "Variação percentual das entradas em relação ao mês anterior.",
       color: "text-[var(--income)]",
       toneClassName: "border-[color-mix(in_srgb,var(--income)_20%,transparent)] bg-[color-mix(in_srgb,var(--income)_7%,transparent)]",
       format: "currency",
-      infoText: "Soma de todas as entradas registradas no mes filtrado.",
+      infoText: "Soma de todas as entradas registradas no mês filtrado.",
     },
     {
-      label: "Total de saidas",
+      label: "Total de saídas",
       value: overview?.totalExpense ?? 0,
       delta: renderDelta(overview?.monthOverMonthExpenseChange),
-      deltaDescription: "Variacao percentual das saidas em relacao ao mes anterior.",
+      deltaDescription: "Variação percentual das saídas em relação ao mês anterior.",
       color: "text-[var(--expense)]",
       toneClassName: "border-[color-mix(in_srgb,var(--expense)_20%,transparent)] bg-[color-mix(in_srgb,var(--expense)_7%,transparent)]",
       format: "currency",
-      infoText: "Soma de todas as saidas registradas no mes filtrado.",
+      infoText: "Soma de todas as saídas registradas no mês filtrado.",
     },
     {
-      label: "Saldo liquido",
+      label: "Saldo líquido",
       value: overview?.netBalance ?? 0,
-      delta: "Mes atual",
-      deltaDescription: "Resultado de entradas menos saidas no periodo atual.",
+      delta: "Mês atual",
+      deltaDescription: "Resultado de entradas menos saídas no período atual.",
       color: getNetBalanceClassName(overview?.netBalance ?? 0),
       toneClassName: "border-[color-mix(in_srgb,var(--accent-amber)_20%,transparent)] bg-[color-mix(in_srgb,var(--accent-amber)_7%,transparent)]",
       format: "currency",
-      infoText: "Mostra o saldo final do periodo. Fica verde quando positivo, vermelho quando negativo e amarelo quando zerado.",
+      infoText: "Mostra o saldo final do período. Fica verde quando positivo, vermelho quando negativo e amarelo quando zerado.",
     },
     {
-      label: "Taxa de poupanca",
+      label: "Taxa de poupança",
       value: overview?.savingsRate ?? 0,
       delta: "Eficiencia",
-      deltaDescription: "Percentual das entradas que nao foi consumido pelas saidas.",
+      deltaDescription: "Percentual das entradas que não foi consumido pelas saídas.",
       color: "text-[var(--accent)]",
       toneClassName: "border-[color-mix(in_srgb,var(--accent)_20%,transparent)] bg-[color-mix(in_srgb,var(--accent)_7%,transparent)]",
       format: "percent",
-      infoText: "Representa a proporcao de valor preservado no mes depois de descontar as saidas.",
+      infoText: "Representa a proporção de valor preservado no mês depois de descontar as saídas.",
     },
   ] as const;
 
@@ -95,11 +95,13 @@ export function OverviewCards({ overview }: OverviewCardsProps) {
           className="surface futura-card data-reveal relative flex min-h-[172px] flex-col p-5"
           style={{ animationDelay: `${index * 80}ms` }}
         >
-          <div className="absolute right-5 top-5">
-            <InfoTooltip text={stat.infoText} />
-          </div>
-          <div className={`inline-flex w-fit items-center rounded-full border px-3 py-1 text-[11px] uppercase tracking-[0.08em] text-[var(--text-secondary)] ${stat.toneClassName}`}>
-            {stat.label}
+          <div className="flex items-start justify-between gap-4 pr-1">
+            <div className={`inline-flex w-fit items-center rounded-full border px-3 py-1 text-[11px] uppercase tracking-[0.08em] text-[var(--text-secondary)] ${stat.toneClassName}`}>
+              {stat.label}
+            </div>
+            <div className="shrink-0">
+              <InfoTooltip text={stat.infoText} />
+            </div>
           </div>
           <p className={`mt-5 font-display tabular-nums text-3xl whitespace-nowrap xl:text-[2.15rem] ${stat.color}`}>
             {stat.format === "currency" ? formatCurrency(stat.value) : formatPercentage(stat.value)}

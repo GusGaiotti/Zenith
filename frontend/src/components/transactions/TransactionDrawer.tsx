@@ -96,7 +96,7 @@ function TransactionDrawerContent({
         className="surface w-full max-w-lg p-6 shadow-[0_24px_60px_rgba(5,10,24,0.6)]"
       >
         <h2 id={titleId} className="font-display text-3xl">
-          {isEditing ? "Editar transacao" : "Nova transacao"}
+          {isEditing ? "Editar transação" : "Nova transação"}
         </h2>
         <form
           className="mt-6 space-y-4"
@@ -125,29 +125,23 @@ function TransactionDrawerContent({
               value={amountInput ? formatCurrency(amountValue) : "R$ 0,00"}
               onChange={(event) => setAmountInput(normalizeCurrencyInput(event.target.value))}
               required
-              className="focusable h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-3.5 font-mono text-[var(--text-primary)] outline-none"
+              className="focusable h-11 w-full rounded-xl border border-[var(--surface-edge)] bg-[var(--card-strong)] px-3.5 font-mono text-[var(--text-primary)] outline-none"
             />
           </label>
           <div className="grid gap-2 sm:grid-cols-2">
             {(["INCOME", "EXPENSE"] as const).map((value) => {
               const active = type === value;
-              const semanticClassName = value === "INCOME"
-                ? active
-                  ? "border-emerald-400/80 bg-emerald-500/15 text-emerald-200"
-                  : "border-emerald-500/30 bg-emerald-500/5 text-emerald-300 hover:border-emerald-400/60 hover:bg-emerald-500/10"
-                : active
-                  ? "border-red-400/80 bg-red-500/15 text-red-200"
-                  : "border-red-500/30 bg-red-500/5 text-red-300 hover:border-red-400/60 hover:bg-red-500/10";
 
               return (
                 <button
                   type="button"
                   key={value}
                   aria-pressed={active}
-                  className={`focusable rounded-full border px-3 py-2 text-sm font-medium transition-colors duration-150 ${semanticClassName}`}
+                  data-active={active}
+                  className={`focusable rounded-full border px-3 py-2 text-sm font-medium transition-all duration-150 ${value === "INCOME" ? "semantic-income" : "semantic-expense"}`}
                   onClick={() => setType(value)}
                 >
-                  {value === "INCOME" ? "Entrada" : "Saida"}
+                  {value === "INCOME" ? "Entrada" : "Saída"}
                 </button>
               );
             })}
@@ -160,7 +154,7 @@ function TransactionDrawerContent({
               required
               value={date}
               onChange={(event) => setDate(event.target.value)}
-              className="focusable h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-3.5 text-[var(--text-primary)] outline-none"
+              className="focusable h-11 w-full rounded-xl border border-[var(--surface-edge)] bg-[var(--card-strong)] px-3.5 text-[var(--text-primary)] outline-none"
             />
           </label>
           <SelectMenu
@@ -171,13 +165,13 @@ function TransactionDrawerContent({
             placeholder="Selecionar categoria"
           />
           <label className="block">
-            <span className="mb-1 block text-sm text-[var(--text-secondary)]">Descricao</span>
+            <span className="mb-1 block text-sm text-[var(--text-secondary)]">Descrição</span>
             <input
               name="description"
               value={description}
               onChange={(event) => setDescription(event.target.value)}
-              placeholder="Descricao"
-              className="focusable h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-3.5 text-[var(--text-primary)] outline-none placeholder:text-[var(--text-secondary)]"
+              placeholder="Descrição"
+              className="focusable h-11 w-full rounded-xl border border-[var(--surface-edge)] bg-[var(--card-strong)] px-3.5 text-[var(--text-primary)] outline-none placeholder:text-[var(--text-secondary)]"
             />
           </label>
           <div className="flex gap-2">
@@ -185,11 +179,11 @@ function TransactionDrawerContent({
               disabled={isSubmitting || amountValue <= 0}
               className="focusable h-11 flex-1 rounded-xl bg-[var(--accent)] px-4 font-semibold text-white shadow-[0_8px_24px_rgba(79,124,255,0.35)] transition-all duration-150 hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-40"
             >
-              {isSubmitting ? "Salvando..." : isEditing ? "Salvar alteracoes" : "Salvar transacao"}
+              {isSubmitting ? "Salvando..." : isEditing ? "Salvar alterações" : "Salvar transação"}
             </button>
             <button
               type="button"
-              className="focusable h-11 rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-2 text-sm text-red-200 transition-colors duration-150 hover:border-red-300 hover:bg-red-500/20"
+              className="focusable h-11 rounded-xl border border-[color-mix(in_srgb,var(--expense)_30%,transparent)] bg-[color-mix(in_srgb,var(--expense)_10%,var(--panel-bg))] px-4 py-2 text-sm text-[color-mix(in_srgb,var(--expense)_84%,var(--text-primary))] transition-colors duration-150 hover:border-[color-mix(in_srgb,var(--expense)_42%,transparent)] hover:bg-[color-mix(in_srgb,var(--expense)_14%,var(--panel-bg))]"
               onClick={onClose}
             >
               Fechar

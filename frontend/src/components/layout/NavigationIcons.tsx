@@ -20,10 +20,10 @@ const iconClassName = "h-4 w-4";
 
 export const APP_NAV_ITEMS: NavItem[] = [
   { href: "/dashboard", label: "Dashboard", icon: "dashboard" },
-  { href: "/transactions", label: "Transacoes", icon: "transactions" },
+  { href: "/transactions", label: "Transações", icon: "transactions" },
   { href: "/categories", label: "Categorias", icon: "categories" },
   { href: "/ledger", label: "Fatura", icon: "ledger" },
-  { href: "/ask-ai", label: "Pergunte a IA", icon: "ask-ai" },
+  { href: "/ask-ai", label: "Pergunte à IA", icon: "ask-ai" },
 ];
 
 function IconBase(props: SVGProps<SVGSVGElement>) {
@@ -46,44 +46,47 @@ export function NavigationIcon({ name, className = iconClassName }: { name: Icon
     case "dashboard":
       return (
         <IconBase className={className}>
-          <rect x="4" y="4.5" width="7" height="7" rx="2" />
-          <rect x="13" y="4.5" width="7" height="10" rx="2" />
-          <rect x="4" y="13.5" width="7" height="6" rx="2" />
-          <rect x="13" y="16.5" width="7" height="3" rx="1.5" />
+          <path d="M4.5 7.5A3 3 0 0 1 7.5 4.5h3a3 3 0 0 1 3 3v3a3 3 0 0 1-3 3h-3a3 3 0 0 1-3-3v-3Z" />
+          <path d="M15 7.5a3 3 0 0 1 3-3h.5a2.5 2.5 0 0 1 2.5 2.5V13a2.5 2.5 0 0 1-2.5 2.5H18a3 3 0 0 1-3-3V7.5Z" />
+          <path d="M4.5 17.5a2.5 2.5 0 0 1 2.5-2.5H11a2.5 2.5 0 0 1 2.5 2.5v.5A2.5 2.5 0 0 1 11 20.5H7A2.5 2.5 0 0 1 4.5 18v-.5Z" />
+          <path d="M15 18a2.5 2.5 0 0 1 2.5-2.5h1A2.5 2.5 0 0 1 21 18a2.5 2.5 0 0 1-2.5 2.5h-1A2.5 2.5 0 0 1 15 18Z" />
         </IconBase>
       );
     case "transactions":
       return (
         <IconBase className={className}>
-          <path d="M6 8h11" />
-          <path d="m14 5 3 3-3 3" />
-          <path d="M18 16H7" />
-          <path d="m10 13-3 3 3 3" />
+          <path d="M6 7.5h8.5" />
+          <path d="m12.5 4.8 2.7 2.7-2.7 2.7" />
+          <path d="M18 16.5H9.5" />
+          <path d="m11.5 13.8-2.7 2.7 2.7 2.7" />
+          <path d="M4.5 5.5v13" />
+          <path d="M19.5 5.5v13" />
         </IconBase>
       );
     case "categories":
       return (
         <IconBase className={className}>
-          <path d="M12 4.5 4.5 8.7 12 13l7.5-4.3L12 4.5Z" />
-          <path d="M4.5 15.3 12 19.5l7.5-4.2" />
-          <path d="M4.5 12 12 16.2l7.5-4.2" />
+          <path d="M12 4.5 5 8.6 12 12.7l7-4.1L12 4.5Z" />
+          <path d="M5 12.2 12 16.3l7-4.1" />
+          <path d="M5 15.9 12 20l7-4.1" />
         </IconBase>
       );
     case "ledger":
       return (
         <IconBase className={className}>
-          <rect x="4" y="5" width="16" height="14" rx="3" />
-          <path d="M4 10.5h16" />
-          <path d="M8 15h3.5" />
-          <path d="M14 15h2.5" />
+          <rect x="4.5" y="5" width="15" height="14" rx="3" />
+          <path d="M8 9h8" />
+          <path d="M8 13h8" />
+          <path d="M8 17h4.5" />
+          <path d="M15.7 5v14" />
         </IconBase>
       );
     case "ask-ai":
       return (
         <IconBase className={className}>
-          <path d="M12 4c4.8 0 8.5 2.95 8.5 6.9 0 2.17-1.1 4.03-2.98 5.31L18 20l-3.65-1.55c-.73.13-1.5.2-2.35.2-4.8 0-8.5-2.95-8.5-6.9S7.2 4 12 4Z" />
-          <path d="M9.8 10.1c.23-1.12 1.14-1.9 2.2-1.9 1.25 0 2.2.85 2.2 2 0 1-.55 1.53-1.35 2.08-.64.43-.98.72-.98 1.42" />
-          <path d="M12 15.8h.01" />
+          <path d="M12 4.5c4.6 0 8.2 2.9 8.2 6.6 0 2-1 3.8-2.8 5l.3 3.4-3.1-1.6a11 11 0 0 1-2.6.3c-4.6 0-8.2-2.9-8.2-6.6S7.4 4.5 12 4.5Z" />
+          <path d="M9 10.5h6" />
+          <path d="M9.8 13.5h4.4" />
         </IconBase>
       );
     case "lock":
@@ -96,15 +99,15 @@ export function NavigationIcon({ name, className = iconClassName }: { name: Icon
     case "collapse":
       return (
         <IconBase className={className}>
-          <path d="M8 5v14" />
-          <path d="m16 7-4 5 4 5" />
+          <path d="M6.5 5v14" />
+          <path d="m16 7.2-4 4.8 4 4.8" />
         </IconBase>
       );
     case "expand":
       return (
         <IconBase className={className}>
-          <path d="M16 5v14" />
-          <path d="m8 7 4 5-4 5" />
+          <path d="M17.5 5v14" />
+          <path d="m8 7.2 4 4.8-4 4.8" />
         </IconBase>
       );
   }
