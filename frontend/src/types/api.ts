@@ -190,7 +190,10 @@ export interface AskAiRequest {
 }
 
 export interface AskAiResponse {
+  headline?: string;
   answer: string;
+  highlights?: string[];
+  recommendedActions?: string[];
   contextLevelUsed: AskAiContextLevel;
   disclaimer?: string;
 }
