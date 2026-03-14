@@ -6,6 +6,7 @@ type IconName =
   | "categories"
   | "ledger"
   | "ask-ai"
+  | "lock"
   | "collapse"
   | "expand";
 
@@ -45,19 +46,19 @@ export function NavigationIcon({ name, className = iconClassName }: { name: Icon
     case "dashboard":
       return (
         <IconBase className={className}>
-          <path d="M4 5.5h7v5H4z" />
-          <path d="M13 5.5h7v8h-7z" />
-          <path d="M4 12.5h7V20H4z" />
-          <path d="M13 15h7v5h-7z" />
+          <rect x="4" y="4.5" width="7" height="7" rx="2" />
+          <rect x="13" y="4.5" width="7" height="10" rx="2" />
+          <rect x="4" y="13.5" width="7" height="6" rx="2" />
+          <rect x="13" y="16.5" width="7" height="3" rx="1.5" />
         </IconBase>
       );
     case "transactions":
       return (
         <IconBase className={className}>
-          <path d="M6 7h12" />
-          <path d="m13 4 3 3-3 3" />
-          <path d="M18 17H6" />
-          <path d="m11 14-3 3 3 3" />
+          <path d="M6 8h11" />
+          <path d="m14 5 3 3-3 3" />
+          <path d="M18 16H7" />
+          <path d="m10 13-3 3 3 3" />
         </IconBase>
       );
     case "categories":
@@ -71,18 +72,25 @@ export function NavigationIcon({ name, className = iconClassName }: { name: Icon
     case "ledger":
       return (
         <IconBase className={className}>
-          <rect x="4" y="5" width="16" height="14" rx="2.5" />
+          <rect x="4" y="5" width="16" height="14" rx="3" />
           <path d="M4 10.5h16" />
-          <path d="M8 15h3" />
-          <path d="M14 15h2" />
+          <path d="M8 15h3.5" />
+          <path d="M14 15h2.5" />
         </IconBase>
       );
     case "ask-ai":
       return (
         <IconBase className={className}>
-          <path d="M12 3.5c4.97 0 9 3.36 9 7.5 0 2.35-1.3 4.44-3.33 5.82l.33 3.68-3.78-1.84c-.7.13-1.45.2-2.22.2-4.97 0-9-3.36-9-7.5s4.03-7.86 9-7.86Z" />
-          <path d="M9.4 10.2a2.7 2.7 0 0 1 5.2 0c0 1.1-.62 1.73-1.47 2.3-.67.45-1.03.75-1.03 1.5" />
-          <path d="M12 16.2h.01" />
+          <path d="M12 4c4.8 0 8.5 2.95 8.5 6.9 0 2.17-1.1 4.03-2.98 5.31L18 20l-3.65-1.55c-.73.13-1.5.2-2.35.2-4.8 0-8.5-2.95-8.5-6.9S7.2 4 12 4Z" />
+          <path d="M9.8 10.1c.23-1.12 1.14-1.9 2.2-1.9 1.25 0 2.2.85 2.2 2 0 1-.55 1.53-1.35 2.08-.64.43-.98.72-.98 1.42" />
+          <path d="M12 15.8h.01" />
+        </IconBase>
+      );
+    case "lock":
+      return (
+        <IconBase className={className}>
+          <rect x="5.5" y="11" width="13" height="8" rx="2.2" />
+          <path d="M8.5 11V8.7a3.5 3.5 0 1 1 7 0V11" />
         </IconBase>
       );
     case "collapse":

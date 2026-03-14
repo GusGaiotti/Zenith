@@ -53,6 +53,7 @@ export function AuthBootstrap() {
               id: data.userId,
               email: data.email,
               displayName: data.displayName,
+              aiAccessAllowed: data.aiAccessAllowed,
             },
             accessToken: data.accessToken,
           });

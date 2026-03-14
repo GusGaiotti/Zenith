@@ -7,10 +7,13 @@ import { usePathname } from "next/navigation";
 import { APP_NAV_ITEMS, NavigationIcon } from "@/components/layout/NavigationIcons";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { Sidebar } from "@/components/layout/Sidebar";
+import { useAuthStore } from "@/lib/store/auth.store";
 
 export function AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const user = useAuthStore((state) => state.user);
+  const askAiLocked = user ? !user.aiAccessAllowed : false;
 
   return (
     <div className="min-h-screen md:flex">
@@ -25,20 +28,32 @@ export function AppShell({ children }: { children: ReactNode }) {
       </div>
       <nav className="fixed bottom-0 left-0 right-0 z-20 grid grid-cols-5 border-t border-[var(--border)] bg-[var(--bg-surface)]/98 px-2 py-2 backdrop-blur md:hidden">
         {APP_NAV_ITEMS.map((item) => (
-          <Link
-            key={item.href}
-            className={`rounded-xl px-2 py-2 text-center transition-colors duration-150 ${
-              pathname.startsWith(item.href)
-                ? "bg-[var(--accent-muted)] text-[var(--accent-hover)]"
-                : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-            }`}
-            href={item.href}
-          >
-            <span className="flex flex-col items-center gap-1 text-[11px]">
-              <NavigationIcon className="h-4 w-4" name={item.icon} />
-              <span>{item.label}</span>
-            </span>
-          </Link>
+          item.href === "/ask-ai" && askAiLocked ? (
+            <div
+              key={item.href}
+              className="rounded-xl px-2 py-2 text-center text-[var(--text-muted)] opacity-80"
+            >
+              <span className="flex flex-col items-center gap-1 text-[11px]">
+                <NavigationIcon className="h-4 w-4" name="lock" />
+                <span>IA bloqueada</span>
+              </span>
+            </div>
+          ) : (
+            <Link
+              key={item.href}
+              className={`rounded-xl px-2 py-2 text-center transition-colors duration-150 ${
+                pathname.startsWith(item.href)
+                  ? "bg-[var(--accent-muted)] text-[var(--accent-hover)]"
+                  : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+              }`}
+              href={item.href}
+            >
+              <span className="flex flex-col items-center gap-1 text-[11px]">
+                <NavigationIcon className="h-4 w-4" name={item.icon} />
+                <span>{item.label}</span>
+              </span>
+            </Link>
+          )
         ))}
       </nav>
     </div>
