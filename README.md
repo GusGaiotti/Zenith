@@ -191,6 +191,119 @@ npm run typecheck
 npm run build
 ```
 
+## Deploy em Producao
+
+Stack recomendada deste repositório:
+- frontend na Vercel com root `frontend/`
+- backend no Render com root `backend/`
+- banco PostgreSQL no Neon
+
+### 1. Backend no Render
+
+O arquivo [render.yaml](./render.yaml) ja define o serviço `zenith-backend`, mas voce ainda precisa preencher os segredos no painel da Render.
+
+Variaveis obrigatorias no backend:
+
+```env
+SPRING_PROFILES_ACTIVE=prod
+SERVER_PORT=10000
+PORT=10000
+
+DB_URL=jdbc:postgresql://<host-neon>/<database>?sslmode=require
+DB_USERNAME=<usuario-neon>
+DB_PASSWORD=<senha-neon>
+
+JWT_SECRET=<segredo-base64-forte>
+JWT_ACCESS_EXPIRATION=900000
+JWT_REFRESH_EXPIRATION=604800000
+
+CORS_ALLOWED_ORIGINS=https://<seu-frontend>.vercel.app
+
+AUTH_REFRESH_COOKIE_NAME=refresh_token
+AUTH_REFRESH_COOKIE_PATH=/api/v1/auth
+AUTH_REFRESH_COOKIE_SECURE=true
+AUTH_REFRESH_COOKIE_SAME_SITE=Strict
+AUTH_REFRESH_COOKIE_DOMAIN=
+
+AI_MODE=openai
+AI_TIMEOUT_MS=8000
+AI_MAX_RESPONSE_TOKENS=300
+AI_LIMITS_ENABLED=true
+AI_RATE_LIMIT_PER_USER=8
+AI_RATE_LIMIT_PER_IP=20
+AI_DAILY_QUOTA_PER_USER=50
+
+OPENAI_BASE_URL=https://api.openai.com/v1
+OPENAI_API_KEY=<sua-chave-openai>
+OPENAI_MODEL=gpt-4o-mini
+AI_PROD_ALLOWLIST_EMAILS=<seu-email>,<outro-email-opcional>
+```
+
+Notas:
+- `DB_URL` do Neon precisa ser JDBC. Exemplo: `jdbc:postgresql://ep-xxxx.us-east-1.aws.neon.tech/neondb?sslmode=require`.
+- mantenha `AUTH_REFRESH_COOKIE_DOMAIN` vazio para o cookie ficar preso ao dominio do frontend via proxy da Vercel.
+- `CORS_ALLOWED_ORIGINS` deve conter a URL publica exata do frontend, sem barra final.
+
+### 2. Frontend na Vercel
+
+Crie o projeto apontando para a pasta `frontend/`.
+
+Variaveis obrigatorias no frontend:
+
+```env
+API_URL=https://<seu-backend>.onrender.com
+SITE_URL=https://<seu-frontend>.vercel.app
+```
+
+Notas:
+- `API_URL` e usada pelo Next para fazer rewrite de `/api/:path*` para o backend.
+- no navegador, o app chama `/api/v1` no mesmo dominio do frontend; isso evita expor chamadas diretas ao backend no cliente e preserva o fluxo de cookie de refresh.
+- `SITE_URL` alimenta metadata e URLs canônicas.
+
+### 3. Banco no Neon
+
+No Neon, crie o banco PostgreSQL e copie:
+- host
+- nome do banco
+- usuario
+- senha
+
+Monte a `DB_URL` em formato JDBC:
+
+```env
+DB_URL=jdbc:postgresql://<host-neon>/<database>?sslmode=require
+```
+
+O Flyway do backend aplica as migrations automaticamente no boot.
+
+### 4. Liberar usuarios para a IA em prod
+
+Em `prod`, a IA so funciona para usuarios liberados. O backend aceita dois caminhos:
+- usuario com `users.ai_enabled = true`
+- email presente em `AI_PROD_ALLOWLIST_EMAILS`
+
+Para a primeira subida, o mais simples e usar `AI_PROD_ALLOWLIST_EMAILS`.
+
+Se depois quiser liberar direto no banco:
+
+```sql
+update users
+set ai_enabled = true
+where email = '<seu-email>';
+```
+
+### 5. Checklist de smoke test em PRD
+
+Depois do deploy:
+1. abra o frontend publicado
+2. registre ou entre com um usuario allowlisted
+3. confirme que login e refresh de sessao funcionam
+4. abra o drawer `Perguntar para IA`
+5. valide se o status mostra `Modo OpenAI: recomendado para producao com conta e chave configuradas.`
+6. envie uma pergunta simples
+7. se vier `403`, revise `AI_PROD_ALLOWLIST_EMAILS` ou `users.ai_enabled`
+8. se vier fallback seguro, revise `OPENAI_API_KEY`, `AI_MODE` e logs do Render
+
 ## Troubleshooting Rapido
 
 - `403` no endpoint de IA em prod: usuario nao allowlisted.

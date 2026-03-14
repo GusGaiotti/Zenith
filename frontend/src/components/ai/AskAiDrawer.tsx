@@ -114,7 +114,7 @@ export function AskAiDrawer({ open, onClose }: AskAiDrawerProps) {
           </p>
           {usage ? (
             <>
-              <p className="flex items-center gap-2">
+              <div className="flex items-center gap-2">
                 <span>
                   Cota diaria: <span className="font-semibold text-[var(--text-primary)]">{usage.perUserDailyRemaining}/{usage.perUserDailyQuota}</span> restantes.
                 </span>
@@ -122,14 +122,14 @@ export function AskAiDrawer({ open, onClose }: AskAiDrawerProps) {
                   align="left"
                   text="A cota diaria e por usuario. Exemplo: 50/dia significa que cada pessoa autenticada pode fazer ate 50 perguntas por dia."
                 />
-              </p>
-              <p className="flex items-center gap-2">
+              </div>
+              <div className="flex items-center gap-2">
                 <span>Janela por minuto (usuario): {usage.perUserCurrentMinuteUsed}/{usage.perUserPerMinuteLimit}</span>
                 <InfoTooltip
                   align="left"
                   text="Protecao de rajada. Limita quantas perguntas um mesmo usuario pode fazer dentro de 1 minuto para evitar abuso e custo inesperado."
                 />
-              </p>
+              </div>
               <p className="break-words">{usage.note}</p>
               {!usage.accessAllowed ? (
                 <p className="break-words text-red-200">Acesso a IA bloqueado para seu usuario neste ambiente.</p>
