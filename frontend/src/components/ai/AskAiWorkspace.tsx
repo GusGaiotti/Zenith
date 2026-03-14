@@ -2,9 +2,9 @@
 
 import { AxiosError } from "axios";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { MonthPicker } from "@/components/shared/MonthPicker";
 import { InfoTooltip } from "@/components/shared/InfoTooltip";
 import { LoadingSpinner } from "@/components/shared/LoadingSpinner";
+import { MonthPicker } from "@/components/shared/MonthPicker";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { useAskAi, useAskAiUsage } from "@/hooks/useAskAi";
 import { askAiSchema } from "@/lib/validators/ai.schemas";
@@ -24,7 +24,7 @@ type ChatMessage = {
 const starterQuestions = [
   "Onde estamos gastando mais neste mês?",
   "Qual categoria merece corte imediato neste mês?",
-  "Tem algum padrão de gasto que chama atenção?",
+  "O que mudou em relação aos últimos meses?",
 ] as const;
 
 function getCurrentYearMonth() {
@@ -51,15 +51,15 @@ function getModeLabel(mode?: string) {
 }
 
 function getUsageSummary(mode?: string, accessAllowed?: boolean) {
-  if (!accessAllowed) return "Assistente restrito para sua conta no momento";
-  if (mode === "off") return "Assistente temporariamente indisponível";
-  return "Pronto para responder com base nos seus dados";
+  if (!accessAllowed) return "Assistente restrito para sua conta no momento.";
+  if (mode === "off") return "Assistente temporariamente indisponível.";
+  return "Pronto para responder com base nos seus dados.";
 }
 
 function getAskAiErrorMessage(error: unknown) {
   if (error instanceof AxiosError) {
     if (error.code === "ECONNABORTED") {
-      return "A IA demorou mais que o esperado. Tente novamente ou reduza o contexto desta pergunta.";
+      return "A análise demorou mais do que o esperado. Tente novamente ou reduza o contexto da pergunta.";
     }
 
     const responseMessage = error.response?.data;
@@ -153,40 +153,52 @@ export function AskAiWorkspace() {
         <section className="surface flex min-h-[72vh] flex-col overflow-hidden">
           <div className="border-b border-[var(--border)] px-5 py-4">
             <div className="flex flex-wrap items-center gap-3">
-              <span className="info-badge text-[var(--accent-hover)]">
-                {getModeLabel(usage?.mode)}
-              </span>
-              <span className="info-badge text-[var(--income)]">
-                {remainingDaily} restantes hoje
-              </span>
+              <span className="info-badge text-[var(--accent-hover)]">{getModeLabel(usage?.mode)}</span>
+              <span className="info-badge text-[var(--income)]">{remainingDaily} restantes hoje</span>
               <span className="text-sm text-[var(--text-secondary)]">{helperTone}</span>
             </div>
           </div>
 
           <div ref={timelineRef} className="flex-1 space-y-4 overflow-y-auto px-5 py-5">
             {messages.length === 0 ? (
-              <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_300px]">
-                <div className="elevated p-5">
-                  <p className="text-xs uppercase tracking-[0.12em] text-[var(--text-muted)]">Comece por aqui</p>
-                  <h2 className="mt-2 text-2xl font-semibold text-[var(--text-primary)]">Use o assistente como uma leitura rápida do seu mês</h2>
+              <div className="grid gap-4 xl:grid-cols-[minmax(0,1.3fr)_minmax(280px,0.9fr)]">
+                <div className="elevated p-6">
+                  <p className="text-xs uppercase tracking-[0.12em] text-[var(--text-muted)]">Como funciona</p>
+                  <h2 className="mt-2 text-2xl font-semibold text-[var(--text-primary)]">Use o assistente para transformar números em direção</h2>
                   <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--text-secondary)]">
-                    Escolha o mês de referência, escreva uma pergunta objetiva e receba uma resposta curta com prioridades, achados e próximos passos. O assistente considera saldo, categorias e padrões do período para evitar respostas genéricas.
+                    Escolha o mês, faça uma pergunta objetiva e receba uma leitura prática sobre gastos, categorias, saldo e padrões recentes. Quando houver contexto suficiente, ele também consegue comparar o mês selecionado com o histórico mais próximo da sua fatura.
                   </p>
-                  <div className="mt-4 grid gap-3 xl:grid-cols-3">
+                  <div className="mt-5 grid gap-3 lg:grid-cols-2">
                     <div className="rounded-3xl border border-[color-mix(in_srgb,var(--accent)_24%,transparent)] bg-[color-mix(in_srgb,var(--accent)_10%,var(--card-strong))] px-5 py-4">
-                      <p className="text-sm font-semibold text-[var(--text-primary)]">Mês de referência</p>
-                      <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">Troque o mês para revisar um fechamento anterior, comparar comportamento recente ou investigar uma mudança específica nas suas finanças.</p>
+                      <div className="flex items-start justify-between gap-3">
+                        <p className="text-sm font-semibold text-[var(--text-primary)]">Mês de referência</p>
+                        <InfoTooltip text="A análise sempre parte do mês selecionado. Se houver dados em meses anteriores, a IA pode usar esse histórico para comparar comportamento e tendência." />
+                      </div>
+                      <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
+                        Troque o mês para revisar um fechamento antigo, investigar uma mudança específica ou pedir comparações com meses anteriores.
+                      </p>
                     </div>
                     <div className="rounded-3xl border border-[color-mix(in_srgb,var(--accent-emerald)_24%,transparent)] bg-[color-mix(in_srgb,var(--accent-emerald)_10%,var(--card-strong))] px-5 py-4">
-                      <p className="text-sm font-semibold text-[var(--text-primary)]">Amostra de lançamentos</p>
-                      <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">Ative quando quiser uma resposta mais detalhada. O sistema escolhe alguns lançamentos relevantes do período para aprofundar a análise sem exigir seleção manual.</p>
-                    </div>
-                    <div className="rounded-3xl border border-[color-mix(in_srgb,var(--accent-amber)_24%,transparent)] bg-[color-mix(in_srgb,var(--accent-amber)_10%,var(--card-strong))] px-5 py-4">
-                      <p className="text-sm font-semibold text-[var(--text-primary)]">Como extrair mais valor</p>
-                      <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">Pergunte por excessos, categorias, comparações, tendência de gastos ou oportunidades de corte. Quanto mais clara a dúvida, melhor a recomendação.</p>
+                      <div className="flex items-start justify-between gap-3">
+                        <p className="text-sm font-semibold text-[var(--text-primary)]">Amostra de lançamentos</p>
+                        <InfoTooltip text="Quando essa opção está ativa, o sistema seleciona automaticamente até 50 lançamentos relevantes do período para enriquecer a análise." />
+                      </div>
+                      <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
+                        Use essa opção quando quiser respostas mais específicas sobre compras, padrões e possíveis excessos dentro do mês escolhido.
+                      </p>
                     </div>
                   </div>
+                  <div className="mt-3 rounded-3xl border border-[color-mix(in_srgb,var(--accent-amber)_24%,transparent)] bg-[color-mix(in_srgb,var(--accent-amber)_10%,var(--card-strong))] px-5 py-4">
+                    <div className="flex items-start justify-between gap-3">
+                      <p className="text-sm font-semibold text-[var(--text-primary)]">Como extrair mais valor</p>
+                      <InfoTooltip text="Perguntas diretas tendem a gerar respostas melhores: gastos acima do normal, categorias críticas, mudanças entre meses ou oportunidades de corte." />
+                    </div>
+                    <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
+                      Peça prioridades, sinais de atenção, categorias mais pesadas, comportamento por pessoa ou mudanças em relação aos meses anteriores. Quanto mais clara a dúvida, melhor a resposta.
+                    </p>
+                  </div>
                 </div>
+
                 <div className="elevated p-5">
                   <p className="text-xs uppercase tracking-[0.12em] text-[var(--text-muted)]">Boas perguntas</p>
                   <div className="mt-3 flex flex-col gap-2">
@@ -249,9 +261,7 @@ export function AskAiWorkspace() {
                     </ul>
                   </div>
                 ) : null}
-                {message.disclaimer ? (
-                  <p className="mt-3 text-xs text-[var(--text-secondary)]">{message.disclaimer}</p>
-                ) : null}
+                {message.disclaimer ? <p className="mt-3 text-xs text-[var(--text-secondary)]">{message.disclaimer}</p> : null}
               </article>
             ))}
 
@@ -266,18 +276,14 @@ export function AskAiWorkspace() {
           </div>
 
           <div className="border-t border-[var(--border)] bg-[var(--panel-bg)] px-5 py-4">
-            {error ? (
-              <div className="danger-chip mb-4 rounded-2xl px-4 py-3 text-sm">
-                {error}
-              </div>
-            ) : null}
+            {error ? <div className="danger-chip mb-4 rounded-2xl px-4 py-3 text-sm">{error}</div> : null}
 
             <div className="flex flex-col gap-3">
               <label className="block">
-                  <span className="mb-2 flex items-center gap-2 text-sm text-[var(--text-secondary)]">
-                    Mensagem
-                    <InfoTooltip align="left" text="Perguntas curtas e diretas costumam gerar respostas mais objetivas." />
-                  </span>
+                <span className="mb-2 flex items-center gap-2 text-sm text-[var(--text-secondary)]">
+                  Mensagem
+                  <InfoTooltip align="left" text="Perguntas curtas e diretas costumam gerar respostas mais objetivas." />
+                </span>
                 <textarea
                   value={question}
                   onChange={(event) => setQuestion(event.target.value)}
@@ -314,7 +320,7 @@ export function AskAiWorkspace() {
                     setYearMonth(getCurrentYearMonth());
                   }}
                 >
-                  Limpar composição
+                  Apagar
                 </button>
                 <button
                   type="button"
