@@ -58,3 +58,22 @@ auth:
     secure: ${AUTH_REFRESH_COOKIE_SECURE:true}
     same-site: ${AUTH_REFRESH_COOKIE_SAME_SITE:Lax}
     domain: ${AUTH_REFRESH_COOKIE_DOMAIN:}
+
+ai:
+  mode: ${AI_MODE:off}
+  timeout-ms: ${AI_TIMEOUT_MS:8000}
+  max-response-tokens: ${AI_MAX_RESPONSE_TOKENS:300}
+  access:
+    production-allowlist-emails: ${AI_PROD_ALLOWLIST_EMAILS:}
+  limits:
+    enabled: ${AI_LIMITS_ENABLED:true}
+    per-user-per-minute: ${AI_RATE_LIMIT_PER_USER:8}
+    per-ip-per-minute: ${AI_RATE_LIMIT_PER_IP:20}
+    per-user-daily-quota: ${AI_DAILY_QUOTA_PER_USER:50}
+  ollama:
+    base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
+    model: ${OLLAMA_MODEL:llama3.1:8b}
+  openai:
+    base-url: ${OPENAI_BASE_URL:https://api.openai.com/v1}
+    api-key: ${OPENAI_API_KEY:}
+    model: ${OPENAI_MODEL:gpt-4o-mini}

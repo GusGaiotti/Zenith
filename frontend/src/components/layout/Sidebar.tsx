@@ -10,9 +10,10 @@ import { cn } from "@/lib/utils/cn";
 interface SidebarProps {
   collapsed: boolean;
   onCollapsedChange: (value: boolean) => void;
+  onAskAiOpen: () => void;
 }
 
-export function Sidebar({ collapsed, onCollapsedChange }: SidebarProps) {
+export function Sidebar({ collapsed, onCollapsedChange, onAskAiOpen }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const logoutMutation = useLogout();
@@ -53,6 +54,21 @@ export function Sidebar({ collapsed, onCollapsedChange }: SidebarProps) {
             </Link>
           );
         })}
+        <button
+          type="button"
+          title={collapsed ? "Perguntar para IA" : undefined}
+          className={cn(
+            "focusable flex w-full rounded-xl border py-3 text-sm transition-colors duration-150",
+            collapsed ? "items-center justify-center px-0" : "items-center gap-3 px-4",
+            "border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--accent)] hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)]",
+          )}
+          onClick={onAskAiOpen}
+        >
+          <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-[var(--bg-elevated)]">
+            <NavigationIcon name="ask-ai" />
+          </span>
+          {!collapsed ? <span>Perguntar para IA</span> : null}
+        </button>
       </nav>
 
       <div className={cn("space-y-2 border-t border-[var(--border)] px-2 pt-3", collapsed && "text-center")}>

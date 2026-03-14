@@ -5,6 +5,7 @@ import com.gaiotti.zenith.model.Transaction.TransactionType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -193,5 +194,18 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
             @Param("startDate") LocalDate startDate,
             @Param("endDate") LocalDate endDate,
             @Param("createdByUserId") Long createdByUserId
+    );
+
+    @Query("SELECT t FROM Transaction t " +
+           "LEFT JOIN FETCH t.category " +
+           "LEFT JOIN FETCH t.createdBy " +
+           "WHERE t.ledger.id = :ledgerId " +
+           "AND t.date >= :startDate AND t.date <= :endDate " +
+           "ORDER BY t.date DESC, t.id DESC")
+    List<Transaction> findSampleForLedgerAndDateRange(
+            @Param("ledgerId") Long ledgerId,
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate,
+            Pageable pageable
     );
 }
