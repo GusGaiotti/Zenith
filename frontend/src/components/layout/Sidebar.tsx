@@ -51,7 +51,7 @@ export function Sidebar({ collapsed, onCollapsedChange }: SidebarProps) {
                 <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-[var(--bg-elevated)] text-[var(--text-muted)]">
                   <NavigationIcon name="lock" />
                 </span>
-                {!collapsed ? <span className="flex-1">Pergunte a IA</span> : null}
+                {!collapsed ? <span className="flex-1">Pergunte à IA</span> : null}
               </div>
             );
           }
@@ -83,11 +83,11 @@ export function Sidebar({ collapsed, onCollapsedChange }: SidebarProps) {
           <ThemeToggle compact={collapsed} />
         </div>
         <div className="border-t border-[var(--border)] pt-3">
-        {!collapsed ? (
-          <p className="px-1 text-xs text-[var(--text-secondary)]">Logado como {user?.displayName ?? "-"}</p>
-        ) : (
-          <div className="text-[10px] uppercase tracking-[0.08em] text-[var(--text-muted)]">{user?.displayName?.slice(0, 1) ?? "Z"}</div>
-        )}
+          {!collapsed ? (
+            <p className="px-1 text-xs text-[var(--text-secondary)]">Logado como {user?.displayName ?? "-"}</p>
+          ) : (
+            <div className="text-[10px] uppercase tracking-[0.08em] text-[var(--text-muted)]">{user?.displayName?.slice(0, 1) ?? "Z"}</div>
+          )}
         </div>
         <button
           title={collapsed ? "Expandir menu" : undefined}

@@ -115,7 +115,7 @@ export function MonthPicker({
             align === "right" ? "right-0" : "left-0",
           )}
           role="dialog"
-          aria-label="Selecionar mes"
+          aria-label="Selecionar mês"
         >
           <div className="mb-3 flex items-center justify-between">
             <button

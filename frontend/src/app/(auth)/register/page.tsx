@@ -41,7 +41,7 @@ export default function RegisterPage() {
   });
 
   const password = useWatch({ control: form.control, name: "password", defaultValue: "" });
-  const strength = password.length > 10 ? "Forte" : password.length > 6 ? "Media" : "Fraca";
+  const strength = password.length > 10 ? "Forte" : password.length > 6 ? "Média" : "Fraca";
 
   return (
     <main className="relative flex min-h-screen items-center justify-center p-4">
@@ -83,14 +83,14 @@ export default function RegisterPage() {
               className="focusable w-full rounded-md border bg-[var(--bg-elevated)] px-3 py-2 outline-none"
               {...form.register("password")}
             />
-            <span className="mt-1 block text-xs text-[var(--text-secondary)]">Forca: {strength}</span>
+            <span className="mt-1 block text-xs text-[var(--text-secondary)]">Força: {strength}</span>
             {form.formState.errors.password ? (
               <span className="mt-1 block text-xs text-red-300">{form.formState.errors.password.message}</span>
             ) : null}
           </label>
           {registerMutation.isError ? (
             <p className="rounded-md bg-red-500/10 px-3 py-2 text-sm text-red-300">
-              Nao foi possivel cadastrar. Tente novamente.
+              Não foi possível cadastrar. Tente novamente.
             </p>
           ) : null}
           <button
@@ -105,7 +105,7 @@ export default function RegisterPage() {
           </button>
         </form>
         <p className="mt-4 text-sm text-[var(--text-secondary)]">
-          Ja tem conta? <Link className="text-[var(--accent)]" href="/login">Entrar</Link>
+          Já tem conta? <Link className="text-[var(--accent)]" href="/login">Entrar</Link>
         </p>
       </section>
     </main>

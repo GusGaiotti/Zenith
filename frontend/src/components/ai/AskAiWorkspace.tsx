@@ -22,9 +22,9 @@ type ChatMessage = {
 };
 
 const starterQuestions = [
-  "Onde estamos gastando mais neste mes?",
-  "Qual categoria merece corte imediato neste mes?",
-  "Tem algum padrao de gasto que chama atencao?",
+  "Onde estamos gastando mais neste mês?",
+  "Qual categoria merece corte imediato neste mês?",
+  "Tem algum padrão de gasto que chama atenção?",
 ] as const;
 
 function getCurrentYearMonth() {
@@ -38,21 +38,21 @@ function getContextLabel(level?: AskAiResponse["contextLevelUsed"]) {
     case "EXTENDED":
       return "Comparativo de meses";
     case "SAMPLED_TRANSACTIONS":
-      return "Resumo com amostra de lancamentos";
+      return "Resumo com amostra de lançamentos";
     case "SUMMARY":
     default:
-      return "Resumo do mes";
+      return "Resumo do mês";
   }
 }
 
 function getModeLabel(mode?: string) {
-  if (mode === "off") return "Indisponivel";
+  if (mode === "off") return "Indisponível";
   return "Assistente ativo";
 }
 
 function getUsageSummary(mode?: string, accessAllowed?: boolean) {
   if (!accessAllowed) return "Assistente restrito para sua conta no momento";
-  if (mode === "off") return "Assistente temporariamente indisponivel";
+  if (mode === "off") return "Assistente temporariamente indisponível";
   return "Pronto para responder com base nos seus dados";
 }
 
@@ -68,7 +68,7 @@ function getAskAiErrorMessage(error: unknown) {
     }
   }
 
-  return error instanceof Error ? error.message : "Nao foi possivel obter resposta da IA.";
+  return error instanceof Error ? error.message : "Não foi possível obter resposta da IA.";
 }
 
 export function AskAiWorkspace() {
@@ -135,7 +135,7 @@ export function AskAiWorkspace() {
   function handleSubmit() {
     const parsed = askAiSchema.safeParse({ question, yearMonth, includeTransactions });
     if (!parsed.success) {
-      setError(parsed.error.issues[0]?.message ?? "Dados invalidos.");
+      setError(parsed.error.issues[0]?.message ?? "Dados inválidos.");
       return;
     }
 
@@ -145,8 +145,8 @@ export function AskAiWorkspace() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Pergunte a IA"
-        subtitle="Transforme movimentacoes do mes em respostas claras, com foco no que pesa mais e no que vale ajustar."
+        title="Pergunte à IA"
+        subtitle="Transforme as movimentações do mês em respostas claras, com foco no que pesa mais e no que vale ajustar."
       />
 
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_340px]">
@@ -168,22 +168,22 @@ export function AskAiWorkspace() {
               <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_300px]">
                 <div className="elevated p-5">
                   <p className="text-xs uppercase tracking-[0.12em] text-[var(--text-muted)]">Comece por aqui</p>
-                  <h2 className="mt-2 text-2xl font-semibold text-[var(--text-primary)]">Use o assistente como uma leitura rapida do seu mes</h2>
+                  <h2 className="mt-2 text-2xl font-semibold text-[var(--text-primary)]">Use o assistente como uma leitura rápida do seu mês</h2>
                   <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--text-secondary)]">
-                    Escolha o mes de referencia, escreva uma pergunta objetiva e receba uma resposta curta com prioridades, achados e proximos passos. Ele considera saldo, categorias e padroes do periodo para evitar respostas soltas.
+                    Escolha o mês de referência, escreva uma pergunta objetiva e receba uma resposta curta com prioridades, achados e próximos passos. O assistente considera saldo, categorias e padrões do período para evitar respostas genéricas.
                   </p>
-                  <div className="mt-4 grid gap-3 lg:grid-cols-2 2xl:grid-cols-3">
-                    <div className="rounded-2xl border border-[color-mix(in_srgb,var(--accent)_20%,transparent)] bg-[color-mix(in_srgb,var(--accent)_7%,white_93%)] px-4 py-4">
-                      <p className="text-sm font-semibold text-[var(--text-primary)]">Mes de referencia</p>
-                      <p className="mt-1 text-sm leading-6 text-[var(--text-secondary)]">Troque o mes para revisar um fechamento anterior ou comparar comportamentos recentes.</p>
+                  <div className="mt-4 grid gap-3 xl:grid-cols-3">
+                    <div className="rounded-3xl border border-[color-mix(in_srgb,var(--accent)_24%,transparent)] bg-[color-mix(in_srgb,var(--accent)_10%,var(--card-strong))] px-5 py-4">
+                      <p className="text-sm font-semibold text-[var(--text-primary)]">Mês de referência</p>
+                      <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">Troque o mês para revisar um fechamento anterior, comparar comportamento recente ou investigar uma mudança específica nas suas finanças.</p>
                     </div>
-                    <div className="rounded-2xl border border-[color-mix(in_srgb,var(--accent-emerald)_20%,transparent)] bg-[color-mix(in_srgb,var(--accent-emerald)_7%,white_93%)] px-4 py-4">
-                      <p className="text-sm font-semibold text-[var(--text-primary)]">Amostra de lancamentos</p>
-                      <p className="mt-1 text-sm leading-6 text-[var(--text-secondary)]">Ative quando quiser uma resposta mais detalhada. O sistema escolhe alguns lancamentos relevantes do periodo para aprofundar a leitura.</p>
+                    <div className="rounded-3xl border border-[color-mix(in_srgb,var(--accent-emerald)_24%,transparent)] bg-[color-mix(in_srgb,var(--accent-emerald)_10%,var(--card-strong))] px-5 py-4">
+                      <p className="text-sm font-semibold text-[var(--text-primary)]">Amostra de lançamentos</p>
+                      <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">Ative quando quiser uma resposta mais detalhada. O sistema escolhe alguns lançamentos relevantes do período para aprofundar a análise sem exigir seleção manual.</p>
                     </div>
-                    <div className="rounded-2xl border border-[color-mix(in_srgb,var(--accent-amber)_20%,transparent)] bg-[color-mix(in_srgb,var(--accent-amber)_7%,white_93%)] px-4 py-4 sm:col-span-2 xl:col-span-1">
+                    <div className="rounded-3xl border border-[color-mix(in_srgb,var(--accent-amber)_24%,transparent)] bg-[color-mix(in_srgb,var(--accent-amber)_10%,var(--card-strong))] px-5 py-4">
                       <p className="text-sm font-semibold text-[var(--text-primary)]">Como extrair mais valor</p>
-                      <p className="mt-1 text-sm leading-6 text-[var(--text-secondary)]">Pergunte por excessos, categorias, comparacoes ou oportunidades de corte. Quanto mais clara a duvida, melhor a recomendacao.</p>
+                      <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">Pergunte por excessos, categorias, comparações, tendência de gastos ou oportunidades de corte. Quanto mais clara a dúvida, melhor a recomendação.</p>
                     </div>
                   </div>
                 </div>
@@ -216,7 +216,7 @@ export function AskAiWorkspace() {
               >
                 <div className="flex items-center justify-between gap-3">
                   <p className={`text-xs uppercase tracking-[0.12em] ${message.role === "user" ? "text-white/75" : "text-[var(--text-muted)]"}`}>
-                    {message.role === "user" ? "Voce" : "Assistente Zenith"}
+                    {message.role === "user" ? "Você" : "Assistente Zenith"}
                   </p>
                   {message.contextLevel ? (
                     <span className="text-[11px] text-[var(--text-secondary)]">{getContextLabel(message.contextLevel)}</span>
@@ -239,7 +239,7 @@ export function AskAiWorkspace() {
                 </p>
                 {message.recommendedActions?.length ? (
                   <div className="mt-4">
-                    <p className="text-xs uppercase tracking-[0.12em] text-[var(--text-muted)]">Acoes sugeridas</p>
+                    <p className="text-xs uppercase tracking-[0.12em] text-[var(--text-muted)]">Ações sugeridas</p>
                     <ul className="mt-2 space-y-2 text-sm leading-6 text-[var(--text-secondary)]">
                       {message.recommendedActions.map((item) => (
                         <li key={item} className="rounded-2xl border border-[var(--border)] bg-[var(--panel-bg)] px-3 py-3">
@@ -274,10 +274,10 @@ export function AskAiWorkspace() {
 
             <div className="flex flex-col gap-3">
               <label className="block">
-                <span className="mb-2 flex items-center gap-2 text-sm text-[var(--text-secondary)]">
-                  Mensagem
-                  <InfoTooltip align="left" text="Perguntas curtas e diretas costumam gerar respostas mais objetivas." />
-                </span>
+                  <span className="mb-2 flex items-center gap-2 text-sm text-[var(--text-secondary)]">
+                    Mensagem
+                    <InfoTooltip align="left" text="Perguntas curtas e diretas costumam gerar respostas mais objetivas." />
+                  </span>
                 <textarea
                   value={question}
                   onChange={(event) => setQuestion(event.target.value)}
@@ -289,7 +289,7 @@ export function AskAiWorkspace() {
                   }}
                   maxLength={300}
                   required
-                  placeholder="Ex: Onde estamos gastando acima do esperado neste mes?"
+                  placeholder="Ex: Onde estamos gastando acima do esperado neste mês?"
                   className="focusable min-h-28 w-full rounded-3xl border border-[var(--border)] bg-[var(--bg-surface)] px-4 py-4 text-[var(--text-primary)] outline-none placeholder:text-[var(--text-secondary)]"
                 />
                 <span className="mt-2 block text-right font-mono text-xs text-[var(--text-muted)]">{question.length}/300</span>
@@ -314,7 +314,7 @@ export function AskAiWorkspace() {
                     setYearMonth(getCurrentYearMonth());
                   }}
                 >
-                  Limpar composicao
+                  Limpar composição
                 </button>
                 <button
                   type="button"
@@ -357,7 +357,7 @@ export function AskAiWorkspace() {
                 <p className="text-sm leading-6 text-[var(--text-secondary)]">{getUsageSummary(usage.mode, usage.accessAllowed)}</p>
                 {!usage.accessAllowed ? (
                   <p className="danger-chip rounded-2xl px-4 py-3 text-sm">
-                    O assistente nao esta disponivel para a sua conta agora.
+                    O assistente não está disponível para a sua conta agora.
                   </p>
                 ) : null}
               </div>
@@ -371,7 +371,7 @@ export function AskAiWorkspace() {
           <section className="surface p-5">
             <p className="text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">Contexto da consulta</p>
             <div className="mt-4 space-y-4">
-              <MonthPicker value={yearMonth} onChange={setYearMonth} label="Mes de referencia" />
+              <MonthPicker value={yearMonth} onChange={setYearMonth} label="Mês de referência" />
               <label className="flex items-start gap-3 rounded-2xl border border-[var(--border)] bg-[var(--panel-bg)] px-4 py-3 text-sm text-[var(--text-primary)]">
                 <input
                   type="checkbox"
@@ -380,9 +380,9 @@ export function AskAiWorkspace() {
                   className="mt-1 h-4 w-4"
                 />
                 <span className="space-y-1">
-                  <span className="block font-medium">Incluir amostra automatica de lancamentos</span>
+                  <span className="block font-medium">Incluir amostra automática de lançamentos</span>
                   <span className="block text-[13px] leading-5 text-[var(--text-secondary)]">
-                    O sistema seleciona ate 50 lancamentos do periodo para enriquecer a resposta quando a pergunta pede mais contexto.
+                    O sistema seleciona até 50 lançamentos do período para enriquecer a resposta quando a pergunta pede mais contexto.
                   </span>
                 </span>
               </label>
