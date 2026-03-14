@@ -94,6 +94,12 @@ Controle de acesso:
 - o frontend respeita esse estado e remove o acesso direto na navegação
 - o endpoint continua protegido no servidor, mesmo que alguém tente chamar a API manualmente
 
+Contexto da análise:
+
+- a resposta sempre parte do mês selecionado no frontend
+- quando houver histórico suficiente, a IA pode comparar o mês atual com meses anteriores próximos
+- a opção de amostra de lançamentos envia uma seleção limitada de transações relevantes do período para enriquecer a resposta
+
 Para produção:
 
 - `OPENAI_API_KEY` deve existir apenas no backend

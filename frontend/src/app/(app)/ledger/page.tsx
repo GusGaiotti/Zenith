@@ -11,6 +11,15 @@ import { useCancelInvitation, useInviteMember, useLedger, useUpdateLedgerName } 
 import { formatDateTime } from "@/lib/utils/date";
 import { useAuthStore } from "@/lib/store/auth.store";
 
+function PencilIcon() {
+  return (
+    <svg aria-hidden className="h-4 w-4" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.9" viewBox="0 0 24 24">
+      <path d="m4 20 4.2-1 9.3-9.3a2.1 2.1 0 0 0-3-3L5.2 16 4 20Z" />
+      <path d="m13.5 7.5 3 3" />
+    </svg>
+  );
+}
+
 export default function LedgerPage() {
   const router = useRouter();
   const [draftName, setDraftName] = useState("");
@@ -76,7 +85,7 @@ export default function LedgerPage() {
       <PageHeader title="Fatura compartilhada" subtitle="Gerencie sua fatura compartilhada e membros." />
 
       <section className="surface p-6">
-        <h2 className="text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">Informacoes da fatura</h2>
+        <h2 className="text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">Informações da fatura</h2>
         {editing ? (
           <div className="mt-3 space-y-3">
             <input
@@ -110,10 +119,11 @@ export default function LedgerPage() {
             <p className="text-2xl font-semibold">{currentName}</p>
             <button
               type="button"
-              className="focusable rounded-md border px-2.5 py-1 text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+              aria-label="Editar nome da fatura"
+              className="focusable inline-flex h-9 w-9 items-center justify-center rounded-xl border border-[var(--surface-edge)] bg-[var(--card-strong)] text-[var(--text-secondary)] transition-colors duration-150 hover:border-[var(--accent)] hover:text-[var(--accent-hover)]"
               onClick={handleStartEdit}
             >
-              Editar
+              <PencilIcon />
             </button>
           </div>
         )}
