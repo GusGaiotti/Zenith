@@ -51,11 +51,11 @@ export function CoupleSplitPanel({ data }: CoupleSplitPanelProps) {
                 <div className="mt-4 grid gap-3 sm:grid-cols-2">
                   <div className="rounded-2xl border border-[color-mix(in_srgb,var(--income)_22%,transparent)] bg-[color-mix(in_srgb,var(--income)_10%,transparent)] px-4 py-3">
                     <p className="text-[11px] uppercase tracking-[0.08em] text-[var(--text-secondary)]">Entradas</p>
-                    <p className="mt-1 font-mono text-xl text-[var(--income)]">{formatCurrency(row.totalIncome)}</p>
+                    <p className="mt-1 font-display tabular-nums text-xl text-[var(--income)]">{formatCurrency(row.totalIncome)}</p>
                   </div>
                   <div className="rounded-2xl border border-[color-mix(in_srgb,var(--expense)_22%,transparent)] bg-[color-mix(in_srgb,var(--expense)_10%,transparent)] px-4 py-3">
                     <p className="text-[11px] uppercase tracking-[0.08em] text-[var(--text-secondary)]">Saidas</p>
-                    <p className="mt-1 font-mono text-xl text-[var(--expense)]">{formatCurrency(row.totalExpense)}</p>
+                    <p className="mt-1 font-display tabular-nums text-xl text-[var(--expense)]">{formatCurrency(row.totalExpense)}</p>
                   </div>
                 </div>
                 <div className="mt-4 space-y-3">

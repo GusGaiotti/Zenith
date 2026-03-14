@@ -101,7 +101,7 @@ export function OverviewCards({ overview }: OverviewCardsProps) {
           <div className={`inline-flex w-fit items-center rounded-full border px-3 py-1 text-[11px] uppercase tracking-[0.08em] text-[var(--text-secondary)] ${stat.toneClassName}`}>
             {stat.label}
           </div>
-          <p className={`mt-5 font-mono text-3xl whitespace-nowrap xl:text-[2.15rem] ${stat.color}`}>
+          <p className={`mt-5 font-display tabular-nums text-3xl whitespace-nowrap xl:text-[2.15rem] ${stat.color}`}>
             {stat.format === "currency" ? formatCurrency(stat.value) : formatPercentage(stat.value)}
           </p>
           <div className="mt-auto pt-3">
