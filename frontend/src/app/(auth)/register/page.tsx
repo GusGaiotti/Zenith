@@ -46,7 +46,9 @@ export default function RegisterPage() {
   return (
     <main className="relative flex min-h-screen items-center justify-center p-4">
       <div className="absolute right-4 top-4 z-10">
-        <ThemeToggle compact />
+        <div className="w-[190px]">
+          <ThemeToggle />
+        </div>
       </div>
       <section className="surface w-full max-w-md p-8">
         <BrandWordmark animate className="mb-6" labelClassName="text-5xl text-[var(--text-primary)]" />

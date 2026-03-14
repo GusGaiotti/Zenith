@@ -12,9 +12,11 @@ export function PulseSparkline({ data }: PulseSparklineProps) {
 
   return (
     <section className="surface futura-card data-reveal hover-grow p-6">
-      <div className="flex items-center justify-between">
+      <div className="relative pr-10">
         <h3 className="font-display text-2xl italic">Ritmo diario de gastos</h3>
-        <InfoTooltip text="Mostra a intensidade diaria das saidas da fatura." />
+        <div className="absolute right-0 top-0">
+          <InfoTooltip text="Mostra a intensidade diaria das saidas da fatura." />
+        </div>
       </div>
       <div className="mt-4 flex h-28 items-end gap-1 overflow-hidden">
         {(bars.length ? bars : new Array(16).fill({ totalExpense: 0 })).map((bar, index) => {

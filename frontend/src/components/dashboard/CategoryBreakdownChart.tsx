@@ -12,9 +12,11 @@ export function CategoryBreakdownChart({ data }: CategoryBreakdownChartProps) {
 
   return (
     <section className="surface futura-card data-reveal hover-grow p-6">
-      <div className="flex items-center justify-between">
+      <div className="relative pr-10">
         <h3 className="font-display text-2xl italic">Quebra por categoria</h3>
-        <InfoTooltip text="Mostra a concentracao percentual dos gastos por categoria." />
+        <div className="absolute right-0 top-0">
+          <InfoTooltip text="Mostra a concentracao percentual dos gastos por categoria." />
+        </div>
       </div>
       <div className="mt-4 space-y-2">
         {categories.length ? (
