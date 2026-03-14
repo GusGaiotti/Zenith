@@ -5,6 +5,7 @@ export interface AuthResponse {
   userId: number;
   email: string;
   displayName: string;
+  aiAccessAllowed: boolean;
 }
 
 export interface LoginRequest {

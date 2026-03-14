@@ -8,6 +8,7 @@ import com.gaiotti.zenith.model.User;
 import com.gaiotti.zenith.repository.RefreshTokenRepository;
 import com.gaiotti.zenith.repository.UserRepository;
 import com.gaiotti.zenith.security.JwtService;
+import com.gaiotti.zenith.service.ai.AiAccessControlService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -32,6 +33,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final AiAccessControlService aiAccessControlService;
 
     @Value("${jwt.refresh-token-expiration}")
     private long refreshTokenExpirationMs;
@@ -69,6 +71,7 @@ public class AuthService {
                 .userId(user.getId())
                 .email(user.getEmail())
                 .displayName(user.getDisplayName())
+                .aiAccessAllowed(aiAccessControlService.isAiAllowed(user))
                 .build();
         return new AuthSession(response, refreshTokenValue);
     }
@@ -100,6 +103,7 @@ public class AuthService {
                 .userId(user.getId())
                 .email(user.getEmail())
                 .displayName(user.getDisplayName())
+                .aiAccessAllowed(aiAccessControlService.isAiAllowed(user))
                 .build();
         return new AuthSession(response, refreshTokenValue);
     }
@@ -151,6 +155,7 @@ public class AuthService {
                 .userId(user.getId())
                 .email(user.getEmail())
                 .displayName(user.getDisplayName())
+                .aiAccessAllowed(aiAccessControlService.isAiAllowed(user))
                 .build();
         return new AuthSession(response, newRefreshTokenValue);
     }
