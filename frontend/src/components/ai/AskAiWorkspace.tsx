@@ -146,7 +146,7 @@ export function AskAiWorkspace() {
     <div className="space-y-6">
       <PageHeader
         title="Pergunte a IA"
-        subtitle="Faca perguntas sobre o seu mes e receba uma leitura curta, objetiva e pronta para agir."
+        subtitle="Transforme movimentacoes do mes em respostas claras, com foco no que pesa mais e no que vale ajustar."
       />
 
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_340px]">
@@ -168,13 +168,27 @@ export function AskAiWorkspace() {
               <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_280px]">
                 <div className="elevated p-5">
                   <p className="text-xs uppercase tracking-[0.12em] text-[var(--text-muted)]">Comece por aqui</p>
-                  <h2 className="mt-2 text-2xl font-semibold text-[var(--text-primary)]">Converse com contexto financeiro real</h2>
+                  <h2 className="mt-2 text-2xl font-semibold text-[var(--text-primary)]">Use o assistente como uma leitura rapida do seu mes</h2>
                   <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--text-secondary)]">
-                    O assistente responde com base no mes selecionado, nas categorias de gasto e, quando voce quiser, em alguns lancamentos relevantes do periodo.
+                    Escolha o mes de referencia, escreva uma pergunta objetiva e receba uma resposta curta com prioridades, achados e proximos passos. Ele considera saldo, categorias e padroes do periodo para evitar respostas soltas.
                   </p>
+                  <div className="mt-4 grid gap-3 md:grid-cols-3">
+                    <div className="rounded-2xl border border-[var(--surface-edge)] bg-[var(--panel-bg)] px-4 py-3">
+                      <p className="text-sm font-semibold text-[var(--text-primary)]">Mes de referencia</p>
+                      <p className="mt-1 text-sm leading-6 text-[var(--text-secondary)]">Troque o mes para revisar um fechamento anterior ou comparar comportamentos recentes.</p>
+                    </div>
+                    <div className="rounded-2xl border border-[var(--surface-edge)] bg-[var(--panel-bg)] px-4 py-3">
+                      <p className="text-sm font-semibold text-[var(--text-primary)]">Amostra de lancamentos</p>
+                      <p className="mt-1 text-sm leading-6 text-[var(--text-secondary)]">Ative quando quiser uma resposta mais detalhada. O sistema escolhe alguns lancamentos relevantes do periodo para aprofundar a leitura.</p>
+                    </div>
+                    <div className="rounded-2xl border border-[var(--surface-edge)] bg-[var(--panel-bg)] px-4 py-3">
+                      <p className="text-sm font-semibold text-[var(--text-primary)]">Como extrair mais valor</p>
+                      <p className="mt-1 text-sm leading-6 text-[var(--text-secondary)]">Pergunte por excessos, categorias, comparacoes ou oportunidades de corte. Quanto mais clara a duvida, melhor a recomendacao.</p>
+                    </div>
+                  </div>
                 </div>
                 <div className="elevated p-5">
-                  <p className="text-xs uppercase tracking-[0.12em] text-[var(--text-muted)]">Sugestoes</p>
+                  <p className="text-xs uppercase tracking-[0.12em] text-[var(--text-muted)]">Boas perguntas</p>
                   <div className="mt-3 flex flex-col gap-2">
                     {starterQuestions.map((item) => (
                       <button
@@ -253,7 +267,7 @@ export function AskAiWorkspace() {
 
           <div className="border-t border-[var(--border)] bg-[var(--panel-bg)] px-5 py-4">
             {error ? (
-              <div className="mb-4 rounded-2xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+              <div className="danger-chip mb-4 rounded-2xl px-4 py-3 text-sm">
                 {error}
               </div>
             ) : null}
@@ -292,7 +306,7 @@ export function AskAiWorkspace() {
                 </button>
                 <button
                   type="button"
-                  className="focusable h-12 rounded-2xl border border-red-400/30 bg-red-500/10 px-5 text-sm font-medium text-red-200 transition-colors duration-150 hover:border-red-300 hover:bg-red-500/20"
+                  className="focusable danger-chip h-12 rounded-2xl px-5 text-sm font-medium transition-colors duration-150 hover:border-[var(--expense)] hover:bg-[color-mix(in_srgb,var(--expense)_14%,transparent)]"
                   onClick={() => {
                     setQuestion("");
                     setError(null);
@@ -342,7 +356,7 @@ export function AskAiWorkspace() {
                 </div>
                 <p className="text-sm leading-6 text-[var(--text-secondary)]">{getUsageSummary(usage.mode, usage.accessAllowed)}</p>
                 {!usage.accessAllowed ? (
-                  <p className="rounded-2xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+                  <p className="danger-chip rounded-2xl px-4 py-3 text-sm">
                     O assistente nao esta disponivel para a sua conta agora.
                   </p>
                 ) : null}

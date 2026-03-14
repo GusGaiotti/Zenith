@@ -59,12 +59,9 @@ export function Sidebar({ collapsed, onCollapsedChange }: SidebarProps) {
 
       <div className={cn("space-y-2 border-t border-[var(--border)] px-2 pt-3", collapsed && "text-center")}>
         {!collapsed ? (
-          <>
-            <div className="rounded-xl bg-[var(--accent-muted)] px-3 py-2 text-xs text-[var(--accent-hover)]">Espaco ativo</div>
-            <p className="text-xs text-[var(--text-secondary)]">Logado como {user?.displayName ?? "-"}</p>
-          </>
+          <p className="px-1 text-xs text-[var(--text-secondary)]">Logado como {user?.displayName ?? "-"}</p>
         ) : (
-          <div className="text-[10px] uppercase tracking-[0.08em] text-[var(--text-muted)]">Ativa</div>
+          <div className="text-[10px] uppercase tracking-[0.08em] text-[var(--text-muted)]">{user?.displayName?.slice(0, 1) ?? "Z"}</div>
         )}
         <div className={collapsed ? "flex justify-center" : undefined}>
           <ThemeToggle compact={collapsed} />
@@ -85,7 +82,7 @@ export function Sidebar({ collapsed, onCollapsedChange }: SidebarProps) {
         <button
           title={collapsed ? "Sair" : undefined}
           className={cn(
-            "focusable w-full rounded-xl border border-red-400/30 bg-red-500/10 py-3 text-sm text-red-300 transition-colors duration-150 hover:border-red-300 hover:bg-red-500/20",
+            "focusable danger-chip w-full rounded-xl py-3 text-sm transition-colors duration-150 hover:border-[var(--expense)] hover:bg-[color-mix(in_srgb,var(--expense)_14%,transparent)]",
             collapsed ? "px-0 text-center" : "px-4 text-left",
           )}
           onClick={() => {

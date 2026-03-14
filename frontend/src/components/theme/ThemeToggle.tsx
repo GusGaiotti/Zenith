@@ -57,9 +57,10 @@ export function ThemeToggle({ compact = false }: ThemeToggleProps) {
     <button
       type="button"
       aria-label={`Ativar tema ${nextTheme === "light" ? "claro" : "escuro"}`}
+      aria-pressed={theme === "dark"}
       className={cn(
-        "focusable inline-flex items-center justify-center gap-2 rounded-2xl border border-[var(--border)] bg-[var(--bg-elevated)] text-[var(--text-secondary)] transition-colors duration-150 hover:border-[var(--accent)] hover:text-[var(--text-primary)]",
-        compact ? "h-10 w-10" : "h-11 px-4 text-sm font-medium",
+        "focusable inline-flex items-center rounded-full border border-[var(--surface-edge)] bg-[var(--card-strong)] text-[var(--text-secondary)] shadow-[var(--elevated-shadow)] transition-all duration-200 hover:border-[var(--accent)] hover:text-[var(--text-primary)]",
+        compact ? "h-11 w-[74px] justify-center px-2" : "h-12 min-w-[188px] justify-between px-3.5 text-sm font-medium",
       )}
       onClick={() => {
         const updated = theme === "light" ? "dark" : "light";
@@ -67,8 +68,26 @@ export function ThemeToggle({ compact = false }: ThemeToggleProps) {
         applyTheme(updated);
       }}
     >
-      {theme === "light" ? <MoonIcon /> : <SunIcon />}
-      {!compact ? <span>{theme === "light" ? "Modo escuro" : "Modo claro"}</span> : null}
+      {!compact ? <span className="text-sm font-medium text-[var(--text-primary)]">{theme === "light" ? "Tema claro" : "Tema escuro"}</span> : null}
+      <span
+        className={cn(
+          "relative inline-flex h-8 w-[58px] items-center rounded-full border transition-all duration-200",
+          theme === "dark"
+            ? "border-[var(--accent)] bg-[color-mix(in_srgb,var(--accent)_24%,transparent)]"
+            : "border-[var(--border)] bg-[var(--bg-elevated)]",
+        )}
+      >
+        <span
+          className={cn(
+            "absolute top-1 grid h-6 w-6 place-items-center rounded-full text-[var(--text-primary)] shadow-[0_8px_18px_rgba(15,23,42,0.18)] transition-all duration-200",
+            theme === "dark"
+              ? "left-[29px] bg-[var(--accent)] text-white"
+              : "left-1 bg-white",
+          )}
+        >
+          {theme === "light" ? <SunIcon /> : <MoonIcon />}
+        </span>
+      </span>
     </button>
   );
 }
