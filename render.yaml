@@ -29,6 +29,28 @@ services:
         value: Strict
       - key: AUTH_REFRESH_COOKIE_DOMAIN
         value: ""
+      - key: AI_MODE
+        value: openai
+      - key: AI_TIMEOUT_MS
+        value: "8000"
+      - key: AI_MAX_RESPONSE_TOKENS
+        value: "300"
+      - key: AI_LIMITS_ENABLED
+        value: "true"
+      - key: AI_RATE_LIMIT_PER_USER
+        value: "8"
+      - key: AI_RATE_LIMIT_PER_IP
+        value: "20"
+      - key: AI_DAILY_QUOTA_PER_USER
+        value: "50"
+      - key: OPENAI_BASE_URL
+        value: https://api.openai.com/v1
+      - key: OPENAI_MODEL
+        value: gpt-4o-mini
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: AI_PROD_ALLOWLIST_EMAILS
+        sync: false
       - key: CORS_ALLOWED_ORIGINS
         sync: false
       - key: DB_URL
