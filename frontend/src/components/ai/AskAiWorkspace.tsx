@@ -14,6 +14,9 @@ type ChatMessage = {
   id: string;
   role: "user" | "assistant";
   content: string;
+  headline?: string;
+  highlights?: string[];
+  recommendedActions?: string[];
   contextLevel?: AskAiResponse["contextLevelUsed"];
   disclaimer?: string;
 };
@@ -109,7 +112,10 @@ export function AskAiWorkspace() {
         const assistantMessage: ChatMessage = {
           id: `assistant-${Date.now()}`,
           role: "assistant",
+          headline: data.headline,
           content: data.answer,
+          highlights: data.highlights,
+          recommendedActions: data.recommendedActions,
           contextLevel: data.contextLevelUsed,
           disclaimer: data.disclaimer,
         };
@@ -200,9 +206,33 @@ export function AskAiWorkspace() {
                     <span className="text-[11px] text-[var(--text-secondary)]">{getContextLabel(message.contextLevel)}</span>
                   ) : null}
                 </div>
+                {message.headline ? (
+                  <p className="mt-3 text-lg font-semibold text-[var(--text-primary)]">{message.headline}</p>
+                ) : null}
+                {message.highlights?.length ? (
+                  <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                    {message.highlights.map((item) => (
+                      <div key={item} className="rounded-2xl border border-[var(--border)] bg-[rgba(24,36,68,0.72)] px-3 py-3 text-xs leading-5 text-[var(--text-secondary)]">
+                        {item}
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
                 <p className={`mt-3 whitespace-pre-wrap text-sm leading-7 ${message.role === "user" ? "text-white" : "text-[var(--text-primary)]"}`}>
                   {message.content}
                 </p>
+                {message.recommendedActions?.length ? (
+                  <div className="mt-4">
+                    <p className="text-xs uppercase tracking-[0.12em] text-[var(--text-muted)]">Acoes sugeridas</p>
+                    <ul className="mt-2 space-y-2 text-sm leading-6 text-[var(--text-secondary)]">
+                      {message.recommendedActions.map((item) => (
+                        <li key={item} className="rounded-2xl border border-[var(--border)] bg-[rgba(13,21,40,0.72)] px-3 py-3">
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
                 {message.disclaimer ? (
                   <p className="mt-3 text-xs text-[var(--text-secondary)]">{message.disclaimer}</p>
                 ) : null}
@@ -235,6 +265,12 @@ export function AskAiWorkspace() {
                 <textarea
                   value={question}
                   onChange={(event) => setQuestion(event.target.value)}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" && !event.shiftKey) {
+                      event.preventDefault();
+                      handleSubmit();
+                    }
+                  }}
                   maxLength={300}
                   required
                   placeholder="Ex: Onde estamos gastando acima do esperado neste mes?"
@@ -264,7 +300,18 @@ export function AskAiWorkspace() {
                 >
                   Limpar composicao
                 </button>
+                <button
+                  type="button"
+                  className="focusable h-12 rounded-2xl border border-[var(--border)] px-5 text-sm font-medium text-[var(--text-secondary)] transition-colors duration-150 hover:border-[var(--accent)] hover:bg-[rgba(19,31,59,0.86)] hover:text-[var(--text-primary)]"
+                  onClick={() => {
+                    setMessages([]);
+                    setError(null);
+                  }}
+                >
+                  Nova conversa
+                </button>
               </div>
+              <p className="text-xs text-[var(--text-muted)]">Pressione Enter para enviar. Use Shift + Enter para quebrar linha.</p>
             </div>
           </div>
         </section>

@@ -81,6 +81,19 @@ export function NotificationBell() {
     }
   }
 
+  function handleMarkAllSeen() {
+    const unseenIds = items
+      .filter((item) => item.seenAt == null && !sessionSeenIds.includes(item.id))
+      .map((item) => item.id);
+
+    if (!unseenIds.length) {
+      return;
+    }
+
+    setSessionSeenIds((current) => [...current, ...unseenIds]);
+    markSeen.mutate(unseenIds);
+  }
+
   return (
     <div ref={wrapperRef} className="relative">
       <button
@@ -102,7 +115,17 @@ export function NotificationBell() {
         <div className="absolute right-0 top-[calc(100%+0.5rem)] z-40 w-[min(340px,calc(100vw-1.5rem))] rounded-2xl border border-[var(--surface-edge)] bg-[rgba(11,18,36,0.98)] p-3 shadow-[0_20px_60px_rgba(0,0,0,0.42)] backdrop-blur">
           <div className="mb-3 flex items-center justify-between">
             <p className="text-sm font-medium text-[var(--text-primary)]">Notificacoes</p>
-            <span className="text-[11px] uppercase tracking-[0.08em] text-[var(--text-muted)]">7 dias</span>
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                className="text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--accent-hover)] transition-opacity duration-150 hover:opacity-80 disabled:opacity-30"
+                onClick={handleMarkAllSeen}
+                disabled={unreadCount === 0 || markSeen.isPending}
+              >
+                Marcar tudo
+              </button>
+              <span className="text-[11px] uppercase tracking-[0.08em] text-[var(--text-muted)]">7 dias</span>
+            </div>
           </div>
 
           {notifications.isLoading ? (
