@@ -1,6 +1,6 @@
 "use client";
 
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getNotifications, markNotificationsSeen } from "@/lib/api/notifications";
 import { queryKeys } from "@/lib/api/query-keys";
 
@@ -12,7 +12,12 @@ export function useNotifications(days = 7, unseenOnly = true) {
 }
 
 export function useMarkNotificationsSeen() {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: (ids: number[]) => markNotificationsSeen({ ids }).then((response) => response.data),
+    onSettled: () => {
+      void queryClient.invalidateQueries({ queryKey: ["notifications"] });
+    },
   });
 }

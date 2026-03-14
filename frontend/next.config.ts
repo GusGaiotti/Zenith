@@ -11,10 +11,6 @@ function resolveApiURL() {
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
-  experimental: {
-    workerThreads: true,
-    webpackBuildWorker: false,
-  },
   async rewrites() {
     const apiURL = resolveApiURL();
 

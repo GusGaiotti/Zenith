@@ -22,6 +22,7 @@ export const APP_NAV_ITEMS: NavItem[] = [
   { href: "/transactions", label: "Transacoes", icon: "transactions" },
   { href: "/categories", label: "Categorias", icon: "categories" },
   { href: "/ledger", label: "Fatura", icon: "ledger" },
+  { href: "/ask-ai", label: "Pergunte a IA", icon: "ask-ai" },
 ];
 
 function IconBase(props: SVGProps<SVGSVGElement>) {
