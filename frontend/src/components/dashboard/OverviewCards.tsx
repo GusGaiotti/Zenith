@@ -51,6 +51,7 @@ export function OverviewCards({ overview }: OverviewCardsProps) {
       delta: renderDelta(overview?.monthOverMonthIncomeChange),
       deltaDescription: "Variacao percentual das entradas em relacao ao mes anterior.",
       color: "text-[var(--income)]",
+      toneClassName: "border-[color-mix(in_srgb,var(--income)_20%,transparent)] bg-[color-mix(in_srgb,var(--income)_7%,transparent)]",
       format: "currency",
       infoText: "Soma de todas as entradas registradas no mes filtrado.",
     },
@@ -60,6 +61,7 @@ export function OverviewCards({ overview }: OverviewCardsProps) {
       delta: renderDelta(overview?.monthOverMonthExpenseChange),
       deltaDescription: "Variacao percentual das saidas em relacao ao mes anterior.",
       color: "text-[var(--expense)]",
+      toneClassName: "border-[color-mix(in_srgb,var(--expense)_20%,transparent)] bg-[color-mix(in_srgb,var(--expense)_7%,transparent)]",
       format: "currency",
       infoText: "Soma de todas as saidas registradas no mes filtrado.",
     },
@@ -69,6 +71,7 @@ export function OverviewCards({ overview }: OverviewCardsProps) {
       delta: "Mes atual",
       deltaDescription: "Resultado de entradas menos saidas no periodo atual.",
       color: getNetBalanceClassName(overview?.netBalance ?? 0),
+      toneClassName: "border-[color-mix(in_srgb,var(--accent-amber)_20%,transparent)] bg-[color-mix(in_srgb,var(--accent-amber)_7%,transparent)]",
       format: "currency",
       infoText: "Mostra o saldo final do periodo. Fica verde quando positivo, vermelho quando negativo e amarelo quando zerado.",
     },
@@ -78,6 +81,7 @@ export function OverviewCards({ overview }: OverviewCardsProps) {
       delta: "Eficiencia",
       deltaDescription: "Percentual das entradas que nao foi consumido pelas saidas.",
       color: "text-[var(--accent)]",
+      toneClassName: "border-[color-mix(in_srgb,var(--accent)_20%,transparent)] bg-[color-mix(in_srgb,var(--accent)_7%,transparent)]",
       format: "percent",
       infoText: "Representa a proporcao de valor preservado no mes depois de descontar as saidas.",
     },
@@ -91,8 +95,10 @@ export function OverviewCards({ overview }: OverviewCardsProps) {
           className="surface futura-card data-reveal flex min-h-[172px] flex-col p-5"
           style={{ animationDelay: `${index * 80}ms` }}
         >
-          <div className="flex items-center justify-between gap-3">
-            <p className="text-sm uppercase tracking-[0.08em] text-[var(--text-muted)]">{stat.label}</p>
+          <div className={`inline-flex w-fit items-center rounded-full border px-3 py-1 text-[11px] uppercase tracking-[0.08em] text-[var(--text-secondary)] ${stat.toneClassName}`}>
+            {stat.label}
+          </div>
+          <div className="mt-4 flex items-center justify-between gap-3">
             <InfoTooltip text={stat.infoText} />
           </div>
           <p className={`mt-2.5 font-mono text-3xl whitespace-nowrap xl:text-[2.15rem] ${stat.color}`}>

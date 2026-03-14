@@ -25,7 +25,7 @@ export function RecentTransactions({ items = [] }: RecentTransactionsProps) {
       <ul className="space-y-3">
         {lastFive.length ? (
           lastFive.map((item) => (
-            <li key={item.id} className="flex items-center justify-between text-sm transition-transform duration-150 hover:scale-[1.01]">
+            <li key={item.id} className="flex items-center justify-between rounded-2xl border border-[var(--surface-edge)] bg-[var(--card-strong)] px-4 py-3 text-sm transition-transform duration-150 hover:scale-[1.01]">
               <div>
                 <p>{item.description ?? "Sem descricao"}</p>
                 <p className="text-xs text-[var(--text-secondary)]">{formatRelative(item.date)}</p>
