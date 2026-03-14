@@ -1,15 +1,47 @@
 @import "tailwindcss";
 
 :root {
+  --bg-base: #f3f7fc;
+  --bg-surface: #ffffff;
+  --bg-elevated: #eef4ff;
+  --bg-muted: #dbe7fb;
+  --accent: #2563eb;
+  --accent-muted: rgba(37, 99, 235, 0.12);
+  --accent-hover: #1d4ed8;
+  --accent-emerald: #14b8a6;
+  --accent-amber: #f59e0b;
+  --income: #16a34a;
+  --expense: #dc2626;
+  --neutral: #64748b;
+  --text-primary: #10213f;
+  --text-secondary: #4c6287;
+  --text-muted: #7b8ca8;
+  --border: rgba(74, 95, 137, 0.16);
+  --border-focus: rgba(37, 99, 235, 0.35);
+  --surface-edge: rgba(117, 143, 201, 0.22);
+  --surface-gradient-start: rgba(255, 255, 255, 0.94);
+  --surface-gradient-end: rgba(242, 247, 255, 0.94);
+  --elevated-gradient-start: rgba(246, 249, 255, 0.96);
+  --elevated-gradient-end: rgba(233, 241, 255, 0.92);
+  --surface-shadow: 0 18px 42px rgba(72, 102, 158, 0.14);
+  --elevated-shadow: 0 10px 24px rgba(83, 112, 170, 0.12);
+  --overlay: rgba(17, 26, 46, 0.18);
+  --panel-bg: rgba(255, 255, 255, 0.88);
+  --menu-bg: rgba(255, 255, 255, 0.94);
+  --tooltip-bg: rgba(16, 24, 40, 0.92);
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+}
+
+[data-theme="dark"] {
   --bg-base: #070c1a;
   --bg-surface: #0f172a;
   --bg-elevated: #16213d;
   --bg-muted: #21335a;
   --accent: #4f7cff;
-  --accent-muted: #4f7cff2a;
+  --accent-muted: rgba(79, 124, 255, 0.16);
   --accent-hover: #89a8ff;
-  --accent-emerald: #38bdf8;
-  --accent-amber: #f59e0b;
   --income: #4ade80;
   --expense: #f87171;
   --neutral: #94a3b8;
@@ -19,15 +51,23 @@
   --border: rgba(155, 179, 240, 0.18);
   --border-focus: rgba(79, 124, 255, 0.55);
   --surface-edge: rgba(147, 174, 239, 0.2);
-  --radius-sm: 8px;
-  --radius-md: 10px;
-  --radius-lg: 12px;
+  --surface-gradient-start: rgba(15, 23, 42, 0.92);
+  --surface-gradient-end: rgba(11, 18, 36, 0.9);
+  --elevated-gradient-start: rgba(24, 35, 63, 0.92);
+  --elevated-gradient-end: rgba(17, 27, 50, 0.9);
+  --surface-shadow: 0 18px 42px rgba(5, 12, 28, 0.4);
+  --elevated-shadow: 0 10px 24px rgba(6, 12, 28, 0.24);
+  --overlay: rgba(0, 0, 0, 0.55);
+  --panel-bg: rgba(9, 15, 28, 0.82);
+  --menu-bg: rgba(11, 18, 36, 0.94);
+  --tooltip-bg: rgba(16, 24, 40, 0.92);
 }
 
 @theme inline {
   --color-background: var(--bg-base);
   --color-foreground: var(--text-primary);
   --font-sans: var(--font-body);
+  --font-display: var(--font-display);
   --font-mono: var(--font-mono);
 }
 
@@ -40,10 +80,10 @@ body {
   min-height: 100vh;
   color: var(--text-primary);
   background:
-    radial-gradient(circle at 12% -8%, rgba(79, 124, 255, 0.28), transparent 32%),
-    radial-gradient(circle at 88% 2%, rgba(56, 189, 248, 0.12), transparent 24%),
-    radial-gradient(circle at 50% 100%, rgba(35, 62, 120, 0.36), transparent 52%),
-    radial-gradient(circle at 82% 72%, rgba(245, 158, 11, 0.09), transparent 26%),
+    radial-gradient(circle at 12% -8%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 32%),
+    radial-gradient(circle at 88% 2%, color-mix(in srgb, var(--accent-emerald) 12%, transparent), transparent 24%),
+    radial-gradient(circle at 50% 100%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 52%),
+    radial-gradient(circle at 82% 72%, color-mix(in srgb, var(--accent-amber) 10%, transparent), transparent 26%),
     var(--bg-base);
   font-family: var(--font-body), sans-serif;
 }
@@ -53,14 +93,14 @@ body::before {
   pointer-events: none;
   position: fixed;
   inset: 0;
-  background-image: radial-gradient(rgba(210, 225, 255, 0.045) 1px, transparent 0);
+  background-image: radial-gradient(color-mix(in srgb, var(--text-primary) 5%, transparent) 1px, transparent 0);
   background-size: 3px 3px;
   opacity: 0.32;
   z-index: -1;
 }
 
 .font-display {
-  font-family: var(--font-body), sans-serif;
+  font-family: var(--font-display), sans-serif;
   font-weight: 700;
   letter-spacing: -0.02em;
 }
@@ -74,13 +114,13 @@ body::before {
 }
 
 .surface {
-  background: linear-gradient(180deg, rgba(15, 23, 42, 0.92), rgba(11, 18, 36, 0.9));
+  background: linear-gradient(180deg, var(--surface-gradient-start), var(--surface-gradient-end));
   border: 1px solid var(--surface-edge);
   border-radius: var(--radius-lg);
   box-shadow:
-    inset 0 1px 0 rgba(225, 236, 255, 0.06),
-    0 0 0 1px rgba(76, 112, 205, 0.1),
-    0 18px 42px rgba(5, 12, 28, 0.4);
+    inset 0 1px 0 color-mix(in srgb, white 55%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--accent) 8%, transparent),
+    var(--surface-shadow);
 }
 
 .futura-card {
@@ -98,11 +138,11 @@ body::before {
   align-items: center;
   gap: 4px;
   padding: 4px 8px;
-  border: 1px solid rgba(173, 194, 244, 0.2);
+  border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
   border-radius: 999px;
   font-size: 11px;
   color: var(--text-secondary);
-  background: rgba(173, 194, 244, 0.1);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
 }
 
 .hover-grow {
@@ -164,12 +204,12 @@ body::before {
 }
 
 .elevated {
-  background: linear-gradient(180deg, rgba(24, 35, 63, 0.92), rgba(17, 27, 50, 0.9));
-  border: 1px solid rgba(152, 178, 242, 0.16);
+  background: linear-gradient(180deg, var(--elevated-gradient-start), var(--elevated-gradient-end));
+  border: 1px solid color-mix(in srgb, var(--accent) 12%, transparent);
   border-radius: var(--radius-md);
   box-shadow:
-    inset 0 1px 0 rgba(222, 234, 255, 0.06),
-    0 10px 24px rgba(6, 12, 28, 0.24);
+    inset 0 1px 0 color-mix(in srgb, white 55%, transparent),
+    var(--elevated-shadow);
 }
 
 .focusable:focus-visible {
@@ -231,4 +271,39 @@ input[type="date"]::-webkit-datetime-edit-fields-wrapper {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+.brand-z-cut {
+  color: var(--accent);
+  line-height: 1;
+}
+
+.brand-z-cut::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 4%;
+  height: 90%;
+  width: 2px;
+  border-radius: 999px;
+  background: currentColor;
+  transform: translateX(-50%) rotate(22deg);
+  opacity: 0.92;
+}
+
+.brand-letter-reveal {
+  opacity: 0;
+  display: inline-block;
+  animation: brand-letter-reveal 520ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes brand-letter-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

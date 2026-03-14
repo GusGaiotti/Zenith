@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { BrandWordmark } from "@/components/brand/BrandWordmark";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { useLogin } from "@/hooks/useAuth";
 import { getMyLedger } from "@/lib/api/ledger";
 import { useAuthStore } from "@/lib/store/auth.store";
@@ -56,19 +58,22 @@ export default function LoginPage() {
 
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden p-4 sm:p-6">
+      <div className="absolute right-4 top-4 z-10">
+        <ThemeToggle compact />
+      </div>
       <section className="surface relative w-full max-w-5xl overflow-hidden p-0">
         <div className="grid min-h-[620px] lg:grid-cols-[1.1fr_0.9fr]">
-          <div className="relative hidden flex-col justify-between bg-gradient-to-br from-[#14244a] to-[#0d1733] p-10 lg:flex">
+          <div className="relative hidden flex-col justify-between border-r border-[var(--border)] bg-[linear-gradient(145deg,color-mix(in_srgb,var(--accent)_18%,transparent),transparent_52%),linear-gradient(180deg,var(--surface-gradient-start),var(--elevated-gradient-end))] p-10 lg:flex">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-200/90">Zenith</p>
-              <h1 className="mt-4 max-w-sm text-4xl font-semibold leading-tight text-white">
-                Controle financeiro compartilhado com clareza e seguranca.
+              <BrandWordmark animate labelClassName="text-5xl text-[var(--text-primary)]" />
+              <h1 className="mt-6 max-w-sm text-4xl font-semibold leading-tight text-[var(--text-primary)]">
+                Controle financeiro compartilhado com clareza, ritmo e tranquilidade.
               </h1>
             </div>
-            <ul className="space-y-3 text-sm text-blue-100/90">
-              <li className="rounded-xl border border-blue-200/20 bg-blue-100/8 px-4 py-3">Saldo consolidado do casal em tempo real.</li>
-              <li className="rounded-xl border border-blue-200/20 bg-blue-100/8 px-4 py-3">Transacoes organizadas por pessoa e categoria.</li>
-              <li className="rounded-xl border border-blue-200/20 bg-blue-100/8 px-4 py-3">Exportacao de relatorios para fechamento mensal.</li>
+            <ul className="space-y-3 text-sm text-[var(--text-secondary)]">
+              <li className="rounded-xl border border-[var(--border)] bg-[var(--panel-bg)] px-4 py-3">Saldo consolidado do casal em tempo real.</li>
+              <li className="rounded-xl border border-[var(--border)] bg-[var(--panel-bg)] px-4 py-3">Transacoes organizadas por pessoa e categoria.</li>
+              <li className="rounded-xl border border-[var(--border)] bg-[var(--panel-bg)] px-4 py-3">Visoes rapidas para o fechamento do mes.</li>
             </ul>
           </div>
 
