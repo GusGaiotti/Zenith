@@ -18,6 +18,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
@@ -57,7 +61,10 @@ public class AskAiService {
                     (System.nanoTime() - startNanos) / 1_000_000
             );
             return AskAiResponse.builder()
+                    .headline(buildHeadline(context))
                     .answer(providerResult.answer())
+                    .highlights(buildHighlights(context))
+                    .recommendedActions(buildRecommendedActions(context))
                     .contextLevelUsed(context.contextLevel())
                     .disclaimer("Resposta gerada por IA. Revise antes de tomar decisoes financeiras.")
                     .build();
@@ -72,7 +79,10 @@ public class AskAiService {
                     ex.getMessage()
             );
             return AskAiResponse.builder()
+                    .headline(buildHeadline(context))
                     .answer(buildFallbackAnswer(context))
+                    .highlights(buildHighlights(context))
+                    .recommendedActions(buildRecommendedActions(context))
                     .contextLevelUsed(context.contextLevel())
                     .disclaimer("IA indisponivel no momento. Exibindo resumo seguro sem gerar custo adicional.")
                     .build();
@@ -199,6 +209,65 @@ public class AskAiService {
         return answer.toString();
     }
 
+    private String buildHeadline(AiContextBuilder.AiContext context) {
+        if (!context.topExpenseCategories().isEmpty()) {
+            AiContextBuilder.CategoryTotal topCategory = context.topExpenseCategories().getFirst();
+            return topCategory.name() + " lidera os gastos em " + context.targetMonth() + ".";
+        }
+
+        if (context.net().signum() < 0) {
+            return "O mes esta fechando no negativo.";
+        }
+
+        return "Resumo financeiro de " + context.targetMonth() + ".";
+    }
+
+    private List<String> buildHighlights(AiContextBuilder.AiContext context) {
+        List<String> highlights = new ArrayList<>();
+        highlights.add("Saldo do mes: " + formatCurrency(context.net()) + ".");
+
+        if (!context.topExpenseCategories().isEmpty()) {
+            AiContextBuilder.CategoryTotal topCategory = context.topExpenseCategories().getFirst();
+            String share = context.totalExpense().signum() > 0
+                    ? " (" + calculateShare(topCategory.total(), context.totalExpense()) + " das saidas)"
+                    : "";
+            highlights.add("Maior categoria: " + topCategory.name() + " com " + formatCurrency(topCategory.total()) + share + ".");
+        }
+
+        if (context.totalIncome().signum() == 0 && context.totalExpense().signum() > 0) {
+            highlights.add("Nao houve entradas registradas no periodo consultado.");
+        } else if (context.monthlyAggregates().size() > 1) {
+            AiContextBuilder.MonthlyAggregate latest = context.monthlyAggregates().getLast();
+            AiContextBuilder.MonthlyAggregate previous = context.monthlyAggregates().get(context.monthlyAggregates().size() - 2);
+            highlights.add("Comparativo recente: saldo de " + previous.yearMonth() + " para " + latest.yearMonth() + " foi de "
+                    + formatCurrency(previous.net()) + " para " + formatCurrency(latest.net()) + ".");
+        }
+
+        return highlights.stream().limit(3).toList();
+    }
+
+    private List<String> buildRecommendedActions(AiContextBuilder.AiContext context) {
+        List<String> actions = new ArrayList<>();
+
+        if (!context.topExpenseCategories().isEmpty()) {
+            AiContextBuilder.CategoryTotal topCategory = context.topExpenseCategories().getFirst();
+            actions.add("Revise os lancamentos de " + topCategory.name() + " primeiro; e a melhor alavanca imediata deste mes.");
+        }
+
+        if (context.net().signum() < 0) {
+            actions.add("Congele gastos discricionarios ate o saldo voltar ao terreno positivo.");
+        } else if (context.net().signum() > 0) {
+            actions.add("Proteja o saldo positivo evitando aumentos na categoria lider de despesa.");
+        }
+
+        if (context.topExpenseCategories().size() > 1) {
+            AiContextBuilder.CategoryTotal secondCategory = context.topExpenseCategories().get(1);
+            actions.add("Compare " + secondCategory.name() + " com o mes anterior para confirmar se o pico foi pontual ou recorrente.");
+        }
+
+        return actions.stream().limit(3).toList();
+    }
+
     private String sanitizeQuestion(String rawQuestion) {
         if (rawQuestion == null) {
             return "";
@@ -216,5 +285,21 @@ public class AskAiService {
         }
 
         return normalized;
+    }
+
+    private String formatCurrency(BigDecimal value) {
+        NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.of("pt", "BR"));
+        return formatter.format(value);
+    }
+
+    private String calculateShare(BigDecimal partial, BigDecimal total) {
+        if (total.signum() <= 0) {
+            return "0%";
+        }
+
+        BigDecimal percentage = partial
+                .multiply(BigDecimal.valueOf(100))
+                .divide(total, 0, java.math.RoundingMode.HALF_UP);
+        return percentage.toPlainString() + "%";
     }
 }
