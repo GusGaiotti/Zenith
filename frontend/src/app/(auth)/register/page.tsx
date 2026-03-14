@@ -49,7 +49,7 @@ export default function RegisterPage() {
         <ThemeToggle compact />
       </div>
       <section className="surface w-full max-w-md p-8">
-        <BrandWordmark animate className="mb-6" labelClassName="text-4xl text-[var(--text-primary)]" />
+        <BrandWordmark animate className="mb-6" labelClassName="text-5xl text-[var(--text-primary)]" />
         <h1 className="font-display text-4xl">Criar conta</h1>
         <p className="mt-2 text-sm text-[var(--text-secondary)]">Configure o Zenith em menos de um minuto.</p>
         <form className="mt-6 space-y-4" onSubmit={onSubmit}>
