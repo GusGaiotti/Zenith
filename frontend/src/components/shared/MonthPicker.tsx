@@ -111,7 +111,7 @@ export function MonthPicker({
       {open ? (
         <div
           className={cn(
-            "absolute top-[calc(100%+0.5rem)] z-40 w-[min(280px,calc(100vw-1.5rem))] rounded-2xl border border-[var(--surface-edge)] bg-[rgba(11,18,36,0.98)] p-3 shadow-[0_20px_60px_rgba(0,0,0,0.42)] backdrop-blur",
+            "absolute top-[calc(100%+0.5rem)] z-40 w-[min(280px,calc(100vw-1.5rem))] rounded-2xl border border-[var(--surface-edge)] bg-[var(--menu-bg)] p-3 shadow-[0_20px_60px_rgba(0,0,0,0.18)] backdrop-blur",
             align === "right" ? "right-0" : "left-0",
           )}
           role="dialog"

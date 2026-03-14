@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DM_Mono, Inter } from "next/font/google";
+import { IBM_Plex_Mono, Plus_Jakarta_Sans, Space_Grotesk } from "next/font/google";
 import { AuthBootstrap } from "@/components/providers/AuthBootstrap";
 import { QueryProvider } from "@/components/providers/QueryProvider";
 import "./globals.css";
@@ -22,13 +22,19 @@ function resolveMetadataBase() {
   }
 }
 
-const body = Inter({
+const body = Plus_Jakarta_Sans({
   variable: "--font-body",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
 
-const mono = DM_Mono({
+const display = Space_Grotesk({
+  variable: "--font-display",
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+});
+
+const mono = IBM_Plex_Mono({
   variable: "--font-mono",
   subsets: ["latin"],
   weight: ["400", "500"],
@@ -59,8 +65,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR">
-      <body className={`${body.variable} ${mono.variable} antialiased`}>
+    <html lang="pt-BR" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(() => {
+              try {
+                const stored = localStorage.getItem("zenith-theme");
+                document.documentElement.dataset.theme = stored === "dark" ? "dark" : "light";
+              } catch {
+                document.documentElement.dataset.theme = "light";
+              }
+            })();`,
+          }}
+        />
+      </head>
+      <body className={`${body.variable} ${display.variable} ${mono.variable} antialiased`}>
         <QueryProvider>
           <AuthBootstrap />
           {children}
