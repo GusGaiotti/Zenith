@@ -109,12 +109,12 @@ export default function TransactionsPage() {
     return (
       <div className="pb-20 md:pb-6">
         <PageHeader
-          title="Transacoes"
-          subtitle="Acompanhe cada movimentacao do espaco compartilhado."
+          title="Transações"
+          subtitle="Acompanhe cada movimentação do espaço compartilhado."
         />
         <EmptyState
           title="Nenhuma fatura ativa"
-          description="As transacoes ficam disponiveis assim que voce criar uma fatura ou aceitar um convite."
+          description="As transações ficam disponíveis assim que você criar uma fatura ou aceitar um convite."
           action={{ label: "Criar fatura", onClick: () => router.push("/onboarding") }}
         />
       </div>
@@ -124,8 +124,8 @@ export default function TransactionsPage() {
   return (
     <div className="pb-20 md:pb-6">
       <PageHeader
-        title="Transacoes"
-        subtitle="Acompanhe cada movimentacao do espaco compartilhado."
+        title="Transações"
+        subtitle="Acompanhe cada movimentação do espaço compartilhado."
         actions={
           <div className="flex w-full flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-end">
             <MonthPicker value={yearMonth} onChange={setYearMonth} buttonClassName="w-full px-3 py-2 sm:min-w-[140px] sm:w-auto" />
@@ -145,24 +145,24 @@ export default function TransactionsPage() {
                 setOpen(true);
               }}
             >
-              Nova transacao
+              Nova transação
             </button>
           </div>
         }
       />
 
       {errorMessage ? (
-        <div className="mb-4 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+        <div className="mb-4 rounded-xl border border-[color-mix(in_srgb,var(--expense)_32%,transparent)] bg-[color-mix(in_srgb,var(--expense)_10%,var(--panel-bg))] px-4 py-3 text-sm text-[color-mix(in_srgb,var(--expense)_82%,var(--text-primary))]">
           {errorMessage}
         </div>
       ) : null}
 
-      <div className="surface mb-4 grid gap-2 p-4 text-sm md:grid-cols-3">
+      <div className="surface mb-4 grid gap-3 p-4 text-sm md:grid-cols-3">
         <p>
           Entradas <span className="ml-2 font-mono text-[var(--income)]">{formatCurrency(totals.income)}</span>
         </p>
         <p>
-          Saidas <span className="ml-2 font-mono text-[var(--expense)]">{formatCurrency(totals.expense)}</span>
+          Saídas <span className="ml-2 font-mono text-[var(--expense)]">{formatCurrency(totals.expense)}</span>
         </p>
         <p>
           Saldo{" "}
@@ -192,7 +192,7 @@ export default function TransactionsPage() {
           setOpen(true);
         }}
         onDelete={(item) => {
-          const shouldDelete = window.confirm(`Excluir a transacao "${item.description ?? "Sem descricao"}"?`);
+          const shouldDelete = window.confirm(`Excluir a transação "${item.description ?? "Sem descrição"}"?`);
 
           if (!shouldDelete) {
             return;
@@ -206,7 +206,7 @@ export default function TransactionsPage() {
             },
             onError: (error) => {
               setPendingDeleteId(null);
-              setErrorMessage(extractErrorMessage(error, "Nao foi possivel excluir a transacao."));
+              setErrorMessage(extractErrorMessage(error, "Não foi possível excluir a transação."));
             },
           });
         }}
@@ -247,7 +247,7 @@ export default function TransactionsPage() {
                   setEditingTransaction(null);
                 },
                 onError: (error) => {
-                  setErrorMessage(extractErrorMessage(error, "Nao foi possivel atualizar a transacao."));
+                  setErrorMessage(extractErrorMessage(error, "Não foi possível atualizar a transação."));
                 },
               },
             );
@@ -262,7 +262,7 @@ export default function TransactionsPage() {
               }
             },
             onError: (error) => {
-              setErrorMessage(extractErrorMessage(error, "Nao foi possivel criar a transacao."));
+              setErrorMessage(extractErrorMessage(error, "Não foi possível criar a transação."));
             },
           });
         }}

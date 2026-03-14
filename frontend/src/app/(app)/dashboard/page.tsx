@@ -124,8 +124,8 @@ export default function DashboardPage() {
           </div>
         </div>
         <EmptyState
-          title="Fatura nao configurada"
-          description="Voce ainda nao criou uma fatura. Continue navegando ou crie uma em /onboarding para liberar o dashboard completo."
+          title="Fatura não configurada"
+          description="Você ainda não criou uma fatura. Continue navegando ou crie uma em /onboarding para liberar o dashboard completo."
           action={{ label: "Criar fatura", onClick: () => router.push("/onboarding") }}
         />
       </div>
@@ -209,7 +209,7 @@ export default function DashboardPage() {
 
       {hasError ? (
         <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
-          Algumas secoes nao carregaram. Verifique permissao da fatura e disponibilidade da API.
+          Algumas seções não carregaram. Verifique a permissão da fatura e a disponibilidade da API.
         </div>
       ) : null}
 

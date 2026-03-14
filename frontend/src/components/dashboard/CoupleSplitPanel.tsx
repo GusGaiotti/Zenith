@@ -17,9 +17,9 @@ export function CoupleSplitPanel({ data }: CoupleSplitPanelProps) {
   return (
     <section className="surface futura-card data-reveal hover-grow p-6">
       <div className="relative pr-10">
-        <h3 className="font-display text-2xl italic">Divisao da fatura</h3>
+        <h3 className="font-display text-2xl italic">Divisão da fatura</h3>
         <div className="absolute right-0 top-0">
-          <InfoTooltip text="Mostra quanto cada pessoa participou nas entradas e nas saidas do mes e destaca quem contribuiu ou gastou proporcionalmente mais." />
+          <InfoTooltip text="Mostra quanto cada pessoa participou nas entradas e nas saídas do mês e destaca quem contribuiu ou gastou proporcionalmente mais." />
         </div>
       </div>
       <div className="mt-5 space-y-5">
@@ -42,7 +42,7 @@ export function CoupleSplitPanel({ data }: CoupleSplitPanelProps) {
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
                     <p className="text-base font-semibold text-[var(--text-primary)]">{row.displayName}</p>
-                    <p className="mt-1 text-xs text-[var(--text-secondary)]">Participacao nas entradas e nas saidas do periodo.</p>
+                    <p className="mt-1 text-xs text-[var(--text-secondary)]">Participação nas entradas e nas saídas do período.</p>
                   </div>
                   <span className={`rounded-full px-3 py-1.5 text-xs font-medium ${statusClassName}`}>
                     {status}
@@ -54,14 +54,14 @@ export function CoupleSplitPanel({ data }: CoupleSplitPanelProps) {
                     <p className="mt-1 font-display tabular-nums text-xl text-[var(--income)]">{formatCurrency(row.totalIncome)}</p>
                   </div>
                   <div className="rounded-2xl border border-[color-mix(in_srgb,var(--expense)_22%,transparent)] bg-[color-mix(in_srgb,var(--expense)_10%,transparent)] px-4 py-3">
-                    <p className="text-[11px] uppercase tracking-[0.08em] text-[var(--text-secondary)]">Saidas</p>
+                    <p className="text-[11px] uppercase tracking-[0.08em] text-[var(--text-secondary)]">Saídas</p>
                     <p className="mt-1 font-display tabular-nums text-xl text-[var(--expense)]">{formatCurrency(row.totalExpense)}</p>
                   </div>
                 </div>
                 <div className="mt-4 space-y-3">
                   <div className="space-y-1">
                     <div className="flex items-center justify-between text-[11px] text-[var(--text-muted)]">
-                      <span>Participacao nas entradas</span>
+                      <span>Participação nas entradas</span>
                       {incomeShare ? <span>{incomeShare}</span> : null}
                     </div>
                     <div className="h-2.5 rounded-full bg-[var(--metric-track)]">
@@ -73,7 +73,7 @@ export function CoupleSplitPanel({ data }: CoupleSplitPanelProps) {
                   </div>
                   <div className="space-y-1">
                     <div className="flex items-center justify-between text-[11px] text-[var(--text-muted)]">
-                      <span>Participacao nas saidas</span>
+                      <span>Participação nas saídas</span>
                       {expenseShare ? <span>{expenseShare}</span> : null}
                     </div>
                     <div className="h-2.5 rounded-full bg-[var(--metric-track)]">
@@ -88,7 +88,7 @@ export function CoupleSplitPanel({ data }: CoupleSplitPanelProps) {
             );
           })
         ) : (
-          <p className="text-sm text-[var(--text-secondary)]">Sem dados de contribuicao ainda.</p>
+          <p className="text-sm text-[var(--text-secondary)]">Sem dados de contribuição ainda.</p>
         )}
       </div>
       {data?.highestTransaction ? (

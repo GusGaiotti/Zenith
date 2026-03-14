@@ -16,7 +16,7 @@ function extractErrorMessage(error: unknown, fallback: string) {
   if (error instanceof AxiosError) {
     const message = (error.response?.data as { message?: string } | undefined)?.message;
     if (message?.toLowerCase().includes("associated transactions")) {
-      return "Nao e possivel excluir a categoria porque ela possui transacoes associadas. Exclua as transacoes vinculadas antes de tentar novamente.";
+      return "Não é possível excluir a categoria porque ela possui transações associadas. Exclua as transações vinculadas antes de tentar novamente.";
     }
     return message || fallback;
   }
@@ -49,7 +49,7 @@ export default function CategoriesPage() {
         />
         <EmptyState
           title="Nenhuma fatura ativa"
-          description="As categorias ficam disponiveis assim que voce criar uma fatura ou aceitar um convite."
+          description="As categorias ficam disponíveis assim que você criar uma fatura ou aceitar um convite."
           action={{ label: "Criar fatura", onClick: () => router.push("/onboarding") }}
         />
       </div>
@@ -107,7 +107,7 @@ export default function CategoriesPage() {
                 setDeleteErrorMessage(
                   extractErrorMessage(
                     error,
-                    "Nao foi possivel excluir a categoria. Ela pode estar associada a transacoes existentes.",
+                    "Não foi possível excluir a categoria. Ela pode estar associada a transações existentes.",
                   ),
                 );
               },
@@ -118,7 +118,7 @@ export default function CategoriesPage() {
       {!categories.isLoading && (categories.data?.length ?? 0) === 0 ? (
         <EmptyState
           title="Nenhuma categoria ainda"
-          description="Crie sua primeira categoria para organizar os lancamentos."
+          description="Crie sua primeira categoria para organizar os lançamentos."
           action={{ label: "Nova categoria", onClick: () => setOpen(true) }}
         />
       ) : null}
@@ -146,7 +146,7 @@ export default function CategoriesPage() {
                   setEditingCategory(null);
                 },
                 onError: (error) => {
-                  setErrorMessage(extractErrorMessage(error, "Nao foi possivel atualizar a categoria."));
+                  setErrorMessage(extractErrorMessage(error, "Não foi possível atualizar a categoria."));
                 },
               },
             );
@@ -159,7 +159,7 @@ export default function CategoriesPage() {
               setEditingCategory(null);
             },
             onError: (error) => {
-              setErrorMessage(extractErrorMessage(error, "Nao foi possivel criar a categoria."));
+              setErrorMessage(extractErrorMessage(error, "Não foi possível criar a categoria."));
             },
           });
         }}
@@ -168,7 +168,7 @@ export default function CategoriesPage() {
       {deleteErrorMessage ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 p-4">
           <section className="surface w-full max-w-md p-6">
-            <h3 className="font-display text-3xl italic">Nao foi possivel excluir</h3>
+            <h3 className="font-display text-3xl italic">Não foi possível excluir</h3>
             <p className="mt-4 text-sm text-[var(--text-secondary)]">{deleteErrorMessage}</p>
             <div className="mt-5 flex justify-end">
               <button

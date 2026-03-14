@@ -36,7 +36,7 @@ type ChartPoint = {
 
 function pointTooltipLabel(point: ChartPoint, kind: "income" | "expense") {
   const value = kind === "income" ? point.totalIncome : point.totalExpense;
-  const prefix = kind === "income" ? "Entradas" : "Saidas";
+  const prefix = kind === "income" ? "Entradas" : "Saídas";
 
   if (value === null) {
     return `${point.label}: sem dados`;
@@ -102,7 +102,7 @@ export function ExpenseTrendChart({ trends }: ExpenseTrendChartProps) {
     ? "MELHORANDO"
     : trends?.overallTrend === "DECLINING"
       ? "PIORANDO"
-      : "ESTAVEL";
+      : "ESTÁVEL";
   const expensePath = linePath(expenses, maxAmount);
   const incomePath = linePath(incomes, maxAmount);
   const ticks = yTickValues(maxAmount);
@@ -119,9 +119,9 @@ export function ExpenseTrendChart({ trends }: ExpenseTrendChartProps) {
     <section className="surface futura-card data-reveal hover-grow p-5">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <div className="relative pr-10">
-          <h3 className="font-display text-2xl italic">Tendencia de gastos</h3>
+          <h3 className="font-display text-2xl italic">Tendência de gastos</h3>
           <div className="absolute right-0 top-0">
-            <InfoTooltip text="Grafico anual com todos os meses de janeiro a dezembro. Os pontos aparecem apenas nos meses que ja possuem dados, mantendo o contexto anual completo." />
+            <InfoTooltip text="Gráfico anual com todos os meses de janeiro a dezembro. Os pontos aparecem apenas nos meses que já possuem dados, mantendo o contexto anual completo." />
           </div>
         </div>
         <div className="flex items-center gap-2 text-xs">
@@ -131,7 +131,7 @@ export function ExpenseTrendChart({ trends }: ExpenseTrendChartProps) {
           </span>
           <span className="inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--expense)_32%,transparent)] bg-[color-mix(in_srgb,var(--expense)_10%,transparent)] px-3 py-1 text-[var(--expense)]">
             <span className="h-2 w-2 rounded-full bg-[var(--expense)]" />
-            Saidas
+            Saídas
           </span>
           <span className="rounded-full bg-[var(--panel-bg)] px-2 py-1 text-[var(--text-secondary)]">{trendLabel}</span>
         </div>
@@ -140,7 +140,7 @@ export function ExpenseTrendChart({ trends }: ExpenseTrendChartProps) {
       {populatedPoints.length ? (
         <>
           <div className="rounded-2xl border border-[var(--surface-edge)] bg-[var(--card-strong)] p-3">
-            <svg viewBox={`0 0 ${chartWidth} ${chartHeight}`} className="h-auto w-full" role="img" aria-label="Grafico anual de entradas e saidas">
+            <svg viewBox={`0 0 ${chartWidth} ${chartHeight}`} className="h-auto w-full" role="img" aria-label="Gráfico anual de entradas e saídas">
               {ticks.map((tick) => {
                 const y = padding.top + plotHeight - (tick / maxAmount) * plotHeight;
 
@@ -195,27 +195,27 @@ export function ExpenseTrendChart({ trends }: ExpenseTrendChartProps) {
 
           <div className="mt-3 grid gap-3 md:grid-cols-3">
             <MetricTooltip
-              label="Media saida"
+              label="Média saída"
               value={formatCurrency(averageExpense)}
-              description="Media das saidas considerando apenas os meses que ja possuem movimentacao registrada."
+              description="Média das saídas considerando apenas os meses que já possuem movimentação registrada."
               colorClassName="text-[var(--expense)]"
             />
             <MetricTooltip
-              label="Media entrada"
+              label="Média entrada"
               value={formatCurrency(averageIncome)}
-              description="Media das entradas considerando apenas os meses que ja possuem movimentacao registrada."
+              description="Média das entradas considerando apenas os meses que já possuem movimentação registrada."
               colorClassName="text-[var(--income)]"
             />
             <MetricTooltip
-              label="Saldo do ultimo mes"
+              label="Saldo do último mês"
               value={formatCurrency(Number(latestPoint?.net ?? 0))}
-              description="Saldo do mes mais recente com dados, calculado como entradas menos saidas."
+              description="Saldo do mês mais recente com dados, calculado como entradas menos saídas."
               colorClassName={Number(latestPoint?.net ?? 0) >= 0 ? "text-[var(--income)]" : "text-[var(--expense)]"}
             />
           </div>
         </>
       ) : (
-        <p className="text-sm text-[var(--text-secondary)]">Sem dados para o periodo selecionado.</p>
+        <p className="text-sm text-[var(--text-secondary)]">Sem dados para o período selecionado.</p>
       )}
     </section>
   );

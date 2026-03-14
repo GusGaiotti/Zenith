@@ -46,14 +46,14 @@ export const metadata: Metadata = {
     default: "Zenith",
     template: "%s | Zenith",
   },
-  description: "Gestao financeira compartilhada para casais",
+  description: "Gestão financeira compartilhada para casais",
   robots: {
     index: true,
     follow: true,
   },
   openGraph: {
     title: "Zenith",
-    description: "Gestao financeira compartilhada para casais",
+    description: "Gestão financeira compartilhada para casais",
     type: "website",
     locale: "pt_BR",
   },

@@ -79,7 +79,7 @@ export default function LoginPage() {
       </div>
       <section className="surface relative w-full max-w-5xl overflow-hidden p-0">
         <div className="grid min-h-[620px] lg:grid-cols-[1.1fr_0.9fr]">
-          <div className="relative hidden flex-col justify-between border-r border-[var(--surface-edge)] bg-[linear-gradient(145deg,color-mix(in_srgb,var(--accent)_22%,transparent),transparent_52%),linear-gradient(180deg,var(--surface-gradient-start),var(--elevated-gradient-end))] p-10 lg:flex">
+          <div className="relative hidden flex-col justify-between border-r border-[var(--surface-edge)] bg-[linear-gradient(145deg,color-mix(in_srgb,var(--accent)_22%,transparent),transparent_52%),radial-gradient(circle_at_20%_18%,color-mix(in_srgb,var(--accent-violet)_16%,transparent),transparent_36%),linear-gradient(180deg,var(--surface-gradient-start),var(--elevated-gradient-end))] p-10 lg:flex">
             <div>
               <BrandWordmark animate labelClassName="text-6xl text-[var(--text-primary)]" />
               <h1 className="mt-6 max-w-sm text-4xl font-semibold leading-tight text-[var(--text-primary)]">
@@ -88,8 +88,8 @@ export default function LoginPage() {
             </div>
             <ul className="space-y-3 text-sm text-[var(--text-secondary)]">
               <li className="rounded-xl border border-[color-mix(in_srgb,var(--accent)_18%,transparent)] bg-[color-mix(in_srgb,var(--accent)_10%,var(--panel-bg))] px-4 py-3 shadow-[var(--elevated-shadow)]">Saldo consolidado do casal em tempo real.</li>
-              <li className="rounded-xl border border-[color-mix(in_srgb,var(--accent-emerald)_18%,transparent)] bg-[color-mix(in_srgb,var(--accent-emerald)_10%,var(--panel-bg))] px-4 py-3 shadow-[var(--elevated-shadow)]">Transacoes organizadas por pessoa e categoria.</li>
-              <li className="rounded-xl border border-[color-mix(in_srgb,var(--accent-amber)_18%,transparent)] bg-[color-mix(in_srgb,var(--accent-amber)_10%,var(--panel-bg))] px-4 py-3 shadow-[var(--elevated-shadow)]">Visoes rapidas para o fechamento do mes.</li>
+              <li className="rounded-xl border border-[color-mix(in_srgb,var(--accent-emerald)_18%,transparent)] bg-[color-mix(in_srgb,var(--accent-emerald)_10%,var(--panel-bg))] px-4 py-3 shadow-[var(--elevated-shadow)]">Transações organizadas por pessoa e categoria.</li>
+              <li className="rounded-xl border border-[color-mix(in_srgb,var(--accent-amber)_18%,transparent)] bg-[color-mix(in_srgb,var(--accent-amber)_10%,var(--panel-bg))] px-4 py-3 shadow-[var(--elevated-shadow)]">Visões rápidas para o fechamento do mês.</li>
             </ul>
           </div>
 
@@ -127,7 +127,7 @@ export default function LoginPage() {
                 </label>
                 {loginMutation.isError ? (
                   <p className="danger-chip rounded-xl px-3 py-2.5 text-sm">
-                    Credenciais invalidas ou servidor indisponivel.
+                    Credenciais inválidas ou servidor indisponível.
                   </p>
                 ) : null}
                 <button
@@ -144,7 +144,7 @@ export default function LoginPage() {
                 </button>
               </form>
               <p className="mt-5 text-sm text-[var(--text-secondary)]">
-                Nao tem conta?{" "}
+                Não tem conta?{" "}
                 <Link className="font-semibold text-[var(--accent-hover)]" href="/register">
                   Cadastre-se
                 </Link>

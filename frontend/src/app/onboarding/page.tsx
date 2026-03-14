@@ -77,7 +77,7 @@ export default function OnboardingPage() {
               {createLedgerMutation.isPending ? "Criando..." : "Criar fatura"}
             </button>
             {createLedgerMutation.isError ? (
-              <p className="text-sm text-red-300">Nao foi possivel criar a fatura.</p>
+              <p className="text-sm text-red-300">Não foi possível criar a fatura.</p>
             ) : null}
             <button
               type="button"

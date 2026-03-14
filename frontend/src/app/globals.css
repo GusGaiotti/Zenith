@@ -1,16 +1,17 @@
 @import "tailwindcss";
 
 :root {
-  --bg-base: #e8f0fb;
-  --bg-surface: #fbfdff;
-  --bg-elevated: #edf3ff;
-  --bg-muted: #d8e4fb;
+  --bg-base: #eef3fb;
+  --bg-surface: #fcfdff;
+  --bg-elevated: #edf4ff;
+  --bg-muted: #dce8fb;
   --accent: #2563eb;
   --accent-muted: rgba(37, 99, 235, 0.12);
   --accent-hover: #1d4ed8;
   --accent-emerald: #14b8a6;
   --accent-amber: #f59e0b;
   --accent-rose: #ec4899;
+  --accent-violet: #7c3aed;
   --income: #16a34a;
   --expense: #dc2626;
   --danger-text: #b42318;
@@ -20,20 +21,20 @@
   --text-primary: #10213f;
   --text-secondary: #46607f;
   --text-muted: #7083a6;
-  --border: rgba(74, 95, 137, 0.18);
+  --border: rgba(74, 95, 137, 0.24);
   --border-focus: rgba(37, 99, 235, 0.35);
-  --surface-edge: rgba(117, 143, 201, 0.28);
-  --surface-gradient-start: rgba(255, 255, 255, 0.98);
-  --surface-gradient-end: rgba(238, 245, 255, 0.98);
-  --elevated-gradient-start: rgba(247, 250, 255, 0.98);
-  --elevated-gradient-end: rgba(231, 240, 255, 0.96);
-  --surface-shadow: 0 18px 42px rgba(72, 102, 158, 0.16);
-  --elevated-shadow: 0 12px 28px rgba(83, 112, 170, 0.14);
+  --surface-edge: rgba(117, 143, 201, 0.34);
+  --surface-gradient-start: rgba(255, 255, 255, 0.99);
+  --surface-gradient-end: rgba(239, 246, 255, 0.99);
+  --elevated-gradient-start: rgba(249, 251, 255, 0.98);
+  --elevated-gradient-end: rgba(236, 243, 255, 0.98);
+  --surface-shadow: 0 20px 46px rgba(67, 95, 146, 0.14);
+  --elevated-shadow: 0 14px 30px rgba(67, 95, 146, 0.12);
   --overlay: rgba(17, 26, 46, 0.18);
-  --panel-bg: rgba(248, 251, 255, 0.92);
-  --menu-bg: rgba(255, 255, 255, 0.95);
+  --panel-bg: rgba(245, 249, 255, 0.92);
+  --menu-bg: rgba(255, 255, 255, 0.93);
   --tooltip-bg: rgba(16, 24, 40, 0.92);
-  --card-strong: rgba(241, 247, 255, 0.98);
+  --card-strong: rgba(242, 247, 255, 0.98);
   --metric-track: rgba(121, 147, 196, 0.2);
   --chart-grid: rgba(102, 127, 180, 0.18);
   --chart-label: rgba(70, 96, 135, 0.9);
@@ -53,6 +54,7 @@
   --accent-emerald: #2dd4bf;
   --accent-amber: #fbbf24;
   --accent-rose: #f472b6;
+  --accent-violet: #a78bfa;
   --income: #4ade80;
   --expense: #f87171;
   --danger-text: #fecaca;
@@ -72,7 +74,7 @@
   --surface-shadow: 0 18px 42px rgba(5, 12, 28, 0.4);
   --elevated-shadow: 0 10px 24px rgba(6, 12, 28, 0.24);
   --overlay: rgba(0, 0, 0, 0.55);
-  --panel-bg: rgba(9, 15, 28, 0.82);
+  --panel-bg: rgba(12, 20, 37, 0.84);
   --menu-bg: rgba(11, 18, 36, 0.94);
   --tooltip-bg: rgba(16, 24, 40, 0.92);
   --card-strong: rgba(16, 27, 49, 0.94);
@@ -98,12 +100,12 @@ body {
   min-height: 100vh;
   color: var(--text-primary);
   background:
-    radial-gradient(circle at 12% -8%, color-mix(in srgb, var(--accent) 20%, transparent), transparent 32%),
-    radial-gradient(circle at 88% 2%, color-mix(in srgb, var(--accent-emerald) 16%, transparent), transparent 24%),
-    radial-gradient(circle at 50% 100%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 52%),
-    radial-gradient(circle at 82% 72%, color-mix(in srgb, var(--accent-amber) 12%, transparent), transparent 26%),
+    radial-gradient(circle at 12% -8%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 32%),
+    radial-gradient(circle at 88% 2%, color-mix(in srgb, var(--accent-emerald) 17%, transparent), transparent 24%),
+    radial-gradient(circle at 50% 100%, color-mix(in srgb, var(--accent-violet) 12%, transparent), transparent 52%),
+    radial-gradient(circle at 82% 72%, color-mix(in srgb, var(--accent-amber) 13%, transparent), transparent 26%),
     radial-gradient(circle at 68% 18%, color-mix(in srgb, var(--accent-rose) 10%, transparent), transparent 18%),
-    linear-gradient(180deg, rgba(255,255,255,0.24), transparent 22%),
+    linear-gradient(180deg, rgba(255,255,255,0.2), transparent 22%),
     var(--bg-base);
   font-family: var(--font-body), sans-serif;
 }
@@ -116,6 +118,20 @@ body::before {
   background-image: radial-gradient(color-mix(in srgb, var(--text-primary) 5%, transparent) 1px, transparent 0);
   background-size: 3px 3px;
   opacity: 0.22;
+  z-index: -1;
+}
+
+body::after {
+  content: "";
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(100% 60% at 15% 22%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 68%),
+    radial-gradient(88% 56% at 85% 14%, color-mix(in srgb, var(--accent-violet) 9%, transparent), transparent 72%),
+    radial-gradient(84% 50% at 50% 92%, color-mix(in srgb, var(--accent-emerald) 10%, transparent), transparent 74%);
+  filter: blur(56px);
+  opacity: 0.9;
   z-index: -1;
 }
 
@@ -139,8 +155,8 @@ body::before {
   border-radius: var(--radius-lg);
   box-shadow:
     inset 0 1px 0 color-mix(in srgb, white 55%, transparent),
-    0 0 0 1px color-mix(in srgb, var(--accent) 10%, transparent),
-    0 20px 45px color-mix(in srgb, var(--accent) 6%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--accent) 12%, transparent),
+    0 22px 48px color-mix(in srgb, var(--accent) 8%, transparent),
     var(--surface-shadow);
 }
 
@@ -231,6 +247,30 @@ body::before {
   box-shadow:
     inset 0 1px 0 color-mix(in srgb, white 55%, transparent),
     var(--elevated-shadow);
+}
+
+.semantic-income {
+  border-color: color-mix(in srgb, var(--income) 28%, transparent);
+  background: color-mix(in srgb, var(--income) 10%, var(--panel-bg));
+  color: color-mix(in srgb, var(--income) 78%, var(--text-primary));
+}
+
+.semantic-income[data-active="true"] {
+  border-color: color-mix(in srgb, var(--income) 48%, transparent);
+  background: color-mix(in srgb, var(--income) 18%, var(--panel-bg));
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--income) 16%, transparent);
+}
+
+.semantic-expense {
+  border-color: color-mix(in srgb, var(--expense) 26%, transparent);
+  background: color-mix(in srgb, var(--expense) 9%, var(--panel-bg));
+  color: color-mix(in srgb, var(--expense) 82%, var(--text-primary));
+}
+
+.semantic-expense[data-active="true"] {
+  border-color: color-mix(in srgb, var(--expense) 42%, transparent);
+  background: color-mix(in srgb, var(--expense) 15%, var(--panel-bg));
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--expense) 12%, transparent);
 }
 
 .danger-chip {

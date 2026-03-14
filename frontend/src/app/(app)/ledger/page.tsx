@@ -49,7 +49,7 @@ export default function LedgerPage() {
       },
       onError: (error) => {
         const response = (error as { response?: { data?: { message?: string } } }).response;
-        setNameError(response?.data?.message ?? "Nao foi possivel atualizar o nome da fatura.");
+        setNameError(response?.data?.message ?? "Não foi possível atualizar o nome da fatura.");
       },
     });
   }
@@ -60,7 +60,7 @@ export default function LedgerPage() {
         <PageHeader title="Fatura compartilhada" subtitle="Crie uma fatura quando quiser ou aguarde um convite." />
         <EmptyState
           title="Nenhuma fatura ativa"
-          description="Voce ainda nao faz parte de uma fatura. Quando quiser, crie uma nova e convide alguem."
+          description="Você ainda não faz parte de uma fatura. Quando quiser, crie uma nova e convide alguém."
           action={{ label: "Criar fatura", onClick: () => router.push("/onboarding") }}
         />
       </div>
