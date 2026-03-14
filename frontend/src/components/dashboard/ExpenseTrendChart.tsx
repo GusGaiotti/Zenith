@@ -69,7 +69,7 @@ function MetricTooltip({ label, value, description, colorClassName }: { label: s
   return (
     <div className="group relative rounded-2xl border border-[var(--surface-edge)] bg-[var(--card-strong)] px-4 py-3">
       <p className="cursor-help text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">{label}</p>
-      <p className={`mt-2 font-mono text-sm ${colorClassName}`}>{value}</p>
+      <p className={`mt-2 font-display tabular-nums text-sm ${colorClassName}`}>{value}</p>
       <div className="pointer-events-none absolute bottom-full left-0 z-50 mb-3 w-64 translate-y-1 rounded-xl border border-[var(--surface-edge)] bg-[var(--tooltip-bg)] px-3 py-2 text-left text-xs leading-5 text-white opacity-0 shadow-[0_18px_50px_rgba(0,0,0,0.45)] transition-all duration-150 group-hover:translate-y-0 group-hover:opacity-100" role="tooltip">
         {description}
       </div>
