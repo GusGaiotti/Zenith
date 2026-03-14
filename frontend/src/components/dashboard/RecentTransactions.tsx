@@ -16,7 +16,7 @@ export function RecentTransactions({ items = [] }: RecentTransactionsProps) {
       <div className="mb-4 flex items-center justify-between gap-3">
         <h3 className="font-display text-2xl italic">Recentes</h3>
         <div className="flex items-center gap-2">
-          <InfoTooltip text="Lista as ultimas movimentacoes registradas dentro do filtro atual para consulta rapida." />
+          <InfoTooltip text="Lista as últimas movimentações registradas dentro do filtro atual para consulta rápida." />
           <Link className="text-xs text-[var(--accent)]" href="/transactions">
             Ver todas
           </Link>
@@ -34,7 +34,7 @@ export function RecentTransactions({ items = [] }: RecentTransactionsProps) {
             </li>
           ))
         ) : (
-          <li className="text-sm text-[var(--text-secondary)]">Sem transacoes recentes.</li>
+          <li className="text-sm text-[var(--text-secondary)]">Sem transações recentes.</li>
         )}
       </ul>
     </section>

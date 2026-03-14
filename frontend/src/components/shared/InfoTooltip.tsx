@@ -5,10 +5,10 @@ interface InfoTooltipProps {
 
 export function InfoTooltip({ text, align = "right" }: InfoTooltipProps) {
   return (
-    <span className="group relative z-20 inline-flex items-center">
+    <span className="group relative z-20 inline-flex shrink-0 items-start justify-end">
       <button
         aria-label={text}
-        className="cursor-help p-0"
+        className="inline-flex cursor-help p-0 align-top"
         type="button"
       >
         <span
