@@ -26,9 +26,9 @@ export function CategoryBreakdownChart({ data }: CategoryBreakdownChartProps) {
                   {formatPercentage(category.percentageOfTotal)}
                 </span>
               </div>
-              <div className="h-2 rounded-full bg-white/5">
+              <div className="h-2.5 rounded-full bg-[var(--metric-track)]">
                 <div
-                  className="h-2 rounded-full"
+                  className="h-2.5 rounded-full"
                   style={{ width: `${clampPercentage(category.percentageOfTotal)}%`, backgroundColor: category.color }}
                 />
               </div>

@@ -67,13 +67,10 @@ function yTickValues(maxValue: number) {
 
 function MetricTooltip({ label, value, description, colorClassName }: { label: string; value: string; description: string; colorClassName: string }) {
   return (
-    <div className="group relative rounded-xl border border-[var(--surface-edge)] bg-white/4 px-4 py-3">
+    <div className="group relative rounded-2xl border border-[var(--surface-edge)] bg-[var(--card-strong)] px-4 py-3">
       <p className="cursor-help text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">{label}</p>
       <p className={`mt-2 font-mono text-sm ${colorClassName}`}>{value}</p>
-      <div
-        className="pointer-events-none absolute bottom-full left-0 z-50 mb-3 w-64 translate-y-1 rounded-xl border border-[var(--surface-edge)] bg-[rgba(28,26,23,0.98)] px-3 py-2 text-left text-xs leading-5 text-[var(--text-primary)] opacity-0 shadow-[0_18px_50px_rgba(0,0,0,0.45)] transition-all duration-150 group-hover:translate-y-0 group-hover:opacity-100"
-        role="tooltip"
-      >
+      <div className="pointer-events-none absolute bottom-full left-0 z-50 mb-3 w-64 translate-y-1 rounded-xl border border-[var(--surface-edge)] bg-[var(--tooltip-bg)] px-3 py-2 text-left text-xs leading-5 text-white opacity-0 shadow-[0_18px_50px_rgba(0,0,0,0.45)] transition-all duration-150 group-hover:translate-y-0 group-hover:opacity-100" role="tooltip">
         {description}
       </div>
     </div>
@@ -126,29 +123,29 @@ export function ExpenseTrendChart({ trends }: ExpenseTrendChartProps) {
           <InfoTooltip text="Grafico anual com todos os meses de janeiro a dezembro. Os pontos aparecem apenas nos meses que ja possuem dados, mantendo o contexto anual completo." />
         </div>
         <div className="flex items-center gap-2 text-xs">
-          <span className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-500/10 px-3 py-1 text-emerald-300">
+          <span className="inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--income)_32%,transparent)] bg-[color-mix(in_srgb,var(--income)_10%,transparent)] px-3 py-1 text-[var(--income)]">
             <span className="h-2 w-2 rounded-full bg-[var(--income)]" />
             Entradas
           </span>
-          <span className="inline-flex items-center gap-2 rounded-full border border-red-400/30 bg-red-500/10 px-3 py-1 text-red-300">
+          <span className="inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--expense)_32%,transparent)] bg-[color-mix(in_srgb,var(--expense)_10%,transparent)] px-3 py-1 text-[var(--expense)]">
             <span className="h-2 w-2 rounded-full bg-[var(--expense)]" />
             Saidas
           </span>
-          <span className="rounded-full bg-white/5 px-2 py-1 text-[var(--text-secondary)]">{trendLabel}</span>
+          <span className="rounded-full bg-[var(--panel-bg)] px-2 py-1 text-[var(--text-secondary)]">{trendLabel}</span>
         </div>
       </div>
 
       {populatedPoints.length ? (
         <>
-          <div className="rounded-2xl border border-[var(--surface-edge)] bg-white/4 p-3">
+          <div className="rounded-2xl border border-[var(--surface-edge)] bg-[var(--card-strong)] p-3">
             <svg viewBox={`0 0 ${chartWidth} ${chartHeight}`} className="h-auto w-full" role="img" aria-label="Grafico anual de entradas e saidas">
               {ticks.map((tick) => {
                 const y = padding.top + plotHeight - (tick / maxAmount) * plotHeight;
 
                 return (
                   <g key={tick}>
-                    <line x1={padding.left} y1={y} x2={chartWidth - padding.right} y2={y} stroke="rgba(245, 240, 232, 0.08)" strokeDasharray="4 4" />
-                    <text x={padding.left - 10} y={y + 4} fill="rgba(160, 152, 128, 0.8)" fontSize="10" textAnchor="end">
+                    <line x1={padding.left} y1={y} x2={chartWidth - padding.right} y2={y} stroke="var(--chart-grid)" strokeDasharray="4 4" />
+                    <text x={padding.left - 10} y={y + 4} fill="var(--chart-label)" fontSize="10" textAnchor="end">
                       {formatCurrencyShort(tick)}
                     </text>
                   </g>
@@ -185,7 +182,7 @@ export function ExpenseTrendChart({ trends }: ExpenseTrendChartProps) {
                         <circle cx={x} cy={expenseY} r="4" fill="rgba(248, 113, 113, 1)" />
                       </g>
                     ) : null}
-                    <text x={x} y={chartHeight - 10} fill="rgba(160, 152, 128, 0.8)" fontSize="10" textAnchor="middle">
+                    <text x={x} y={chartHeight - 10} fill="var(--chart-label)" fontSize="10" textAnchor="middle">
                       {point.label}
                     </text>
                   </g>

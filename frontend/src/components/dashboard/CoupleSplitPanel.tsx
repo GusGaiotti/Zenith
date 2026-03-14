@@ -30,51 +30,57 @@ export function CoupleSplitPanel({ data }: CoupleSplitPanelProps) {
             const expenseShare = renderShare(expensePercentage);
             const status = delta > 0 ? "Contribuiu proporcionalmente mais" : delta < 0 ? "Gastou proporcionalmente mais" : "Equilibrado";
             const statusClassName = delta > 0
-              ? "border border-emerald-400/40 bg-emerald-500/15 text-emerald-300"
+              ? "border border-emerald-400/40 bg-emerald-500/12 text-[var(--income)]"
               : delta < 0
-                ? "border border-red-400/45 bg-red-500/20 text-red-200"
-                : "border border-amber-400/35 bg-amber-500/15 text-amber-300";
+                ? "danger-chip"
+                : "border border-amber-400/35 bg-amber-500/12 text-[var(--accent-amber)]";
 
             return (
-              <div key={row.userId} className="rounded-md bg-white/5 p-4 transition-transform duration-150 hover:scale-[1.02]">
-                <p className="text-sm font-semibold">{row.displayName}</p>
-                <p className="mt-2 text-xs text-[var(--text-secondary)]">
-                  Entrada <span className="font-mono text-[var(--income)]">{formatCurrency(row.totalIncome)}</span>
-                </p>
-                <p className="text-xs text-[var(--text-secondary)]">
-                  Saida <span className="font-mono text-[var(--expense)]">{formatCurrency(row.totalExpense)}</span>
-                </p>
-                <div className="mt-3 space-y-2">
+              <div key={row.userId} className="rounded-3xl border border-[var(--surface-edge)] bg-[var(--card-strong)] p-4 shadow-[var(--elevated-shadow)] transition-transform duration-150 hover:scale-[1.01]">
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div>
+                    <p className="text-base font-semibold text-[var(--text-primary)]">{row.displayName}</p>
+                    <p className="mt-1 text-xs text-[var(--text-secondary)]">Participacao nas entradas e nas saidas do periodo.</p>
+                  </div>
+                  <span className={`rounded-full px-3 py-1.5 text-xs font-medium ${statusClassName}`}>
+                    {status}
+                  </span>
+                </div>
+                <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                  <div className="rounded-2xl border border-[color-mix(in_srgb,var(--income)_22%,transparent)] bg-[color-mix(in_srgb,var(--income)_10%,transparent)] px-4 py-3">
+                    <p className="text-[11px] uppercase tracking-[0.08em] text-[var(--text-secondary)]">Entradas</p>
+                    <p className="mt-1 font-mono text-xl text-[var(--income)]">{formatCurrency(row.totalIncome)}</p>
+                  </div>
+                  <div className="rounded-2xl border border-[color-mix(in_srgb,var(--expense)_22%,transparent)] bg-[color-mix(in_srgb,var(--expense)_10%,transparent)] px-4 py-3">
+                    <p className="text-[11px] uppercase tracking-[0.08em] text-[var(--text-secondary)]">Saidas</p>
+                    <p className="mt-1 font-mono text-xl text-[var(--expense)]">{formatCurrency(row.totalExpense)}</p>
+                  </div>
+                </div>
+                <div className="mt-4 space-y-3">
                   <div className="space-y-1">
                     <div className="flex items-center justify-between text-[11px] text-[var(--text-muted)]">
-                      <span>Entrada</span>
+                      <span>Participacao nas entradas</span>
                       {incomeShare ? <span>{incomeShare}</span> : null}
                     </div>
-                    <div className="h-2 rounded-full bg-white/10">
+                    <div className="h-2.5 rounded-full bg-[var(--metric-track)]">
                       <div
-                        className="h-2 rounded-full bg-[var(--income)]"
+                        className="h-2.5 rounded-full bg-[linear-gradient(90deg,color-mix(in_srgb,var(--income)_88%,white_12%),var(--accent-emerald))]"
                         style={{ width: `${clampPercentage(incomePercentage)}%` }}
                       />
                     </div>
                   </div>
                   <div className="space-y-1">
                     <div className="flex items-center justify-between text-[11px] text-[var(--text-muted)]">
-                      <span>Saida</span>
+                      <span>Participacao nas saidas</span>
                       {expenseShare ? <span>{expenseShare}</span> : null}
                     </div>
-                    <div className="h-2 rounded-full bg-white/10">
+                    <div className="h-2.5 rounded-full bg-[var(--metric-track)]">
                       <div
-                        className="h-2 rounded-full bg-[var(--expense)]"
+                        className="h-2.5 rounded-full bg-[linear-gradient(90deg,color-mix(in_srgb,var(--expense)_88%,white_12%),var(--accent-amber))]"
                         style={{ width: `${clampPercentage(expensePercentage)}%` }}
                       />
                     </div>
                   </div>
-                </div>
-                <div className="mt-2 flex items-center justify-between">
-                  <span className="text-xs text-[var(--text-secondary)]">Equilibrio de contribuicao</span>
-                  <span className={`rounded-full px-2 py-1 text-xs ${statusClassName}`}>
-                    {status}
-                  </span>
                 </div>
               </div>
             );
