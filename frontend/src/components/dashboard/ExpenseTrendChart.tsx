@@ -118,9 +118,11 @@ export function ExpenseTrendChart({ trends }: ExpenseTrendChartProps) {
   return (
     <section className="surface futura-card data-reveal hover-grow p-5">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
+        <div className="relative pr-10">
           <h3 className="font-display text-2xl italic">Tendencia de gastos</h3>
-          <InfoTooltip text="Grafico anual com todos os meses de janeiro a dezembro. Os pontos aparecem apenas nos meses que ja possuem dados, mantendo o contexto anual completo." />
+          <div className="absolute right-0 top-0">
+            <InfoTooltip text="Grafico anual com todos os meses de janeiro a dezembro. Os pontos aparecem apenas nos meses que ja possuem dados, mantendo o contexto anual completo." />
+          </div>
         </div>
         <div className="flex items-center gap-2 text-xs">
           <span className="inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--income)_32%,transparent)] bg-[color-mix(in_srgb,var(--income)_10%,transparent)] px-3 py-1 text-[var(--income)]">

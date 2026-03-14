@@ -73,7 +73,9 @@ export default function LoginPage() {
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden p-4 sm:p-6">
       <div className="absolute right-4 top-4 z-10">
-        <ThemeToggle compact />
+        <div className="w-[190px]">
+          <ThemeToggle />
+        </div>
       </div>
       <section className="surface relative w-full max-w-5xl overflow-hidden p-0">
         <div className="grid min-h-[620px] lg:grid-cols-[1.1fr_0.9fr]">
@@ -85,13 +87,13 @@ export default function LoginPage() {
               </h1>
             </div>
             <ul className="space-y-3 text-sm text-[var(--text-secondary)]">
-              <li className="rounded-xl border border-[color-mix(in_srgb,var(--accent)_18%,transparent)] bg-[color-mix(in_srgb,var(--accent)_8%,white_92%)] px-4 py-3">Saldo consolidado do casal em tempo real.</li>
-              <li className="rounded-xl border border-[color-mix(in_srgb,var(--accent-emerald)_18%,transparent)] bg-[color-mix(in_srgb,var(--accent-emerald)_8%,white_92%)] px-4 py-3">Transacoes organizadas por pessoa e categoria.</li>
-              <li className="rounded-xl border border-[color-mix(in_srgb,var(--accent-amber)_18%,transparent)] bg-[color-mix(in_srgb,var(--accent-amber)_8%,white_92%)] px-4 py-3">Visoes rapidas para o fechamento do mes.</li>
+              <li className="rounded-xl border border-[color-mix(in_srgb,var(--accent)_18%,transparent)] bg-[color-mix(in_srgb,var(--accent)_10%,var(--card-strong))] px-4 py-3 shadow-[var(--elevated-shadow)]">Saldo consolidado do casal em tempo real.</li>
+              <li className="rounded-xl border border-[color-mix(in_srgb,var(--accent-emerald)_18%,transparent)] bg-[color-mix(in_srgb,var(--accent-emerald)_10%,var(--card-strong))] px-4 py-3 shadow-[var(--elevated-shadow)]">Transacoes organizadas por pessoa e categoria.</li>
+              <li className="rounded-xl border border-[color-mix(in_srgb,var(--accent-amber)_18%,transparent)] bg-[color-mix(in_srgb,var(--accent-amber)_10%,var(--card-strong))] px-4 py-3 shadow-[var(--elevated-shadow)]">Visoes rapidas para o fechamento do mes.</li>
             </ul>
           </div>
 
-          <div className="bg-[linear-gradient(180deg,color-mix(in_srgb,var(--bg-surface)_70%,white_30%),color-mix(in_srgb,var(--panel-bg)_78%,white_22%))] p-6 sm:p-10">
+          <div className="bg-[linear-gradient(180deg,color-mix(in_srgb,var(--bg-surface)_58%,var(--accent)_2%),color-mix(in_srgb,var(--panel-bg)_84%,var(--accent-amber)_3%))] p-6 sm:p-10">
             <div className="mx-auto w-full max-w-md">
               <div className="inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--income)_26%,transparent)] bg-[color-mix(in_srgb,var(--income)_10%,transparent)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-[var(--income)]">
                 <LockIcon />
@@ -124,7 +126,7 @@ export default function LoginPage() {
                   ) : null}
                 </label>
                 {loginMutation.isError ? (
-                  <p className="rounded-xl border border-red-500/25 bg-red-500/10 px-3 py-2.5 text-sm text-red-300">
+                  <p className="danger-chip rounded-xl px-3 py-2.5 text-sm">
                     Credenciais invalidas ou servidor indisponivel.
                   </p>
                 ) : null}
