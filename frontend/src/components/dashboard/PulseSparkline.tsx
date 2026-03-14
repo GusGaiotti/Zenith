@@ -23,7 +23,7 @@ export function PulseSparkline({ data }: PulseSparklineProps) {
           return (
             <div
               key={index}
-              className={`bar-rise w-full rounded-sm ${value === 0 ? "bg-[var(--bg-muted)]" : "bg-[var(--accent)]/70"}`}
+              className={`bar-rise w-full rounded-sm ${value === 0 ? "bg-[var(--bg-muted)]" : index % 3 === 0 ? "bg-[color-mix(in_srgb,var(--accent)_72%,transparent)]" : index % 3 === 1 ? "bg-[color-mix(in_srgb,var(--accent-emerald)_72%,transparent)]" : "bg-[color-mix(in_srgb,var(--accent-amber)_72%,transparent)]"}`}
               style={{ height: `${height}%`, animationDelay: `${index * 35}ms` }}
               title={formatCurrency(value)}
             />
