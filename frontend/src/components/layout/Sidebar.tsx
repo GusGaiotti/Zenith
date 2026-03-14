@@ -19,6 +19,7 @@ export function Sidebar({ collapsed, onCollapsedChange }: SidebarProps) {
   const router = useRouter();
   const logoutMutation = useLogout();
   const user = useAuthStore((state) => state.user);
+  const askAiLocked = user ? !user.aiAccessAllowed : false;
 
   return (
     <aside
@@ -34,6 +35,25 @@ export function Sidebar({ collapsed, onCollapsedChange }: SidebarProps) {
       <nav className="flex-1 space-y-2 px-1">
         {APP_NAV_ITEMS.map((item) => {
           const active = pathname.startsWith(item.href);
+          const locked = item.href === "/ask-ai" && askAiLocked;
+
+          if (locked) {
+            return (
+              <div
+                key={item.href}
+                title={collapsed ? `${item.label} bloqueado` : undefined}
+                className={cn(
+                  "flex rounded-xl border border-[var(--border)] py-3 text-sm text-[var(--text-muted)] opacity-78",
+                  collapsed ? "items-center justify-center px-0" : "items-center gap-3 px-4",
+                )}
+              >
+                <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-[var(--bg-elevated)] text-[var(--text-muted)]">
+                  <NavigationIcon name="lock" />
+                </span>
+                {!collapsed ? <span className="flex-1">Pergunte a IA</span> : null}
+              </div>
+            );
+          }
 
           return (
             <Link

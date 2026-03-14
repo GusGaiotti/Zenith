@@ -4,6 +4,7 @@ type AuthUser = {
   id: number;
   email: string;
   displayName: string;
+  aiAccessAllowed: boolean;
 };
 
 interface AuthState {
@@ -31,6 +32,17 @@ const LEGACY_LEDGER_KEY = "zen_active_ledger_id";
 const LEGACY_STORAGE_KEY = "zen_auth_state_v1";
 
 type PersistedAuthState = Pick<AuthState, "user" | "activeLedgerId">;
+
+function normalizeUser(user: PersistedAuthState["user"]) {
+  if (!user) {
+    return null;
+  }
+
+  return {
+    ...user,
+    aiAccessAllowed: user.aiAccessAllowed ?? false,
+  };
+}
 
 function getSessionStorage() {
   if (typeof window === "undefined") return null;
@@ -72,7 +84,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       const parsed = JSON.parse(source) as PersistedAuthState;
 
       const hydratedState: PersistedAuthState = {
-        user: parsed.user ?? null,
+        user: normalizeUser(parsed.user),
         activeLedgerId: parsed.activeLedgerId ?? legacyLedgerId ?? null,
       };
 
@@ -94,16 +106,18 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ authResolved: resolved });
   },
   setSession: ({ user, accessToken }) => {
-    set({ user, accessToken });
+    const normalizedUser = normalizeUser(user);
+    set({ user: normalizedUser, accessToken });
     persist({
-      user,
+      user: normalizedUser,
       activeLedgerId: useAuthStore.getState().activeLedgerId,
     });
   },
   setAuth: ({ user, accessToken }) => {
-    set({ user, accessToken, authResolved: true });
+    const normalizedUser = normalizeUser(user);
+    set({ user: normalizedUser, accessToken, authResolved: true });
     persist({
-      user,
+      user: normalizedUser,
       activeLedgerId: useAuthStore.getState().activeLedgerId,
     });
   },

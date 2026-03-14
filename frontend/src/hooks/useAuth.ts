@@ -5,8 +5,8 @@ import { login, logout, register } from "@/lib/api/auth";
 import { useAuthStore } from "@/lib/store/auth.store";
 import type { LoginRequest, RegisterRequest } from "@/types/api";
 
-function mapUser(data: { userId: number; email: string; displayName: string }) {
-  return { id: data.userId, email: data.email, displayName: data.displayName };
+function mapUser(data: { userId: number; email: string; displayName: string; aiAccessAllowed: boolean }) {
+  return { id: data.userId, email: data.email, displayName: data.displayName, aiAccessAllowed: data.aiAccessAllowed };
 }
 
 export function useAuthHydration() {
