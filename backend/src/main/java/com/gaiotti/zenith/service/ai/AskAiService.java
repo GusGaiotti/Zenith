@@ -84,7 +84,7 @@ public class AskAiService {
                     .highlights(buildHighlights(context))
                     .recommendedActions(buildRecommendedActions(context))
                     .contextLevelUsed(context.contextLevel())
-                    .disclaimer("IA indisponivel no momento. Exibindo resumo seguro sem gerar custo adicional.")
+                    .disclaimer("Assistente temporariamente indisponivel. Exibindo um resumo seguro com base nos dados disponiveis.")
                     .build();
         }
     }

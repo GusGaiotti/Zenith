@@ -1,16 +1,17 @@
 # Zenith
 
-Aplicacao de financas compartilhadas em monorepo:
+Aplicacao de finanças compartilhadas em monorepo, com dashboard financeiro, fluxo colaborativo entre duas pessoas e assistente contextual para leitura rápida do mês.
+
 - `backend/`: Spring Boot, Java 21, PostgreSQL
 - `frontend/`: Next.js, React, TypeScript
 
 ## O que entrega
 
-- autenticacao com access token + refresh token
+- autenticação com access token + refresh token
 - ledger compartilhado entre duas pessoas
-- categorias, transacoes e dashboard financeiro
+- categorias, transações e dashboard financeiro
 - convites entre membros
-- assistente de IA com contexto financeiro e limites de uso
+- assistente com contexto financeiro e limites de uso
 
 ## Stack
 
@@ -23,24 +24,22 @@ Aplicacao de financas compartilhadas em monorepo:
 
 ## Rodando localmente
 
-### Banco
+Banco:
 
 ```bash
 docker compose up -d
 ```
 
-### Backend
+Backend:
 
 Crie `backend/.env` a partir de [backend/.env.example](./backend/.env.example).
-
-Windows:
 
 ```powershell
 cd backend
 .\mvnw.cmd spring-boot:run
 ```
 
-### Frontend
+Frontend:
 
 Crie `frontend/.env`:
 
@@ -48,8 +47,6 @@ Crie `frontend/.env`:
 API_URL=http://localhost:8080
 SITE_URL=http://localhost:3000
 ```
-
-Depois:
 
 ```powershell
 cd frontend
@@ -59,24 +56,11 @@ npm.cmd run dev
 
 ## Ambientes
 
-### Desenvolvimento
-
-- `AI_MODE=local` para usar Ollama
-- `AI_MODE=off` para desligar a IA
-
-### Producao
-
-- frontend na Vercel com root `frontend/`
-- backend no Render com root `backend/`
-- banco PostgreSQL no Neon
-- `AI_MODE=openai`
+- desenvolvimento com IA local ou desativada
+- produção compatível com Vercel, Render e Neon
 - `OPENAI_API_KEY` configurada apenas no backend
 
-Em producao, o acesso da IA pode ser liberado por:
-- `AI_PROD_ALLOWLIST_EMAILS`
-- `users.ai_enabled = true`
-
-## Variaveis importantes
+## Variáveis importantes
 
 Backend:
 - `DB_URL`
@@ -92,7 +76,7 @@ Frontend:
 - `API_URL`
 - `SITE_URL`
 
-## Validacao
+## Validação
 
 Backend:
 

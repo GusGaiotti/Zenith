@@ -123,7 +123,7 @@ class AskAiServiceTest {
         AskAiResponse response = askAiService.ask(1L, member, request, "127.0.0.1");
 
         assertThat(response.getAnswer()).contains("Resumo de 2026-03");
-        assertThat(response.getDisclaimer()).contains("IA indisponivel");
+        assertThat(response.getDisclaimer()).contains("Assistente temporariamente indisponivel");
         assertThat(response.getAnswer()).doesNotContain("sk-prod-secret");
     }
 

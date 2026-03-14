@@ -59,8 +59,8 @@ export function ThemeToggle({ compact = false }: ThemeToggleProps) {
       aria-label={`Ativar tema ${nextTheme === "light" ? "claro" : "escuro"}`}
       aria-pressed={theme === "dark"}
       className={cn(
-        "focusable inline-flex items-center rounded-full border border-[var(--surface-edge)] bg-[var(--card-strong)] text-[var(--text-secondary)] shadow-[var(--elevated-shadow)] transition-all duration-200 hover:border-[var(--accent)] hover:text-[var(--text-primary)]",
-        compact ? "h-11 w-[74px] justify-center px-2" : "h-12 min-w-[188px] justify-between px-3.5 text-sm font-medium",
+        "focusable inline-flex items-center rounded-xl border border-[var(--surface-edge)] bg-[var(--card-strong)] text-[var(--text-secondary)] shadow-[var(--elevated-shadow)] transition-all duration-200 hover:border-[var(--accent)] hover:text-[var(--text-primary)]",
+        compact ? "h-11 w-11 justify-center" : "h-12 w-full justify-between px-4 text-sm font-medium",
       )}
       onClick={() => {
         const updated = theme === "light" ? "dark" : "light";
@@ -88,6 +88,9 @@ export function ThemeToggle({ compact = false }: ThemeToggleProps) {
           {theme === "light" ? <SunIcon /> : <MoonIcon />}
         </span>
       </span>
+      {compact ? (
+        <span className="sr-only">{theme === "light" ? "Ativar tema escuro" : "Ativar tema claro"}</span>
+      ) : null}
     </button>
   );
 }

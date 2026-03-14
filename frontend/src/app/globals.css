@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
 :root {
-  --bg-base: #f4f7fc;
-  --bg-surface: #ffffff;
-  --bg-elevated: #eef4ff;
-  --bg-muted: #dde8fb;
+  --bg-base: #ebf2fb;
+  --bg-surface: #fbfdff;
+  --bg-elevated: #edf3ff;
+  --bg-muted: #d8e4fb;
   --accent: #2563eb;
   --accent-muted: rgba(37, 99, 235, 0.12);
   --accent-hover: #1d4ed8;
@@ -20,21 +20,21 @@
   --text-primary: #10213f;
   --text-secondary: #46607f;
   --text-muted: #7083a6;
-  --border: rgba(74, 95, 137, 0.15);
+  --border: rgba(74, 95, 137, 0.18);
   --border-focus: rgba(37, 99, 235, 0.35);
-  --surface-edge: rgba(117, 143, 201, 0.22);
-  --surface-gradient-start: rgba(255, 255, 255, 0.96);
-  --surface-gradient-end: rgba(244, 248, 255, 0.98);
-  --elevated-gradient-start: rgba(248, 250, 255, 0.98);
-  --elevated-gradient-end: rgba(235, 242, 255, 0.95);
-  --surface-shadow: 0 18px 42px rgba(72, 102, 158, 0.12);
-  --elevated-shadow: 0 10px 24px rgba(83, 112, 170, 0.1);
+  --surface-edge: rgba(117, 143, 201, 0.28);
+  --surface-gradient-start: rgba(255, 255, 255, 0.98);
+  --surface-gradient-end: rgba(241, 246, 255, 0.98);
+  --elevated-gradient-start: rgba(247, 250, 255, 0.98);
+  --elevated-gradient-end: rgba(231, 240, 255, 0.96);
+  --surface-shadow: 0 18px 42px rgba(72, 102, 158, 0.16);
+  --elevated-shadow: 0 12px 28px rgba(83, 112, 170, 0.14);
   --overlay: rgba(17, 26, 46, 0.18);
-  --panel-bg: rgba(255, 255, 255, 0.82);
+  --panel-bg: rgba(248, 251, 255, 0.92);
   --menu-bg: rgba(255, 255, 255, 0.95);
   --tooltip-bg: rgba(16, 24, 40, 0.92);
-  --card-strong: rgba(255, 255, 255, 0.92);
-  --metric-track: rgba(121, 147, 196, 0.16);
+  --card-strong: rgba(245, 249, 255, 0.98);
+  --metric-track: rgba(121, 147, 196, 0.2);
   --chart-grid: rgba(102, 127, 180, 0.18);
   --chart-label: rgba(70, 96, 135, 0.9);
   --radius-sm: 8px;
@@ -99,10 +99,11 @@ body {
   color: var(--text-primary);
   background:
     radial-gradient(circle at 12% -8%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 32%),
-    radial-gradient(circle at 88% 2%, color-mix(in srgb, var(--accent-emerald) 12%, transparent), transparent 24%),
-    radial-gradient(circle at 50% 100%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 52%),
-    radial-gradient(circle at 82% 72%, color-mix(in srgb, var(--accent-amber) 10%, transparent), transparent 26%),
-    radial-gradient(circle at 68% 18%, color-mix(in srgb, var(--accent-rose) 8%, transparent), transparent 18%),
+    radial-gradient(circle at 88% 2%, color-mix(in srgb, var(--accent-emerald) 15%, transparent), transparent 24%),
+    radial-gradient(circle at 50% 100%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 52%),
+    radial-gradient(circle at 82% 72%, color-mix(in srgb, var(--accent-amber) 12%, transparent), transparent 26%),
+    radial-gradient(circle at 68% 18%, color-mix(in srgb, var(--accent-rose) 10%, transparent), transparent 18%),
+    linear-gradient(180deg, rgba(255,255,255,0.28), transparent 22%),
     var(--bg-base);
   font-family: var(--font-body), sans-serif;
 }
@@ -114,7 +115,7 @@ body::before {
   inset: 0;
   background-image: radial-gradient(color-mix(in srgb, var(--text-primary) 5%, transparent) 1px, transparent 0);
   background-size: 3px 3px;
-  opacity: 0.32;
+  opacity: 0.22;
   z-index: -1;
 }
 
@@ -138,7 +139,7 @@ body::before {
   border-radius: var(--radius-lg);
   box-shadow:
     inset 0 1px 0 color-mix(in srgb, white 55%, transparent),
-    0 0 0 1px color-mix(in srgb, var(--accent) 8%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--accent) 10%, transparent),
     var(--surface-shadow);
 }
 
@@ -224,7 +225,7 @@ body::before {
 
 .elevated {
   background: linear-gradient(180deg, var(--elevated-gradient-start), var(--elevated-gradient-end));
-  border: 1px solid color-mix(in srgb, var(--accent) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
   border-radius: var(--radius-md);
   box-shadow:
     inset 0 1px 0 color-mix(in srgb, white 55%, transparent),
@@ -296,24 +297,6 @@ input[type="date"]::-webkit-datetime-edit-fields-wrapper {
 a {
   color: inherit;
   text-decoration: none;
-}
-
-.brand-z-cut {
-  color: var(--accent);
-  line-height: 1;
-}
-
-.brand-z-cut::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 6%;
-  height: 86%;
-  width: 2.5px;
-  border-radius: 999px;
-  background: currentColor;
-  transform: translateX(-50%);
-  opacity: 0.92;
 }
 
 .brand-letter-reveal {

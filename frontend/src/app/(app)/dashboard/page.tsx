@@ -163,7 +163,7 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-5">
-      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between">
+      <div className="surface flex flex-col gap-3 p-5 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between">
         <div>
           <p className="font-display text-3xl text-[var(--text-primary)]">Dashboard</p>
           <p className="mt-1 text-sm text-[var(--text-secondary)]">Resumo mensal da fatura compartilhada.</p>
@@ -204,7 +204,7 @@ export default function DashboardPage() {
       </div>
 
       {exportError ? (
-        <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">{exportError}</div>
+        <div className="danger-chip rounded-xl px-4 py-3 text-sm">{exportError}</div>
       ) : null}
 
       {hasError ? (

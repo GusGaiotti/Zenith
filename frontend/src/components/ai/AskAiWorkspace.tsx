@@ -172,16 +172,16 @@ export function AskAiWorkspace() {
                   <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--text-secondary)]">
                     Escolha o mes de referencia, escreva uma pergunta objetiva e receba uma resposta curta com prioridades, achados e proximos passos. Ele considera saldo, categorias e padroes do periodo para evitar respostas soltas.
                   </p>
-                  <div className="mt-4 grid gap-3 md:grid-cols-3">
-                    <div className="rounded-2xl border border-[var(--surface-edge)] bg-[var(--panel-bg)] px-4 py-3">
+                  <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                    <div className="rounded-2xl border border-[color-mix(in_srgb,var(--accent)_20%,transparent)] bg-[color-mix(in_srgb,var(--accent)_7%,white_93%)] px-4 py-4">
                       <p className="text-sm font-semibold text-[var(--text-primary)]">Mes de referencia</p>
                       <p className="mt-1 text-sm leading-6 text-[var(--text-secondary)]">Troque o mes para revisar um fechamento anterior ou comparar comportamentos recentes.</p>
                     </div>
-                    <div className="rounded-2xl border border-[var(--surface-edge)] bg-[var(--panel-bg)] px-4 py-3">
+                    <div className="rounded-2xl border border-[color-mix(in_srgb,var(--accent-emerald)_20%,transparent)] bg-[color-mix(in_srgb,var(--accent-emerald)_7%,white_93%)] px-4 py-4">
                       <p className="text-sm font-semibold text-[var(--text-primary)]">Amostra de lancamentos</p>
                       <p className="mt-1 text-sm leading-6 text-[var(--text-secondary)]">Ative quando quiser uma resposta mais detalhada. O sistema escolhe alguns lancamentos relevantes do periodo para aprofundar a leitura.</p>
                     </div>
-                    <div className="rounded-2xl border border-[var(--surface-edge)] bg-[var(--panel-bg)] px-4 py-3">
+                    <div className="rounded-2xl border border-[color-mix(in_srgb,var(--accent-amber)_20%,transparent)] bg-[color-mix(in_srgb,var(--accent-amber)_7%,white_93%)] px-4 py-4 sm:col-span-2 xl:col-span-1">
                       <p className="text-sm font-semibold text-[var(--text-primary)]">Como extrair mais valor</p>
                       <p className="mt-1 text-sm leading-6 text-[var(--text-secondary)]">Pergunte por excessos, categorias, comparacoes ou oportunidades de corte. Quanto mais clara a duvida, melhor a recomendacao.</p>
                     </div>

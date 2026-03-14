@@ -57,14 +57,16 @@ export function Sidebar({ collapsed, onCollapsedChange }: SidebarProps) {
         })}
       </nav>
 
-      <div className={cn("space-y-2 border-t border-[var(--border)] px-2 pt-3", collapsed && "text-center")}>
+      <div className={cn("space-y-2 px-2 pt-3", collapsed && "text-center")}>
+        <div className={collapsed ? "flex justify-center" : undefined}>
+          <ThemeToggle compact={collapsed} />
+        </div>
+        <div className="border-t border-[var(--border)] pt-3">
         {!collapsed ? (
           <p className="px-1 text-xs text-[var(--text-secondary)]">Logado como {user?.displayName ?? "-"}</p>
         ) : (
           <div className="text-[10px] uppercase tracking-[0.08em] text-[var(--text-muted)]">{user?.displayName?.slice(0, 1) ?? "Z"}</div>
         )}
-        <div className={collapsed ? "flex justify-center" : undefined}>
-          <ThemeToggle compact={collapsed} />
         </div>
         <button
           title={collapsed ? "Expandir menu" : undefined}
