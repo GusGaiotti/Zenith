@@ -77,6 +77,17 @@ Frontend:
 - `API_URL`
 - `SITE_URL`
 
+## IA por ambiente
+
+- `AI_MODE=off`: desliga o assistente e mantem apenas o fallback seguro
+- `AI_MODE=local`: usa provider local para desenvolvimento
+- `AI_MODE=openai`: habilita o provider remoto para homologacao ou producao
+
+Em producao:
+- a chave `OPENAI_API_KEY` deve existir apenas no backend
+- o acesso pode ser restringido por conta, mesmo com o modo ativo
+- o frontend apenas consome a API autenticada; nao fala diretamente com o provider
+
 ## Validacao
 
 Backend:
