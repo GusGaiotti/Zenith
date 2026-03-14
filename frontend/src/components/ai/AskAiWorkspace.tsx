@@ -46,9 +46,14 @@ function getContextLabel(level?: AskAiResponse["contextLevelUsed"]) {
 }
 
 function getModeLabel(mode?: string) {
-  if (mode === "openai") return "OpenAI ativo";
-  if (mode === "off") return "IA desativada";
-  return "Modo local";
+  if (mode === "off") return "Indisponivel";
+  return "Assistente ativo";
+}
+
+function getUsageSummary(mode?: string, accessAllowed?: boolean) {
+  if (!accessAllowed) return "Assistente restrito para sua conta no momento";
+  if (mode === "off") return "Assistente temporariamente indisponivel";
+  return "Pronto para responder com base nos seus dados";
 }
 
 function getAskAiErrorMessage(error: unknown) {
@@ -91,10 +96,7 @@ export function AskAiWorkspace() {
 
   const helperTone = useMemo(() => {
     if (!usage) return "Carregando disponibilidade";
-    if (!usage.accessAllowed) return "Acesso restrito neste ambiente";
-    if (usage.mode === "openai") return "Pronto para consultas em producao";
-    if (usage.mode === "off") return "IA desativada";
-    return "Executando com provider local";
+    return getUsageSummary(usage.mode, usage.accessAllowed);
   }, [usage]);
 
   function submitQuestion(payload: AskAiRequest) {
@@ -144,17 +146,17 @@ export function AskAiWorkspace() {
     <div className="space-y-6">
       <PageHeader
         title="Pergunte a IA"
-        subtitle="Analise financeira assistida com respostas curtas, contexto do mes e limites visiveis para uso em producao."
+        subtitle="Faca perguntas sobre o seu mes e receba uma leitura curta, objetiva e pronta para agir."
       />
 
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_340px]">
         <section className="surface flex min-h-[72vh] flex-col overflow-hidden">
           <div className="border-b border-[var(--border)] px-5 py-4">
             <div className="flex flex-wrap items-center gap-3">
-              <span className="info-badge border-[rgba(79,124,255,0.22)] bg-[rgba(79,124,255,0.14)] text-[var(--accent-hover)]">
+              <span className="info-badge text-[var(--accent-hover)]">
                 {getModeLabel(usage?.mode)}
               </span>
-              <span className="info-badge border-[rgba(74,222,128,0.22)] bg-[rgba(74,222,128,0.12)] text-emerald-200">
+              <span className="info-badge text-[var(--income)]">
                 {remainingDaily} restantes hoje
               </span>
               <span className="text-sm text-[var(--text-secondary)]">{helperTone}</span>
@@ -168,7 +170,7 @@ export function AskAiWorkspace() {
                   <p className="text-xs uppercase tracking-[0.12em] text-[var(--text-muted)]">Comece por aqui</p>
                   <h2 className="mt-2 text-2xl font-semibold text-[var(--text-primary)]">Converse com contexto financeiro real</h2>
                   <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--text-secondary)]">
-                    A IA responde com base no mes selecionado, categorias de gasto e, quando voce quiser, uma amostra automatica de lancamentos.
+                    O assistente responde com base no mes selecionado, nas categorias de gasto e, quando voce quiser, em alguns lancamentos relevantes do periodo.
                   </p>
                 </div>
                 <div className="elevated p-5">
@@ -178,7 +180,7 @@ export function AskAiWorkspace() {
                       <button
                         key={item}
                         type="button"
-                        className="focusable rounded-2xl border border-[var(--border)] bg-[rgba(19,31,59,0.86)] px-4 py-3 text-left text-sm text-[var(--text-secondary)] transition-colors duration-150 hover:border-[var(--accent)] hover:text-[var(--text-primary)]"
+                        className="focusable rounded-2xl border border-[var(--border)] bg-[var(--panel-bg)] px-4 py-3 text-left text-sm text-[var(--text-secondary)] transition-colors duration-150 hover:border-[var(--accent)] hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)]"
                         onClick={() => setQuestion(item)}
                       >
                         {item}
@@ -194,13 +196,13 @@ export function AskAiWorkspace() {
                 key={message.id}
                 className={`max-w-3xl rounded-3xl border px-4 py-4 shadow-[0_10px_24px_rgba(7,12,28,0.16)] ${
                   message.role === "user"
-                    ? "ml-auto border-[rgba(79,124,255,0.3)] bg-[linear-gradient(135deg,rgba(53,88,181,0.95),rgba(34,58,117,0.95))] text-white"
-                    : "border-[var(--surface-edge)] bg-[rgba(15,23,42,0.88)] text-[var(--text-primary)]"
+                    ? "ml-auto border-[var(--accent)] bg-[var(--accent)] text-white"
+                    : "border-[var(--surface-edge)] bg-[var(--menu-bg)] text-[var(--text-primary)]"
                 }`}
               >
                 <div className="flex items-center justify-between gap-3">
-                  <p className={`text-xs uppercase tracking-[0.12em] ${message.role === "user" ? "text-blue-100/80" : "text-[var(--text-muted)]"}`}>
-                    {message.role === "user" ? "Voce" : "Zenith IA"}
+                  <p className={`text-xs uppercase tracking-[0.12em] ${message.role === "user" ? "text-white/75" : "text-[var(--text-muted)]"}`}>
+                    {message.role === "user" ? "Voce" : "Assistente Zenith"}
                   </p>
                   {message.contextLevel ? (
                     <span className="text-[11px] text-[var(--text-secondary)]">{getContextLabel(message.contextLevel)}</span>
@@ -212,7 +214,7 @@ export function AskAiWorkspace() {
                 {message.highlights?.length ? (
                   <div className="mt-3 grid gap-2 sm:grid-cols-2">
                     {message.highlights.map((item) => (
-                      <div key={item} className="rounded-2xl border border-[var(--border)] bg-[rgba(24,36,68,0.72)] px-3 py-3 text-xs leading-5 text-[var(--text-secondary)]">
+                      <div key={item} className="rounded-2xl border border-[var(--border)] bg-[var(--panel-bg)] px-3 py-3 text-xs leading-5 text-[var(--text-secondary)]">
                         {item}
                       </div>
                     ))}
@@ -226,7 +228,7 @@ export function AskAiWorkspace() {
                     <p className="text-xs uppercase tracking-[0.12em] text-[var(--text-muted)]">Acoes sugeridas</p>
                     <ul className="mt-2 space-y-2 text-sm leading-6 text-[var(--text-secondary)]">
                       {message.recommendedActions.map((item) => (
-                        <li key={item} className="rounded-2xl border border-[var(--border)] bg-[rgba(13,21,40,0.72)] px-3 py-3">
+                        <li key={item} className="rounded-2xl border border-[var(--border)] bg-[var(--panel-bg)] px-3 py-3">
                           {item}
                         </li>
                       ))}
@@ -240,7 +242,7 @@ export function AskAiWorkspace() {
             ))}
 
             {askMutation.isPending ? (
-              <article className="max-w-3xl rounded-3xl border border-[var(--surface-edge)] bg-[rgba(15,23,42,0.88)] px-4 py-4 text-[var(--text-primary)]">
+              <article className="max-w-3xl rounded-3xl border border-[var(--surface-edge)] bg-[var(--menu-bg)] px-4 py-4 text-[var(--text-primary)]">
                 <div className="flex items-center gap-3">
                   <LoadingSpinner size="sm" />
                   <span className="text-sm text-[var(--text-secondary)]">Consultando a IA com o contexto selecionado...</span>
@@ -249,7 +251,7 @@ export function AskAiWorkspace() {
             ) : null}
           </div>
 
-          <div className="border-t border-[var(--border)] bg-[rgba(9,15,28,0.82)] px-5 py-4">
+          <div className="border-t border-[var(--border)] bg-[var(--panel-bg)] px-5 py-4">
             {error ? (
               <div className="mb-4 rounded-2xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
                 {error}
@@ -260,7 +262,7 @@ export function AskAiWorkspace() {
               <label className="block">
                 <span className="mb-2 flex items-center gap-2 text-sm text-[var(--text-secondary)]">
                   Mensagem
-                  <InfoTooltip align="left" text="Perguntas curtas e diretas tendem a gerar respostas mais acionaveis." />
+                  <InfoTooltip align="left" text="Perguntas curtas e diretas costumam gerar respostas mais objetivas." />
                 </span>
                 <textarea
                   value={question}
@@ -274,7 +276,7 @@ export function AskAiWorkspace() {
                   maxLength={300}
                   required
                   placeholder="Ex: Onde estamos gastando acima do esperado neste mes?"
-                  className="focusable min-h-28 w-full rounded-3xl border border-[var(--border)] bg-[rgba(16,26,49,0.9)] px-4 py-4 text-[var(--text-primary)] outline-none placeholder:text-[var(--text-secondary)]"
+                  className="focusable min-h-28 w-full rounded-3xl border border-[var(--border)] bg-[var(--bg-surface)] px-4 py-4 text-[var(--text-primary)] outline-none placeholder:text-[var(--text-secondary)]"
                 />
                 <span className="mt-2 block text-right font-mono text-xs text-[var(--text-muted)]">{question.length}/300</span>
               </label>
@@ -302,7 +304,7 @@ export function AskAiWorkspace() {
                 </button>
                 <button
                   type="button"
-                  className="focusable h-12 rounded-2xl border border-[var(--border)] px-5 text-sm font-medium text-[var(--text-secondary)] transition-colors duration-150 hover:border-[var(--accent)] hover:bg-[rgba(19,31,59,0.86)] hover:text-[var(--text-primary)]"
+                  className="focusable h-12 rounded-2xl border border-[var(--border)] px-5 text-sm font-medium text-[var(--text-secondary)] transition-colors duration-150 hover:border-[var(--accent)] hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)]"
                   onClick={() => {
                     setMessages([]);
                     setError(null);
@@ -320,7 +322,7 @@ export function AskAiWorkspace() {
           <section className="surface p-5">
             <div className="flex items-center gap-2 text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">
               <span>Uso e cotas</span>
-              <InfoTooltip align="left" text="Esses indicadores mostram o estado real do backend para o usuario autenticado." />
+              <InfoTooltip align="left" text="Esses indicadores mostram a disponibilidade atual do assistente para a sua conta." />
             </div>
             {usage ? (
               <div className="mt-4 grid gap-3">
@@ -338,10 +340,10 @@ export function AskAiWorkspace() {
                     {usage.perUserCurrentMinuteUsed}/{usage.perUserPerMinuteLimit}
                   </p>
                 </div>
-                <p className="text-sm leading-6 text-[var(--text-secondary)]">{usage.note}</p>
+                <p className="text-sm leading-6 text-[var(--text-secondary)]">{getUsageSummary(usage.mode, usage.accessAllowed)}</p>
                 {!usage.accessAllowed ? (
                   <p className="rounded-2xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
-                    Acesso a IA bloqueado para seu usuario neste ambiente.
+                    O assistente nao esta disponivel para a sua conta agora.
                   </p>
                 ) : null}
               </div>
@@ -356,7 +358,7 @@ export function AskAiWorkspace() {
             <p className="text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">Contexto da consulta</p>
             <div className="mt-4 space-y-4">
               <MonthPicker value={yearMonth} onChange={setYearMonth} label="Mes de referencia" />
-              <label className="flex items-start gap-3 rounded-2xl border border-[var(--border)] bg-[rgba(15,23,42,0.72)] px-4 py-3 text-sm text-[var(--text-primary)]">
+              <label className="flex items-start gap-3 rounded-2xl border border-[var(--border)] bg-[var(--panel-bg)] px-4 py-3 text-sm text-[var(--text-primary)]">
                 <input
                   type="checkbox"
                   checked={includeTransactions}
@@ -366,7 +368,7 @@ export function AskAiWorkspace() {
                 <span className="space-y-1">
                   <span className="block font-medium">Incluir amostra automatica de lancamentos</span>
                   <span className="block text-[13px] leading-5 text-[var(--text-secondary)]">
-                    O backend seleciona ate 50 lancamentos do periodo para enriquecer a resposta quando a pergunta pede mais contexto.
+                    O sistema seleciona ate 50 lancamentos do periodo para enriquecer a resposta quando a pergunta pede mais contexto.
                   </span>
                 </span>
               </label>

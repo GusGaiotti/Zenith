@@ -5,6 +5,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { APP_NAV_ITEMS, NavigationIcon } from "@/components/layout/NavigationIcons";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { Sidebar } from "@/components/layout/Sidebar";
 
 export function AppShell({ children }: { children: ReactNode }) {
@@ -15,6 +16,9 @@ export function AppShell({ children }: { children: ReactNode }) {
     <div className="min-h-screen md:flex">
       <Sidebar collapsed={sidebarCollapsed} onCollapsedChange={setSidebarCollapsed} />
       <div className={`w-full min-w-0 flex-1 transition-[margin] duration-300 ${sidebarCollapsed ? "md:ml-[116px]" : "md:ml-[280px]"}`}>
+        <div className="mx-auto flex w-full max-w-[1280px] justify-end px-4 pt-4 md:hidden">
+          <ThemeToggle compact />
+        </div>
         <main className="mx-auto w-full max-w-[1280px] px-4 py-4 pb-24 md:px-6 md:py-6 md:pb-6">
           {children}
         </main>

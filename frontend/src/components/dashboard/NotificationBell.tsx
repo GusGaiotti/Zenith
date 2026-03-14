@@ -112,7 +112,7 @@ export function NotificationBell() {
       </button>
 
       {open ? (
-        <div className="absolute right-0 top-[calc(100%+0.5rem)] z-40 w-[min(340px,calc(100vw-1.5rem))] rounded-2xl border border-[var(--surface-edge)] bg-[rgba(11,18,36,0.98)] p-3 shadow-[0_20px_60px_rgba(0,0,0,0.42)] backdrop-blur">
+        <div className="absolute right-0 top-[calc(100%+0.5rem)] z-40 w-[min(340px,calc(100vw-1.5rem))] rounded-2xl border border-[var(--surface-edge)] bg-[var(--menu-bg)] p-3 shadow-[0_20px_60px_rgba(0,0,0,0.18)] backdrop-blur">
           <div className="mb-3 flex items-center justify-between">
             <p className="text-sm font-medium text-[var(--text-primary)]">Notificacoes</p>
             <div className="flex items-center gap-3">
@@ -144,8 +144,8 @@ export function NotificationBell() {
                     key={item.id}
                     className={`rounded-xl border p-3 text-sm ${
                       item.seenAt
-                        ? "border-[var(--border)] bg-[rgba(18,29,54,0.72)]"
-                        : "border-[rgba(94,140,255,0.28)] bg-[rgba(27,41,76,0.92)]"
+                        ? "border-[var(--border)] bg-[var(--panel-bg)]"
+                        : "border-[var(--accent)] bg-[var(--accent-muted)]"
                     }`}
                   >
                     <p className="font-medium text-[var(--text-primary)]">{item.title}</p>

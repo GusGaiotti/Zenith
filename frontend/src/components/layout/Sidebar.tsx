@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { BrandWordmark } from "@/components/brand/BrandWordmark";
 import { APP_NAV_ITEMS, NavigationIcon } from "@/components/layout/NavigationIcons";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { useLogout } from "@/hooks/useAuth";
 import { useAuthStore } from "@/lib/store/auth.store";
 import { cn } from "@/lib/utils/cn";
@@ -26,7 +28,7 @@ export function Sidebar({ collapsed, onCollapsedChange }: SidebarProps) {
       )}
     >
       <div className={cn("px-2 py-3", collapsed && "text-center")}>
-        <p className="font-display text-2xl text-[var(--accent-hover)]">{collapsed ? "C" : "Zenith"}</p>
+        <BrandWordmark compact={collapsed} className={collapsed ? "justify-center" : undefined} labelClassName="text-2xl text-[var(--text-primary)]" />
       </div>
 
       <nav className="flex-1 space-y-2 px-1">
@@ -58,12 +60,15 @@ export function Sidebar({ collapsed, onCollapsedChange }: SidebarProps) {
       <div className={cn("space-y-2 border-t border-[var(--border)] px-2 pt-3", collapsed && "text-center")}>
         {!collapsed ? (
           <>
-            <div className="rounded-xl bg-[var(--accent-muted)] px-3 py-2 text-xs text-[var(--accent-hover)]">Fatura ativa</div>
+            <div className="rounded-xl bg-[var(--accent-muted)] px-3 py-2 text-xs text-[var(--accent-hover)]">Espaco ativo</div>
             <p className="text-xs text-[var(--text-secondary)]">Logado como {user?.displayName ?? "-"}</p>
           </>
         ) : (
           <div className="text-[10px] uppercase tracking-[0.08em] text-[var(--text-muted)]">Ativa</div>
         )}
+        <div className={collapsed ? "flex justify-center" : undefined}>
+          <ThemeToggle compact={collapsed} />
+        </div>
         <button
           title={collapsed ? "Expandir menu" : undefined}
           className={cn(

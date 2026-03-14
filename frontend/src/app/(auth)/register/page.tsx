@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useWatch } from "react-hook-form";
+import { BrandWordmark } from "@/components/brand/BrandWordmark";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { useRegister } from "@/hooks/useAuth";
 import { registerSchema, type RegisterSchema } from "@/lib/validators/auth.schemas";
 
@@ -42,9 +44,13 @@ export default function RegisterPage() {
   const strength = password.length > 10 ? "Forte" : password.length > 6 ? "Media" : "Fraca";
 
   return (
-    <main className="flex min-h-screen items-center justify-center p-4">
+    <main className="relative flex min-h-screen items-center justify-center p-4">
+      <div className="absolute right-4 top-4 z-10">
+        <ThemeToggle compact />
+      </div>
       <section className="surface w-full max-w-md p-8">
-        <h1 className="font-display text-4xl italic">Criar conta</h1>
+        <BrandWordmark animate className="mb-6" labelClassName="text-4xl text-[var(--text-primary)]" />
+        <h1 className="font-display text-4xl">Criar conta</h1>
         <p className="mt-2 text-sm text-[var(--text-secondary)]">Configure o Zenith em menos de um minuto.</p>
         <form className="mt-6 space-y-4" onSubmit={onSubmit}>
           <label className="block text-sm">
