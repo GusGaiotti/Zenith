@@ -97,7 +97,7 @@ class NotificationServiceTest {
 
         when(notificationRepository.findByRecipientUserIdAndSeenAtIsNullAndCreatedAtAfterOrderByCreatedAtDesc(eq(recipient.getId()), any()))
                 .thenReturn(List.of(notification));
-        when(notificationRepository.countByRecipientUserIdAndSeenAtIsNull(recipient.getId())).thenReturn(1L);
+        when(notificationRepository.countByRecipientUserIdAndSeenAtIsNullAndCreatedAtAfter(eq(recipient.getId()), any())).thenReturn(1L);
         when(invitationRepository.findAllById(List.of(5L))).thenReturn(List.of(invitation));
 
         NotificationListResponse response = notificationService.listForUser(recipient, 7, true);
@@ -132,7 +132,7 @@ class NotificationServiceTest {
     void listForUser_WhenUnseenOnlyIsFalse_UsesFullQuery() {
         when(notificationRepository.findByRecipientUserIdAndCreatedAtAfterOrderByCreatedAtDesc(eq(recipient.getId()), any()))
                 .thenReturn(List.of());
-        when(notificationRepository.countByRecipientUserIdAndSeenAtIsNull(recipient.getId())).thenReturn(0L);
+        when(notificationRepository.countByRecipientUserIdAndSeenAtIsNullAndCreatedAtAfter(eq(recipient.getId()), any())).thenReturn(0L);
 
         NotificationListResponse response = notificationService.listForUser(recipient, 99, false);
 

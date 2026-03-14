@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { AppShell } from "@/components/layout/AppShell";
+import { LoadingSpinner } from "@/components/shared/LoadingSpinner";
 import { useAuthStore } from "@/lib/store/auth.store";
 
 export default function ProtectedLayout({ children }: { children: React.ReactNode }) {
@@ -21,7 +22,7 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
   if (!hydrated || !authResolved || !accessToken) {
     return (
       <main className="flex min-h-screen items-center justify-center">
-        <p className="font-mono text-sm text-[var(--text-secondary)]">Carregando sessao...</p>
+        <LoadingSpinner label="Carregando sessao" />
       </main>
     );
   }

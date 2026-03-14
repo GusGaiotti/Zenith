@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { LoadingSpinner } from "@/components/shared/LoadingSpinner";
 import { useAuthStore } from "@/lib/store/auth.store";
 
 export default function Home() {
@@ -23,7 +24,7 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen items-center justify-center">
-      <p className="font-mono text-sm text-[var(--text-secondary)]">Carregando Zenith...</p>
+      <LoadingSpinner size="lg" label="Carregando Zenith" />
     </main>
   );
 }

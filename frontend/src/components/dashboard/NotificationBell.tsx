@@ -29,14 +29,13 @@ export function NotificationBell() {
   const [open, setOpen] = useState(false);
   const [sessionSeenIds, setSessionSeenIds] = useState<number[]>([]);
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const notifications = useNotifications(7, true);
+  const notifications = useNotifications(7, false);
   const markSeen = useMarkNotificationsSeen();
 
   const unreadCount = useMemo(() => {
     const items = notifications.data?.items ?? [];
-    const unseenInSession = items.filter((item) => sessionSeenIds.includes(item.id)).length;
-    return Math.max(0, (notifications.data?.unreadCount ?? 0) - unseenInSession);
-  }, [notifications.data?.items, notifications.data?.unreadCount, sessionSeenIds]);
+    return items.filter((item) => item.seenAt == null && !sessionSeenIds.includes(item.id)).length;
+  }, [notifications.data?.items, sessionSeenIds]);
 
   const items = notifications.data?.items ?? [];
 
@@ -118,7 +117,14 @@ export function NotificationBell() {
             <ul className="max-h-[320px] space-y-2 overflow-y-auto pr-1">
               {items.length ? (
                 items.map((item) => (
-                  <li key={item.id} className="rounded-xl border border-[var(--surface-edge)] bg-[var(--bg-elevated)] p-3 text-sm">
+                  <li
+                    key={item.id}
+                    className={`rounded-xl border p-3 text-sm ${
+                      item.seenAt
+                        ? "border-[var(--border)] bg-[rgba(18,29,54,0.72)]"
+                        : "border-[rgba(94,140,255,0.28)] bg-[rgba(27,41,76,0.92)]"
+                    }`}
+                  >
                     <p className="font-medium text-[var(--text-primary)]">{item.title}</p>
                     <p className="mt-1 text-[13px] text-[var(--text-secondary)]">{item.body}</p>
                     <div className="mt-2 flex items-center justify-between gap-2">
