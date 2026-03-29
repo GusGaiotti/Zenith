@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.time.Instant;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
 @RequiredArgsConstructor
@@ -20,8 +21,9 @@ public class AiUsageGuardService {
     private final ConcurrentHashMap<String, WindowCounter> ipRateCounters = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<Long, DailyCounter> userDailyQuota = new ConcurrentHashMap<>();
 
+    private static final long RATE_WINDOW_MS = 60_000L;
     private static final int CLEANUP_INTERVAL = 200;
-    private int assertCallCount = 0;
+    private final AtomicInteger assertCallCount = new AtomicInteger(0);
 
     public void assertAllowedAndConsume(Long userId, String clientIp) {
         if (!aiProperties.getLimits().isEnabled()) {
@@ -29,16 +31,15 @@ public class AiUsageGuardService {
         }
 
         long now = Instant.now().toEpochMilli();
-        long windowMs = 60_000L;
 
-        checkWindowCounter(userRateCounters, "u:" + userId, aiProperties.getLimits().getPerUserPerMinute(), now, windowMs,
+        checkWindowCounter(userRateCounters, "u:" + userId, aiProperties.getLimits().getPerUserPerMinute(), now, RATE_WINDOW_MS,
                 "AI rate limit exceeded for this user");
-        checkWindowCounter(ipRateCounters, "ip:" + clientIp, aiProperties.getLimits().getPerIpPerMinute(), now, windowMs,
+        checkWindowCounter(ipRateCounters, "ip:" + clientIp, aiProperties.getLimits().getPerIpPerMinute(), now, RATE_WINDOW_MS,
                 "AI rate limit exceeded for this IP");
         checkDailyQuota(userId, aiProperties.getLimits().getPerUserDailyQuota());
 
-        if (++assertCallCount % CLEANUP_INTERVAL == 0) {
-            cleanupStaleEntries(now, windowMs);
+        if (assertCallCount.incrementAndGet() % CLEANUP_INTERVAL == 0) {
+            cleanupStaleEntries(now, RATE_WINDOW_MS);
         }
     }
 
@@ -120,7 +121,7 @@ public class AiUsageGuardService {
 
         long now = Instant.now().toEpochMilli();
         synchronized (counter) {
-            if (now - counter.windowStart >= 60_000L) {
+            if (now - counter.windowStart >= RATE_WINDOW_MS) {
                 counter.windowStart = now;
                 counter.count = 0;
             }

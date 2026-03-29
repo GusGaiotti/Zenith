@@ -24,6 +24,7 @@ public class AiContextBuilder {
     private static final int MAX_MONTHS_IN_CONTEXT = 6;
     private static final int MAX_SAMPLED_TRANSACTIONS = 50;
     private static final int MAX_TOP_CATEGORIES = 3;
+    // Matches Portuguese phrases like "3 meses", "6 meses atrás" to expand context window
     private static final Pattern MONTHS_PATTERN = Pattern.compile("(\\d{1,2})\\s*mes");
 
     private final TransactionRepository transactionRepository;
