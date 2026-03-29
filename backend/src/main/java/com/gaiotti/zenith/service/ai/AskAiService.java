@@ -152,9 +152,6 @@ public class AskAiService {
                     .map(item -> item.name() + "=" + item.total().toPlainString())
                     .collect(Collectors.joining(", "));
             prompt.append("Top categorias de despesa: ").append(categories).append("\n");
-        }
-
-        if (!context.topExpenseCategories().isEmpty()) {
             AiContextBuilder.CategoryTotal leadCategory = context.topExpenseCategories().getFirst();
             prompt.append("Maior categoria de despesa: ")
                     .append(leadCategory.name())
@@ -268,12 +265,17 @@ public class AskAiService {
         return actions.stream().limit(3).toList();
     }
 
+    private static final int MAX_QUESTION_LENGTH = 500;
+
     private String sanitizeQuestion(String rawQuestion) {
         if (rawQuestion == null) {
             return "";
         }
 
-        String normalized = rawQuestion.trim().replaceAll("\\s+", " ");
+        String truncated = rawQuestion.length() > MAX_QUESTION_LENGTH
+                ? rawQuestion.substring(0, MAX_QUESTION_LENGTH)
+                : rawQuestion;
+        String normalized = truncated.trim().replaceAll("\\s+", " ");
         String lowered = normalized.toLowerCase(Locale.ROOT);
 
         if (lowered.contains("ignore previous instructions")
