@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -60,7 +59,7 @@ public class LedgerService {
 
     @Transactional
     public InvitationResponse inviteUser(Long ledgerId, User inviter, String targetEmail) {
-        ledgerRepository.findByIdWithLock(ledgerId)
+        Ledger ledger = ledgerRepository.findByIdWithLock(ledgerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Ledger not found"));
 
         if (!ledgerMemberRepository.existsByLedgerIdAndUserId(ledgerId, inviter.getId())) {
@@ -87,8 +86,6 @@ public class LedgerService {
                 ledgerId, targetEmail, Invitation.InvitationStatus.PENDING)) {
             throw new IllegalArgumentException("A pending invitation already exists for that email");
         }
-
-        Ledger ledger = ledgerRepository.findById(ledgerId).get();
 
         Invitation invitation = Invitation.builder()
                 .ledger(ledger)
@@ -226,7 +223,7 @@ public class LedgerService {
                         .displayName(m.getUser().getDisplayName())
                         .joinedAt(m.getJoinedAt())
                 .build())
-                .collect(Collectors.toList());
+                .toList();
 
         List<InvitationResponse> pendingInvitations = invitationRepository
                 .findByLedgerIdAndStatusOrderByCreatedAtDesc(ledger.getId(), Invitation.InvitationStatus.PENDING)
