@@ -20,6 +20,9 @@ public class AiUsageGuardService {
     private final ConcurrentHashMap<String, WindowCounter> ipRateCounters = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<Long, DailyCounter> userDailyQuota = new ConcurrentHashMap<>();
 
+    private static final int CLEANUP_INTERVAL = 200;
+    private int assertCallCount = 0;
+
     public void assertAllowedAndConsume(Long userId, String clientIp) {
         if (!aiProperties.getLimits().isEnabled()) {
             return;
@@ -33,6 +36,29 @@ public class AiUsageGuardService {
         checkWindowCounter(ipRateCounters, "ip:" + clientIp, aiProperties.getLimits().getPerIpPerMinute(), now, windowMs,
                 "AI rate limit exceeded for this IP");
         checkDailyQuota(userId, aiProperties.getLimits().getPerUserDailyQuota());
+
+        if (++assertCallCount % CLEANUP_INTERVAL == 0) {
+            cleanupStaleEntries(now, windowMs);
+        }
+    }
+
+    private void cleanupStaleEntries(long now, long windowMs) {
+        LocalDate today = LocalDate.now();
+        userRateCounters.entrySet().removeIf(entry -> {
+            synchronized (entry.getValue()) {
+                return now - entry.getValue().windowStart >= windowMs * 2;
+            }
+        });
+        ipRateCounters.entrySet().removeIf(entry -> {
+            synchronized (entry.getValue()) {
+                return now - entry.getValue().windowStart >= windowMs * 2;
+            }
+        });
+        userDailyQuota.entrySet().removeIf(entry -> {
+            synchronized (entry.getValue()) {
+                return entry.getValue().day.isBefore(today);
+            }
+        });
     }
 
     public UsageSnapshot getSnapshot(Long userId, String clientIp) {
@@ -108,9 +134,10 @@ public class AiUsageGuardService {
             return 0;
         }
 
+        LocalDate today = LocalDate.now();
         synchronized (counter) {
-            if (!counter.day.equals(LocalDate.now())) {
-                counter.day = LocalDate.now();
+            if (!counter.day.equals(today)) {
+                counter.day = today;
                 counter.count = 0;
             }
             return counter.count;
