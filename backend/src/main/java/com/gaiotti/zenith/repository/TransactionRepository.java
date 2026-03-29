@@ -60,32 +60,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
 
     @Query(value = """
         SELECT 
-            COALESCE(SUM(CASE WHEN t.type = 'INCOME' THEN t.amount ELSE 0 END), 0) as total_income,
-            COALESCE(SUM(CASE WHEN t.type = 'EXPENSE' THEN t.amount ELSE 0 END), 0) as total_expense
-        FROM transactions t
-        WHERE t.ledger_id = :ledgerId AND t.date >= :startDate AND t.date <= :endDate
-        """, nativeQuery = true)
-    Object[] getMonthlyTotals(
-            @Param("ledgerId") Long ledgerId,
-            @Param("startDate") LocalDate startDate,
-            @Param("endDate") LocalDate endDate
-    );
-
-    @Query(value = """
-        SELECT 
-            COALESCE(SUM(CASE WHEN t.type = 'INCOME' THEN t.amount ELSE 0 END), 0) as total_income,
-            COALESCE(SUM(CASE WHEN t.type = 'EXPENSE' THEN t.amount ELSE 0 END), 0) as total_expense
-        FROM transactions t
-        WHERE t.ledger_id = :ledgerId AND t.date >= :startDate AND t.date <= :endDate
-        """, nativeQuery = true)
-    Object[] getPreviousMonthTotals(
-            @Param("ledgerId") Long ledgerId,
-            @Param("startDate") LocalDate startDate,
-            @Param("endDate") LocalDate endDate
-    );
-
-    @Query(value = """
-        SELECT 
             u.id as user_id, u.email, u.display_name,
             COALESCE(SUM(CASE
                 WHEN :createdByUserId IS NOT NULL AND u.id <> :createdByUserId THEN 0
