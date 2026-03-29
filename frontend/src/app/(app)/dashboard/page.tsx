@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
@@ -114,6 +114,48 @@ export default function DashboardPage() {
   ];
   const showSplitPanel = memberFilter === "all" && (ledger.data?.members?.length ?? 0) > 1;
 
+  const controls = (
+    <div className="surface flex flex-col gap-3 p-5 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between">
+      <div>
+        <p className="font-display text-3xl text-[var(--text-primary)]">Dashboard</p>
+        <p className="mt-1 text-sm text-[var(--text-secondary)]">Resumo mensal da fatura compartilhada.</p>
+      </div>
+      <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:flex-wrap sm:items-end">
+        <div className="flex flex-col gap-2">
+          <span className="block text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">Alertas</span>
+          <NotificationBell />
+        </div>
+        <div className="flex flex-col gap-2">
+          <span className="block text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">Exportar</span>
+          <button
+            type="button"
+            aria-label="Exportar Excel"
+            disabled={!activeLedgerId || exportMutation.isPending}
+            className="focusable elevated grid h-12 w-full place-items-center rounded-xl px-4 text-sm text-[var(--text-primary)] shadow-[0_8px_22px_rgba(7,12,30,0.35)] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+            onClick={() => exportMutation.mutate()}
+          >
+            <DownloadIcon className={`h-5 w-5 ${exportMutation.isPending ? "animate-pulse" : ""}`} />
+          </button>
+        </div>
+        <MonthPicker
+          label="Mes"
+          value={yearMonth}
+          onChange={setYearMonth}
+          align="right"
+          buttonClassName={filterClassName}
+        />
+        <SelectMenu
+          label="Pessoa"
+          value={memberFilter}
+          options={memberOptions}
+          onChange={setMemberFilter}
+          align="right"
+          buttonClassName={filterClassName}
+        />
+      </div>
+    </div>
+  );
+
   if (!activeLedgerId) {
     return (
       <div className="space-y-5">
@@ -132,76 +174,9 @@ export default function DashboardPage() {
     );
   }
 
-  if (loading) {
-    return (
-      <div className="space-y-5">
-        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-          {Array.from({ length: 4 }).map((_, index) => (
-            <LoadingSkeleton key={index} variant="stat" />
-          ))}
-        </div>
-        <div className="grid gap-5 xl:grid-cols-12">
-          <div className="xl:col-span-8">
-            <LoadingSkeleton variant="chart" />
-          </div>
-          <div className="xl:col-span-4">
-            <LoadingSkeleton variant="chart" />
-          </div>
-          <div className="xl:col-span-4">
-            <LoadingSkeleton variant="chart" />
-          </div>
-          <div className="xl:col-span-4">
-            <LoadingSkeleton variant="chart" />
-          </div>
-          <div className="xl:col-span-4">
-            <LoadingSkeleton variant="chart" />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="space-y-5">
-      <div className="surface flex flex-col gap-3 p-5 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between">
-        <div>
-          <p className="font-display text-3xl text-[var(--text-primary)]">Dashboard</p>
-          <p className="mt-1 text-sm text-[var(--text-secondary)]">Resumo mensal da fatura compartilhada.</p>
-        </div>
-        <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:flex-wrap sm:items-end">
-          <div className="flex flex-col gap-2">
-            <span className="block text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">Alertas</span>
-            <NotificationBell />
-          </div>
-          <div className="flex flex-col gap-2">
-            <span className="block text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">Exportar</span>
-            <button
-              type="button"
-              aria-label="Exportar Excel"
-              disabled={!activeLedgerId || exportMutation.isPending}
-              className="focusable elevated grid h-12 w-full place-items-center rounded-xl px-4 text-sm text-[var(--text-primary)] shadow-[0_8px_22px_rgba(7,12,30,0.35)] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
-              onClick={() => exportMutation.mutate()}
-            >
-              <DownloadIcon className={`h-5 w-5 ${exportMutation.isPending ? "animate-pulse" : ""}`} />
-            </button>
-          </div>
-          <MonthPicker
-            label="Mes"
-            value={yearMonth}
-            onChange={setYearMonth}
-            align="right"
-            buttonClassName={filterClassName}
-          />
-          <SelectMenu
-            label="Pessoa"
-            value={memberFilter}
-            options={memberOptions}
-            onChange={setMemberFilter}
-            align="right"
-            buttonClassName={filterClassName}
-          />
-        </div>
-      </div>
+      {controls}
 
       {exportError ? (
         <div className="danger-chip rounded-xl px-4 py-3 text-sm">{exportError}</div>
@@ -213,42 +188,53 @@ export default function DashboardPage() {
         </div>
       ) : null}
 
-      <OverviewCards overview={overview.data} />
-      <div className="grid gap-5 xl:grid-cols-12">
-        <div className="space-y-5 xl:col-span-8">
-          <Suspense fallback={<LoadingSkeleton variant="chart" />}>
-            <ExpenseTrendChart trends={trends.data} />
-          </Suspense>
-          {showSplitPanel ? (
-            <div className="grid gap-5 lg:grid-cols-2">
-              <Suspense fallback={<LoadingSkeleton variant="chart" />}>
-                <CategoryBreakdownChart data={categories.data} />
-              </Suspense>
-              <Suspense fallback={<LoadingSkeleton variant="chart" />}>
-                <PulseSparkline data={pulse.data} />
-              </Suspense>
+      {loading ? (
+        <div className="space-y-5">
+          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+            {Array.from({ length: 4 }).map((_, index) => (
+              <LoadingSkeleton key={index} variant="stat" />
+            ))}
+          </div>
+          <div className="grid gap-5 xl:grid-cols-12">
+            <div className="xl:col-span-8">
+              <LoadingSkeleton variant="chart" />
             </div>
-          ) : null}
+            <div className="xl:col-span-4">
+              <LoadingSkeleton variant="chart" />
+            </div>
+            <div className="xl:col-span-4">
+              <LoadingSkeleton variant="chart" />
+            </div>
+            <div className="xl:col-span-4">
+              <LoadingSkeleton variant="chart" />
+            </div>
+            <div className="xl:col-span-4">
+              <LoadingSkeleton variant="chart" />
+            </div>
+          </div>
         </div>
-        <div className="space-y-5 xl:col-span-4">
-          {showSplitPanel ? (
-            <Suspense fallback={<LoadingSkeleton variant="chart" />}>
-              <CoupleSplitPanel data={split.data} />
-            </Suspense>
-          ) : null}
-          {!showSplitPanel ? (
-            <Suspense fallback={<LoadingSkeleton variant="chart" />}>
-              <CategoryBreakdownChart data={categories.data} />
-            </Suspense>
-          ) : null}
-          {!showSplitPanel ? (
-            <Suspense fallback={<LoadingSkeleton variant="chart" />}>
-              <PulseSparkline data={pulse.data} />
-            </Suspense>
-          ) : null}
-          <RecentTransactions items={recent} />
-        </div>
-      </div>
+      ) : (
+        <>
+          <OverviewCards overview={overview.data} />
+          <div className="grid gap-5 xl:grid-cols-12">
+            <div className="space-y-5 xl:col-span-8">
+              <ExpenseTrendChart trends={trends.data} />
+              {showSplitPanel ? (
+                <div className="grid gap-5 lg:grid-cols-2">
+                  <CategoryBreakdownChart data={categories.data} />
+                  <PulseSparkline data={pulse.data} />
+                </div>
+              ) : null}
+            </div>
+            <div className="space-y-5 xl:col-span-4">
+              {showSplitPanel ? <CoupleSplitPanel data={split.data} /> : null}
+              {!showSplitPanel ? <CategoryBreakdownChart data={categories.data} /> : null}
+              {!showSplitPanel ? <PulseSparkline data={pulse.data} /> : null}
+              <RecentTransactions items={recent} />
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
