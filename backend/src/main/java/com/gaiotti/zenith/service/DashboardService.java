@@ -454,12 +454,18 @@ public class DashboardService {
 
         List<DashboardPulseResponse.DailySpending> dailySpending = new ArrayList<>();
         Map<LocalDate, BigDecimal> spendingByDate = new LinkedHashMap<>();
+        BigDecimal maxSpending = BigDecimal.ZERO;
+        LocalDate maxDate = null;
 
         for (Object[] row : dailyResults) {
             LocalDate date = toLocalDate(row[0]);
             BigDecimal amount = abs(toBigDecimal(row[1]));
             if (date != null) {
                 spendingByDate.put(date, amount);
+                if (amount.compareTo(maxSpending) > 0) {
+                    maxSpending = amount;
+                    maxDate = date;
+                }
             }
         }
 
@@ -494,16 +500,6 @@ public class DashboardService {
         }
 
         DashboardPulseResponse.HighestSpendingDay highestDay = null;
-        BigDecimal maxSpending = BigDecimal.ZERO;
-        LocalDate maxDate = null;
-        for (Object[] row : dailyResults) {
-            BigDecimal amount = abs(toBigDecimal(row[1]));
-            LocalDate date = toLocalDate(row[0]);
-            if (amount.compareTo(maxSpending) > 0) {
-                maxSpending = amount;
-                maxDate = date;
-            }
-        }
         if (maxDate != null) {
             highestDay = DashboardPulseResponse.HighestSpendingDay.builder()
                     .date(maxDate.format(DateTimeFormatter.ISO_LOCAL_DATE))
@@ -555,16 +551,12 @@ public class DashboardService {
     }
 
     private BigDecimal toBigDecimal(Object value) {
-        if (value == null) {
-            return BigDecimal.ZERO;
-        }
-        if (value instanceof BigDecimal) {
-            return (BigDecimal) value;
-        }
-        if (value instanceof Number) {
-            return new BigDecimal(value.toString());
-        }
-        return BigDecimal.ZERO;
+        return switch (value) {
+            case null -> BigDecimal.ZERO;
+            case BigDecimal bd -> bd;
+            case Number n -> new BigDecimal(n.toString());
+            default -> BigDecimal.ZERO;
+        };
     }
 
     private BigDecimal nonNull(BigDecimal value) {
