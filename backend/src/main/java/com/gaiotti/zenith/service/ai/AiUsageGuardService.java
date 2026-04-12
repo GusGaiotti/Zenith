@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.time.Instant;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
 @RequiredArgsConstructor
@@ -20,19 +21,45 @@ public class AiUsageGuardService {
     private final ConcurrentHashMap<String, WindowCounter> ipRateCounters = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<Long, DailyCounter> userDailyQuota = new ConcurrentHashMap<>();
 
+    private static final long RATE_WINDOW_MS = 60_000L;
+    private static final int CLEANUP_INTERVAL = 200;
+    private final AtomicInteger assertCallCount = new AtomicInteger(0);
+
     public void assertAllowedAndConsume(Long userId, String clientIp) {
         if (!aiProperties.getLimits().isEnabled()) {
             return;
         }
 
         long now = Instant.now().toEpochMilli();
-        long windowMs = 60_000L;
 
-        checkWindowCounter(userRateCounters, "u:" + userId, aiProperties.getLimits().getPerUserPerMinute(), now, windowMs,
+        checkWindowCounter(userRateCounters, "u:" + userId, aiProperties.getLimits().getPerUserPerMinute(), now, RATE_WINDOW_MS,
                 "AI rate limit exceeded for this user");
-        checkWindowCounter(ipRateCounters, "ip:" + clientIp, aiProperties.getLimits().getPerIpPerMinute(), now, windowMs,
+        checkWindowCounter(ipRateCounters, "ip:" + clientIp, aiProperties.getLimits().getPerIpPerMinute(), now, RATE_WINDOW_MS,
                 "AI rate limit exceeded for this IP");
         checkDailyQuota(userId, aiProperties.getLimits().getPerUserDailyQuota());
+
+        if (assertCallCount.incrementAndGet() % CLEANUP_INTERVAL == 0) {
+            cleanupStaleEntries(now, RATE_WINDOW_MS);
+        }
+    }
+
+    private void cleanupStaleEntries(long now, long windowMs) {
+        LocalDate today = LocalDate.now();
+        userRateCounters.entrySet().removeIf(entry -> {
+            synchronized (entry.getValue()) {
+                return now - entry.getValue().windowStart >= windowMs * 2;
+            }
+        });
+        ipRateCounters.entrySet().removeIf(entry -> {
+            synchronized (entry.getValue()) {
+                return now - entry.getValue().windowStart >= windowMs * 2;
+            }
+        });
+        userDailyQuota.entrySet().removeIf(entry -> {
+            synchronized (entry.getValue()) {
+                return entry.getValue().day.isBefore(today);
+            }
+        });
     }
 
     public UsageSnapshot getSnapshot(Long userId, String clientIp) {
@@ -94,7 +121,7 @@ public class AiUsageGuardService {
 
         long now = Instant.now().toEpochMilli();
         synchronized (counter) {
-            if (now - counter.windowStart >= 60_000L) {
+            if (now - counter.windowStart >= RATE_WINDOW_MS) {
                 counter.windowStart = now;
                 counter.count = 0;
             }
@@ -108,9 +135,10 @@ public class AiUsageGuardService {
             return 0;
         }
 
+        LocalDate today = LocalDate.now();
         synchronized (counter) {
-            if (!counter.day.equals(LocalDate.now())) {
-                counter.day = LocalDate.now();
+            if (!counter.day.equals(today)) {
+                counter.day = today;
                 counter.count = 0;
             }
             return counter.count;
