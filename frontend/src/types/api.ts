@@ -212,6 +212,20 @@ export interface AskAiUsageResponse {
   note: string;
 }
 
+export interface UserProfileResponse {
+  id: number;
+  email: string;
+  displayName: string;
+  aiEnabled: boolean;
+  createdAt: string;
+}
+
+export interface UpdateProfileRequest {
+  displayName?: string;
+  currentPassword?: string;
+  newPassword?: string;
+}
+
 export interface CreateLedgerRequest {
   name: string;
 }

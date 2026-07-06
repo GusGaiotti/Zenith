@@ -1,5 +1,5 @@
 ﻿import api from "@/lib/api/axios";
-import type { CreateLedgerRequest, InvitationResponse, InviteUserRequest, LedgerResponse, UpdateLedgerRequest } from "@/types/api";
+import type { CreateLedgerRequest, InvitationResponse, InviteUserRequest, LedgerResponse, MessageResponse, UpdateLedgerRequest } from "@/types/api";
 
 export const createLedger = (body: CreateLedgerRequest) => api.post<LedgerResponse>("/ledgers", body);
 export const getLedger = (id: number) => api.get<LedgerResponse>(`/ledgers/${id}`);
@@ -12,3 +12,6 @@ export const declineInvitation = (token: string) =>
   api.patch<InvitationResponse>(`/ledgers/invitations/${token}/decline`);
 export const cancelInvitation = (token: string) =>
   api.patch<InvitationResponse>(`/ledgers/invitations/${token}/cancel`);
+export const leaveLedger = (id: number) => api.delete<MessageResponse>(`/ledgers/${id}/members/me`);
+export const removeMember = (ledgerId: number, userId: number) =>
+  api.delete<MessageResponse>(`/ledgers/${ledgerId}/members/${userId}`);

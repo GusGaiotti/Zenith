@@ -12,6 +12,7 @@ public interface LedgerMemberRepository extends JpaRepository<LedgerMember, Long
     boolean existsByLedgerIdAndUserId(Long ledgerId, Long userId);
     boolean existsByUserId(Long userId);
     Optional<LedgerMember> findFirstByUserId(Long userId);
+    Optional<LedgerMember> findByLedgerIdAndUserId(Long ledgerId, Long userId);
     long countByLedgerId(Long ledgerId);
     List<LedgerMember> findByLedgerId(Long ledgerId);
 }

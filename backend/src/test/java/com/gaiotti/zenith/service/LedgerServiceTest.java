@@ -46,6 +46,9 @@ class LedgerServiceTest {
     @Mock
     private NotificationService notificationService;
 
+    @Mock
+    private EmailService emailService;
+
     @InjectMocks
     private LedgerService ledgerService;
 
@@ -120,9 +123,7 @@ class LedgerServiceTest {
         when(userRepository.findByEmail(targetUser.getEmail())).thenReturn(Optional.of(targetUser));
         when(invitationRepository.existsByLedgerIdAndInvitedEmailAndStatus(
                 testLedger.getId(), targetUser.getEmail(), Invitation.InvitationStatus.PENDING)).thenReturn(false);
-        when(ledgerRepository.findById(testLedger.getId())).thenReturn(Optional.of(testLedger));
         when(invitationRepository.save(any(Invitation.class))).thenReturn(testInvitation);
-        when(userRepository.findByEmail(targetUser.getEmail())).thenReturn(Optional.of(targetUser));
 
         InvitationResponse response = ledgerService.inviteUser(testLedger.getId(), testUser, targetUser.getEmail());
 
