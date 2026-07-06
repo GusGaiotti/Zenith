@@ -8,6 +8,7 @@ import com.gaiotti.zenith.security.AuthCookieService;
 import com.gaiotti.zenith.security.JwtService;
 import com.gaiotti.zenith.security.UserDetailsServiceImpl;
 import com.gaiotti.zenith.service.AuthService;
+import com.gaiotti.zenith.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -36,6 +37,9 @@ class UserControllerTest {
 
     @MockBean
     private AuthService authService;
+
+    @MockBean
+    private UserService userService;
 
     @MockBean
     private AuthUtils authUtils;
