@@ -7,7 +7,8 @@ import { MemberCard } from "@/components/ledger/MemberCard";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { LoadingSkeleton } from "@/components/shared/LoadingSkeleton";
 import { PageHeader } from "@/components/shared/PageHeader";
-import { useCancelInvitation, useInviteMember, useLedger, useUpdateLedgerName } from "@/hooks/useLedger";
+import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
+import { useCancelInvitation, useInviteMember, useLeaveLedger, useLedger, useRemoveMember, useUpdateLedgerName } from "@/hooks/useLedger";
 import { formatDateTime } from "@/lib/utils/date";
 import { useAuthStore } from "@/lib/store/auth.store";
 
@@ -28,10 +29,15 @@ export default function LedgerPage() {
   const [open, setOpen] = useState(false);
 
   const activeLedgerId = useAuthStore((state) => state.activeLedgerId);
+  const currentUser = useAuthStore((state) => state.user);
   const ledger = useLedger();
   const inviteMember = useInviteMember();
   const cancelInvitation = useCancelInvitation();
   const updateLedgerName = useUpdateLedgerName();
+  const leaveLedger = useLeaveLedger();
+  const removeMember = useRemoveMember();
+  const [confirmLeave, setConfirmLeave] = useState(false);
+  const [confirmRemove, setConfirmRemove] = useState<number | null>(null);
   const members = ledger.data?.members ?? [];
   const pendingInvitations = ledger.data?.pendingInvitations ?? [];
   const canInvite = members.length < 2 && pendingInvitations.length === 0;
@@ -145,14 +151,23 @@ export default function LedgerPage() {
           ) : null}
         </div>
         <div className="grid gap-4 md:grid-cols-2">
-          {members.map((member) => (
-            <MemberCard
-              key={member.userId}
-              name={member.displayName}
-              email={member.email}
-              joinedAt={new Date(member.joinedAt).toLocaleDateString("pt-BR")}
-            />
-          ))}
+          {members.map((member) => {
+            const isCurrentUser = member.userId === currentUser?.id;
+            return (
+              <MemberCard
+                key={member.userId}
+                name={member.displayName}
+                email={member.email}
+                joinedAt={new Date(member.joinedAt).toLocaleDateString("pt-BR")}
+                actionLabel={isCurrentUser ? "Sair da fatura" : "Remover membro"}
+                actionDisabled={leaveLedger.isPending || removeMember.isPending}
+                onAction={() => isCurrentUser
+                  ? setConfirmLeave(true)
+                  : setConfirmRemove(member.userId)
+                }
+              />
+            );
+          })}
           {pendingInvitations.map((invitation) => (
             <MemberCard
               key={invitation.token}
@@ -172,6 +187,40 @@ export default function LedgerPage() {
           ) : null}
         </div>
       </section>
+
+      <ConfirmDialog
+        open={confirmLeave}
+        title="Sair da fatura"
+        description="Tem certeza que deseja sair desta fatura? Você perderá acesso às transações compartilhadas."
+        confirmLabel="Sair da fatura"
+        variant="danger"
+        isPending={leaveLedger.isPending}
+        onConfirm={() => {
+          if (activeLedgerId) {
+            leaveLedger.mutate(activeLedgerId, {
+              onSuccess: () => router.replace("/onboarding"),
+            });
+          }
+        }}
+        onCancel={() => setConfirmLeave(false)}
+      />
+
+      <ConfirmDialog
+        open={confirmRemove !== null}
+        title="Remover membro"
+        description="Tem certeza que deseja remover este membro da fatura?"
+        confirmLabel="Remover"
+        variant="danger"
+        isPending={removeMember.isPending}
+        onConfirm={() => {
+          if (confirmRemove !== null) {
+            removeMember.mutate(confirmRemove, {
+              onSuccess: () => setConfirmRemove(null),
+            });
+          }
+        }}
+        onCancel={() => setConfirmRemove(null)}
+      />
 
       <InviteModal
         open={open && canInvite}

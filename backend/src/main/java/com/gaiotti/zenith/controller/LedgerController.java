@@ -5,6 +5,7 @@ import com.gaiotti.zenith.dto.request.InviteUserRequest;
 import com.gaiotti.zenith.dto.request.UpdateLedgerRequest;
 import com.gaiotti.zenith.dto.response.InvitationResponse;
 import com.gaiotti.zenith.dto.response.LedgerResponse;
+import com.gaiotti.zenith.dto.response.MessageResponse;
 import com.gaiotti.zenith.model.User;
 import com.gaiotti.zenith.security.AuthUtils;
 import com.gaiotti.zenith.service.LedgerService;
@@ -82,5 +83,21 @@ public class LedgerController {
         User authenticatedUser = authUtils.getAuthenticatedUser();
         InvitationResponse response = ledgerService.cancelInvitation(token, authenticatedUser);
         return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{id}/members/me")
+    public ResponseEntity<MessageResponse> leaveLedger(@PathVariable Long id) {
+        User authenticatedUser = authUtils.getAuthenticatedUser();
+        ledgerService.leaveLedger(id, authenticatedUser);
+        return ResponseEntity.ok(new MessageResponse("Left ledger successfully"));
+    }
+
+    @DeleteMapping("/{id}/members/{userId}")
+    public ResponseEntity<MessageResponse> removeMember(
+            @PathVariable Long id,
+            @PathVariable Long userId) {
+        User authenticatedUser = authUtils.getAuthenticatedUser();
+        ledgerService.removeMember(id, userId, authenticatedUser);
+        return ResponseEntity.ok(new MessageResponse("Member removed successfully"));
     }
 }

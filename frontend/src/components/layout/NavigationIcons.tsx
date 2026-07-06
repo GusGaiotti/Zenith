@@ -6,6 +6,7 @@ type IconName =
   | "categories"
   | "ledger"
   | "ask-ai"
+  | "settings"
   | "lock"
   | "collapse"
   | "expand";
@@ -24,6 +25,7 @@ export const APP_NAV_ITEMS: NavItem[] = [
   { href: "/categories", label: "Categorias", icon: "categories" },
   { href: "/ledger", label: "Fatura", icon: "ledger" },
   { href: "/ask-ai", label: "Pergunte à IA", icon: "ask-ai" },
+  { href: "/settings", label: "Configurações", icon: "settings" },
 ];
 
 function IconBase(props: SVGProps<SVGSVGElement>) {
@@ -85,6 +87,13 @@ export function NavigationIcon({ name, className = iconClassName }: { name: Icon
           <path d="M12 5c4.4 0 8 2.7 8 6.2 0 1.9-1 3.6-2.7 4.8l.4 3-2.8-1.5a10.7 10.7 0 0 1-2.9.4c-4.4 0-8-2.7-8-6.2S7.6 5 12 5Z" />
           <path d="M8.7 10.5h6.6" />
           <path d="M10.1 13.5h3.8" />
+        </IconBase>
+      );
+    case "settings":
+      return (
+        <IconBase className={className}>
+          <circle cx="12" cy="12" r="3" />
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z" />
         </IconBase>
       );
     case "lock":
