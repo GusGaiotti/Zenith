@@ -34,6 +34,7 @@ public class LedgerService {
     private final InvitationRepository invitationRepository;
     private final UserRepository userRepository;
     private final NotificationService notificationService;
+    private final EmailService emailService;
 
     @Transactional
     public LedgerResponse createLedger(String name, User authenticatedUser) {
@@ -94,6 +95,12 @@ public class LedgerService {
                 .build();
         invitation = invitationRepository.save(invitation);
         notificationService.createInvitationNotification(invitation, targetUser);
+        emailService.sendInvitationEmail(
+                targetEmail,
+                inviter.getDisplayName(),
+                ledger.getName(),
+                invitation.getToken()
+        );
 
         return buildInvitationResponse(invitation);
     }
@@ -205,6 +212,36 @@ public class LedgerService {
         ledger.setName(normalizedName);
         ledgerRepository.save(ledger);
         return buildLedgerResponse(ledger);
+    }
+
+    @Transactional
+    public void leaveLedger(Long ledgerId, User authenticatedUser) {
+        if (!ledgerMemberRepository.existsByLedgerIdAndUserId(ledgerId, authenticatedUser.getId())) {
+            throw new AccessDeniedException("You are not a member of this ledger");
+        }
+
+        LedgerMember membership = ledgerMemberRepository
+                .findByLedgerIdAndUserId(ledgerId, authenticatedUser.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Membership not found"));
+
+        ledgerMemberRepository.delete(membership);
+    }
+
+    @Transactional
+    public void removeMember(Long ledgerId, Long targetUserId, User authenticatedUser) {
+        if (!ledgerMemberRepository.existsByLedgerIdAndUserId(ledgerId, authenticatedUser.getId())) {
+            throw new AccessDeniedException("You are not a member of this ledger");
+        }
+
+        if (authenticatedUser.getId().equals(targetUserId)) {
+            throw new IllegalArgumentException("Use the leave endpoint to remove yourself");
+        }
+
+        LedgerMember membership = ledgerMemberRepository
+                .findByLedgerIdAndUserId(ledgerId, targetUserId)
+                .orElseThrow(() -> new ResourceNotFoundException("Member not found in this ledger"));
+
+        ledgerMemberRepository.delete(membership);
     }
 
     @Transactional(readOnly = true)
