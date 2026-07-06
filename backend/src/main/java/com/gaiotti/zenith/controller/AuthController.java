@@ -1,7 +1,9 @@
 package com.gaiotti.zenith.controller;
 
+import com.gaiotti.zenith.dto.request.ForgotPasswordRequest;
 import com.gaiotti.zenith.dto.request.LoginRequest;
 import com.gaiotti.zenith.dto.request.RegisterRequest;
+import com.gaiotti.zenith.dto.request.ResetPasswordRequest;
 import com.gaiotti.zenith.dto.response.AuthResponse;
 import com.gaiotti.zenith.dto.response.MessageResponse;
 import com.gaiotti.zenith.config.AllowedOriginsProvider;
@@ -57,6 +59,18 @@ public class AuthController {
                 .header(HttpHeaders.PRAGMA, "no-cache")
                 .header("Set-Cookie", authCookieService.buildRefreshTokenCookie(session.refreshToken()).toString())
                 .body(session.response());
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<MessageResponse> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
+        authService.requestPasswordReset(request);
+        return ResponseEntity.ok(new MessageResponse("If an account with that email exists, a password reset link has been sent."));
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<MessageResponse> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        authService.resetPassword(request);
+        return ResponseEntity.ok(new MessageResponse("Password updated successfully. Please log in with your new password."));
     }
 
     @PostMapping("/logout")

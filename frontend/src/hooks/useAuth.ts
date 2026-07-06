@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import { useMutation } from "@tanstack/react-query";
-import { login, logout, register } from "@/lib/api/auth";
+import { forgotPassword, login, logout, register, resetPassword } from "@/lib/api/auth";
 import { useAuthStore } from "@/lib/store/auth.store";
 import type { LoginRequest, RegisterRequest } from "@/types/api";
 
@@ -46,5 +46,18 @@ export function useLogout() {
   return useMutation({
     mutationFn: () => logout().then((response) => response.data),
     onSettled: () => clear(),
+  });
+}
+
+export function useForgotPassword() {
+  return useMutation({
+    mutationFn: (email: string) => forgotPassword(email).then((r) => r.data),
+  });
+}
+
+export function useResetPassword() {
+  return useMutation({
+    mutationFn: ({ token, newPassword }: { token: string; newPassword: string }) =>
+      resetPassword(token, newPassword).then((r) => r.data),
   });
 }

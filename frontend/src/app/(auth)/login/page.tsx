@@ -115,7 +115,12 @@ export default function LoginPage() {
                   ) : null}
                 </label>
                 <label className="block text-sm">
-                  <span className="mb-1.5 block font-medium text-[var(--text-secondary)]">Senha</span>
+                  <div className="mb-1.5 flex items-center justify-between">
+                    <span className="font-medium text-[var(--text-secondary)]">Senha</span>
+                    <Link className="text-xs text-[var(--text-muted)] hover:text-[var(--accent-hover)]" href="/forgot-password">
+                      Esqueci minha senha
+                    </Link>
+                  </div>
                   <input
                     type="password"
                     className="focusable h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-3.5 outline-none transition-colors duration-150"

@@ -1,10 +1,14 @@
 package com.gaiotti.zenith.service;
 
+import com.gaiotti.zenith.dto.request.ForgotPasswordRequest;
 import com.gaiotti.zenith.dto.request.LoginRequest;
 import com.gaiotti.zenith.dto.request.RegisterRequest;
+import com.gaiotti.zenith.dto.request.ResetPasswordRequest;
 import com.gaiotti.zenith.dto.response.AuthResponse;
+import com.gaiotti.zenith.model.PasswordResetToken;
 import com.gaiotti.zenith.model.RefreshToken;
 import com.gaiotti.zenith.model.User;
+import com.gaiotti.zenith.repository.PasswordResetTokenRepository;
 import com.gaiotti.zenith.repository.RefreshTokenRepository;
 import com.gaiotti.zenith.repository.UserRepository;
 import com.gaiotti.zenith.security.JwtService;
@@ -20,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -30,10 +35,12 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final AiAccessControlService aiAccessControlService;
+    private final EmailService emailService;
 
     @Value("${jwt.refresh-token-expiration}")
     private long refreshTokenExpirationMs;
@@ -174,6 +181,46 @@ public class AuthService {
             validTokens.forEach(token -> token.setRevoked(true));
             refreshTokenRepository.saveAll(validTokens);
         }
+    }
+
+    @Transactional
+    public void requestPasswordReset(ForgotPasswordRequest request) {
+        String email = normalizeEmail(request.getEmail());
+        userRepository.findByEmail(email).ifPresent(user -> {
+            passwordResetTokenRepository.deleteAllByUserId(user.getId());
+
+            String token = UUID.randomUUID().toString();
+            PasswordResetToken resetToken = PasswordResetToken.builder()
+                    .token(token)
+                    .user(user)
+                    .expiresAt(LocalDateTime.now().plusHours(1))
+                    .build();
+            passwordResetTokenRepository.save(resetToken);
+
+            emailService.sendPasswordResetEmail(user.getEmail(), token);
+        });
+    }
+
+    @Transactional
+    public void resetPassword(ResetPasswordRequest request) {
+        PasswordResetToken resetToken = passwordResetTokenRepository.findByToken(request.getToken())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid or expired reset token"));
+
+        if (resetToken.isUsed()) {
+            throw new IllegalArgumentException("Reset token has already been used");
+        }
+        if (resetToken.isExpired()) {
+            throw new IllegalArgumentException("Reset token has expired");
+        }
+
+        User user = resetToken.getUser();
+        user.setPasswordHash(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
+
+        resetToken.setUsed(true);
+        passwordResetTokenRepository.save(resetToken);
+
+        logout(user.getId());
     }
 
     private String normalizeEmail(String email) {
