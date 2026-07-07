@@ -55,6 +55,9 @@ management:
     health:
       probes:
         enabled: true
+  health:
+    mail:
+      enabled: false
 
 jwt:
   secret: ${JWT_SECRET}
@@ -67,6 +70,7 @@ cors:
 app:
   base-url: ${APP_BASE_URL:http://localhost:3000}
   mail:
+    enabled: ${MAIL_ENABLED:false}
     from: ${MAIL_FROM:noreply@zenith.app}
 
 auth:
