@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { SelectMenu } from "@/components/shared/SelectMenu";
+import { Button } from "@/components/ui";
 import {
   formatCurrency,
   normalizeCurrencyInput,
@@ -186,12 +187,9 @@ function TransactionDrawerContent({
             />
           </label>
           <div className="flex gap-2">
-            <button
-              disabled={isSubmitting || amountValue <= 0}
-              className="focusable h-11 flex-1 rounded-xl bg-[var(--accent)] px-4 font-semibold text-white shadow-[0_8px_24px_rgba(79,124,255,0.35)] transition-all duration-150 hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-40"
-            >
+            <Button type="submit" className="flex-1" disabled={isSubmitting || amountValue <= 0}>
               {isSubmitting ? "Salvando..." : isEditing ? "Salvar alterações" : "Salvar transação"}
-            </button>
+            </Button>
             <button
               type="button"
               className="focusable h-11 rounded-xl border border-[color-mix(in_srgb,var(--expense)_30%,transparent)] bg-[color-mix(in_srgb,var(--expense)_10%,var(--panel-bg))] px-4 py-2 text-sm text-[color-mix(in_srgb,var(--expense)_84%,var(--text-primary))] transition-colors duration-150 hover:border-[color-mix(in_srgb,var(--expense)_42%,transparent)] hover:bg-[color-mix(in_srgb,var(--expense)_14%,var(--panel-bg))]"
