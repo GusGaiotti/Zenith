@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { BrandWordmark } from "@/components/brand/BrandWordmark";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { Alert, Button, Field, Input } from "@/components/ui";
 import { useLogin } from "@/hooks/useAuth";
 import { getMyLedger } from "@/lib/api/ledger";
 import { useAuthStore } from "@/lib/store/auth.store";
@@ -122,50 +123,41 @@ export default function LoginPage() {
               </p>
 
               <form className="mt-8 space-y-5" onSubmit={onSubmit}>
-                <label className="block text-sm">
-                  <span className="mb-1.5 block font-medium text-[var(--text-secondary)]">
-                    Email
-                  </span>
-                  <input
+                <Field label="Email" htmlFor="email" error={form.formState.errors.email?.message}>
+                  <Input
+                    id="email"
                     type="email"
-                    className="focusable h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-3.5 transition-colors duration-150 outline-none"
+                    invalid={!!form.formState.errors.email}
                     {...form.register("email")}
                   />
-                  {form.formState.errors.email ? (
-                    <span className="mt-1.5 block text-xs text-[var(--danger-text)]">
-                      {form.formState.errors.email.message}
-                    </span>
-                  ) : null}
-                </label>
-                <label className="block text-sm">
-                  <div className="mb-1.5 flex items-center justify-between">
-                    <span className="font-medium text-[var(--text-secondary)]">Senha</span>
+                </Field>
+                <Field
+                  label="Senha"
+                  htmlFor="password"
+                  error={form.formState.errors.password?.message}
+                  action={
                     <Link
                       className="text-xs text-[var(--text-muted)] hover:text-[var(--accent-hover)]"
                       href="/forgot-password"
                     >
                       Esqueci minha senha
                     </Link>
-                  </div>
-                  <input
+                  }
+                >
+                  <Input
+                    id="password"
                     type="password"
-                    className="focusable h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-3.5 transition-colors duration-150 outline-none"
+                    invalid={!!form.formState.errors.password}
                     {...form.register("password")}
                   />
-                  {form.formState.errors.password ? (
-                    <span className="mt-1.5 block text-xs text-[var(--danger-text)]">
-                      {form.formState.errors.password.message}
-                    </span>
-                  ) : null}
-                </label>
+                </Field>
                 {loginMutation.isError ? (
-                  <p className="danger-chip rounded-xl px-3 py-2.5 text-sm">
-                    Credenciais inválidas ou servidor indisponível.
-                  </p>
+                  <Alert tone="danger">Credenciais inválidas ou servidor indisponível.</Alert>
                 ) : null}
-                <button
+                <Button
+                  type="submit"
+                  className="w-full"
                   disabled={loginMutation.isPending || isPreparingRoute || cooldownSeconds > 0}
-                  className="focusable h-11 w-full rounded-xl bg-[var(--accent)] px-4 font-semibold text-white shadow-[0_8px_24px_rgba(79,124,255,0.35)] transition-all duration-150 hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-45"
                 >
                   {loginMutation.isPending
                     ? "Entrando..."
@@ -174,7 +166,7 @@ export default function LoginPage() {
                       : cooldownSeconds > 0
                         ? `Tente novamente em ${cooldownSeconds}s`
                         : "Entrar"}
-                </button>
+                </Button>
               </form>
               <p className="mt-5 text-sm text-[var(--text-secondary)]">
                 Não tem conta?{" "}
