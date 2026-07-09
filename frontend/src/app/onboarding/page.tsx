@@ -103,7 +103,10 @@ export default function OnboardingPage() {
               >
                 Enviar convite
               </button>
-              <button className="focusable rounded-md border px-4 py-2 text-sm" onClick={() => router.push("/dashboard")}>
+              <button
+                className="focusable rounded-md border px-4 py-2 text-sm"
+                onClick={() => router.push("/dashboard")}
+              >
                 Fazer depois
               </button>
             </div>
@@ -113,4 +116,3 @@ export default function OnboardingPage() {
     </main>
   );
 }
-

@@ -45,15 +45,21 @@ export default function RegisterPage() {
 
   return (
     <main className="relative flex min-h-screen items-center justify-center p-4">
-      <div className="absolute right-4 top-4 z-10">
+      <div className="absolute top-4 right-4 z-10">
         <div className="w-[190px]">
           <ThemeToggle />
         </div>
       </div>
       <section className="surface w-full max-w-md p-8">
-        <BrandWordmark animate className="mb-6" labelClassName="text-5xl text-[var(--text-primary)]" />
+        <BrandWordmark
+          animate
+          className="mb-6"
+          labelClassName="text-5xl text-[var(--text-primary)]"
+        />
         <h1 className="font-display text-4xl">Criar conta</h1>
-        <p className="mt-2 text-sm text-[var(--text-secondary)]">Configure o Zenith em menos de um minuto.</p>
+        <p className="mt-2 text-sm text-[var(--text-secondary)]">
+          Configure o Zenith em menos de um minuto.
+        </p>
         <form className="mt-6 space-y-4" onSubmit={onSubmit}>
           <label className="block text-sm">
             <span className="mb-1 block text-[var(--text-secondary)]">Nome</span>
@@ -62,7 +68,9 @@ export default function RegisterPage() {
               {...form.register("displayName")}
             />
             {form.formState.errors.displayName ? (
-              <span className="mt-1 block text-xs text-red-300">{form.formState.errors.displayName.message}</span>
+              <span className="mt-1 block text-xs text-red-300">
+                {form.formState.errors.displayName.message}
+              </span>
             ) : null}
           </label>
           <label className="block text-sm">
@@ -73,7 +81,9 @@ export default function RegisterPage() {
               {...form.register("email")}
             />
             {form.formState.errors.email ? (
-              <span className="mt-1 block text-xs text-red-300">{form.formState.errors.email.message}</span>
+              <span className="mt-1 block text-xs text-red-300">
+                {form.formState.errors.email.message}
+              </span>
             ) : null}
           </label>
           <label className="block text-sm">
@@ -83,9 +93,13 @@ export default function RegisterPage() {
               className="focusable w-full rounded-md border bg-[var(--bg-elevated)] px-3 py-2 outline-none"
               {...form.register("password")}
             />
-            <span className="mt-1 block text-xs text-[var(--text-secondary)]">Força: {strength}</span>
+            <span className="mt-1 block text-xs text-[var(--text-secondary)]">
+              Força: {strength}
+            </span>
             {form.formState.errors.password ? (
-              <span className="mt-1 block text-xs text-red-300">{form.formState.errors.password.message}</span>
+              <span className="mt-1 block text-xs text-red-300">
+                {form.formState.errors.password.message}
+              </span>
             ) : null}
           </label>
           {registerMutation.isError ? (
@@ -105,10 +119,12 @@ export default function RegisterPage() {
           </button>
         </form>
         <p className="mt-4 text-sm text-[var(--text-secondary)]">
-          Já tem conta? <Link className="text-[var(--accent)]" href="/login">Entrar</Link>
+          Já tem conta?{" "}
+          <Link className="text-[var(--accent)]" href="/login">
+            Entrar
+          </Link>
         </p>
       </section>
     </main>
   );
 }
-

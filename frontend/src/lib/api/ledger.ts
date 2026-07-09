@@ -1,13 +1,23 @@
 ﻿import api from "@/lib/api/axios";
-import type { CreateLedgerRequest, InvitationResponse, InviteUserRequest, LedgerResponse, MessageResponse, UpdateLedgerRequest } from "@/types/api";
+import type {
+  CreateLedgerRequest,
+  InvitationResponse,
+  InviteUserRequest,
+  LedgerResponse,
+  MessageResponse,
+  UpdateLedgerRequest,
+} from "@/types/api";
 
-export const createLedger = (body: CreateLedgerRequest) => api.post<LedgerResponse>("/ledgers", body);
+export const createLedger = (body: CreateLedgerRequest) =>
+  api.post<LedgerResponse>("/ledgers", body);
 export const getLedger = (id: number) => api.get<LedgerResponse>(`/ledgers/${id}`);
-export const updateLedger = (id: number, body: UpdateLedgerRequest) => api.patch<LedgerResponse>(`/ledgers/${id}`, body);
+export const updateLedger = (id: number, body: UpdateLedgerRequest) =>
+  api.patch<LedgerResponse>(`/ledgers/${id}`, body);
 export const getMyLedger = () => api.get<LedgerResponse>("/ledgers/me");
 export const inviteToLedger = (id: number, body: InviteUserRequest) =>
   api.post<InvitationResponse>(`/ledgers/${id}/invitations`, body);
-export const acceptInvitation = (token: string) => api.patch<LedgerResponse>(`/ledgers/invitations/${token}/accept`);
+export const acceptInvitation = (token: string) =>
+  api.patch<LedgerResponse>(`/ledgers/invitations/${token}/accept`);
 export const declineInvitation = (token: string) =>
   api.patch<InvitationResponse>(`/ledgers/invitations/${token}/decline`);
 export const cancelInvitation = (token: string) =>

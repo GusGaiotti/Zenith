@@ -49,9 +49,12 @@ export default function SettingsPage() {
 
   const onSaveProfile = profileForm.handleSubmit((values) => {
     setProfileSuccess(false);
-    updateProfile.mutate({ displayName: values.displayName }, {
-      onSuccess: () => setProfileSuccess(true),
-    });
+    updateProfile.mutate(
+      { displayName: values.displayName },
+      {
+        onSuccess: () => setProfileSuccess(true),
+      },
+    );
   });
 
   const onSavePassword = passwordForm.handleSubmit((values) => {
@@ -89,10 +92,12 @@ export default function SettingsPage() {
             <p className="mt-1 text-xs text-[var(--text-muted)]">O email não pode ser alterado.</p>
           </div>
           <label className="block text-sm">
-            <span className="mb-1.5 block font-medium text-[var(--text-secondary)]">Nome de exibição</span>
+            <span className="mb-1.5 block font-medium text-[var(--text-secondary)]">
+              Nome de exibição
+            </span>
             <input
               type="text"
-              className="focusable h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-3.5 outline-none transition-colors duration-150"
+              className="focusable h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-3.5 transition-colors duration-150 outline-none"
               {...profileForm.register("displayName")}
             />
             {profileForm.formState.errors.displayName ? (
@@ -122,15 +127,19 @@ export default function SettingsPage() {
 
       <section className="surface p-6 sm:p-8">
         <h2 className="text-base font-semibold text-[var(--text-primary)]">Alterar senha</h2>
-        <p className="mt-1 text-sm text-[var(--text-secondary)]">Escolha uma senha com pelo menos 6 caracteres.</p>
+        <p className="mt-1 text-sm text-[var(--text-secondary)]">
+          Escolha uma senha com pelo menos 6 caracteres.
+        </p>
 
         <form className="mt-5 space-y-4" onSubmit={onSavePassword}>
           <label className="block text-sm">
-            <span className="mb-1.5 block font-medium text-[var(--text-secondary)]">Senha atual</span>
+            <span className="mb-1.5 block font-medium text-[var(--text-secondary)]">
+              Senha atual
+            </span>
             <input
               type="password"
               autoComplete="current-password"
-              className="focusable h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-3.5 outline-none transition-colors duration-150"
+              className="focusable h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-3.5 transition-colors duration-150 outline-none"
               {...passwordForm.register("currentPassword")}
             />
             {passwordForm.formState.errors.currentPassword ? (
@@ -140,11 +149,13 @@ export default function SettingsPage() {
             ) : null}
           </label>
           <label className="block text-sm">
-            <span className="mb-1.5 block font-medium text-[var(--text-secondary)]">Nova senha</span>
+            <span className="mb-1.5 block font-medium text-[var(--text-secondary)]">
+              Nova senha
+            </span>
             <input
               type="password"
               autoComplete="new-password"
-              className="focusable h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-3.5 outline-none transition-colors duration-150"
+              className="focusable h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-3.5 transition-colors duration-150 outline-none"
               {...passwordForm.register("newPassword")}
             />
             {passwordForm.formState.errors.newPassword ? (
@@ -154,11 +165,13 @@ export default function SettingsPage() {
             ) : null}
           </label>
           <label className="block text-sm">
-            <span className="mb-1.5 block font-medium text-[var(--text-secondary)]">Confirmar nova senha</span>
+            <span className="mb-1.5 block font-medium text-[var(--text-secondary)]">
+              Confirmar nova senha
+            </span>
             <input
               type="password"
               autoComplete="new-password"
-              className="focusable h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-3.5 outline-none transition-colors duration-150"
+              className="focusable h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-3.5 transition-colors duration-150 outline-none"
               {...passwordForm.register("confirmPassword")}
             />
             {passwordForm.formState.errors.confirmPassword ? (

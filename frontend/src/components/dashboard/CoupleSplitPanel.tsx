@@ -18,7 +18,7 @@ export function CoupleSplitPanel({ data }: CoupleSplitPanelProps) {
     <section className="surface futura-card data-reveal hover-grow p-6">
       <div className="relative pr-10">
         <h3 className="font-display text-2xl italic">Divisão da fatura</h3>
-        <div className="absolute right-0 top-0">
+        <div className="absolute top-0 right-0">
           <InfoTooltip text="Mostra quanto cada pessoa participou nas entradas e nas saídas do mês e destaca quem contribuiu ou gastou proporcionalmente mais." />
         </div>
       </div>
@@ -30,32 +30,55 @@ export function CoupleSplitPanel({ data }: CoupleSplitPanelProps) {
             const expensePercentage = normalizePercentage(row.expensePercentage);
             const incomeShare = renderShare(incomePercentage);
             const expenseShare = renderShare(expensePercentage);
-            const status = delta > 0 ? "Contribuiu proporcionalmente mais" : delta < 0 ? "Gastou proporcionalmente mais" : "Equilibrado";
-            const statusClassName = delta > 0
-              ? "border border-emerald-400/40 bg-emerald-500/12 text-[var(--income)]"
-              : delta < 0
-                ? "danger-chip"
-                : "border border-amber-400/35 bg-amber-500/12 text-[var(--accent-amber)]";
+            const status =
+              delta > 0
+                ? "Contribuiu proporcionalmente mais"
+                : delta < 0
+                  ? "Gastou proporcionalmente mais"
+                  : "Equilibrado";
+            const statusClassName =
+              delta > 0
+                ? "border border-emerald-400/40 bg-emerald-500/12 text-[var(--income)]"
+                : delta < 0
+                  ? "danger-chip"
+                  : "border border-amber-400/35 bg-amber-500/12 text-[var(--accent-amber)]";
 
             return (
-              <div key={row.userId} className="rounded-3xl border border-[var(--surface-edge)] bg-[var(--card-strong)] p-4 shadow-[var(--elevated-shadow)] transition-transform duration-150 hover:scale-[1.01]">
+              <div
+                key={row.userId}
+                className="rounded-3xl border border-[var(--surface-edge)] bg-[var(--card-strong)] p-4 shadow-[var(--elevated-shadow)] transition-transform duration-150 hover:scale-[1.01]"
+              >
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
-                    <p className="text-base font-semibold text-[var(--text-primary)]">{row.displayName}</p>
-                    <p className="mt-1 text-xs text-[var(--text-secondary)]">Participação nas entradas e nas saídas do período.</p>
+                    <p className="text-base font-semibold text-[var(--text-primary)]">
+                      {row.displayName}
+                    </p>
+                    <p className="mt-1 text-xs text-[var(--text-secondary)]">
+                      Participação nas entradas e nas saídas do período.
+                    </p>
                   </div>
-                  <span className={`rounded-full px-3 py-1.5 text-xs font-medium ${statusClassName}`}>
+                  <span
+                    className={`rounded-full px-3 py-1.5 text-xs font-medium ${statusClassName}`}
+                  >
                     {status}
                   </span>
                 </div>
                 <div className="mt-4 grid gap-3 sm:grid-cols-2">
                   <div className="rounded-2xl border border-[color-mix(in_srgb,var(--income)_22%,transparent)] bg-[color-mix(in_srgb,var(--income)_10%,transparent)] px-4 py-3">
-                    <p className="text-[11px] uppercase tracking-[0.08em] text-[var(--text-secondary)]">Entradas</p>
-                    <p className="mt-1 font-display tabular-nums text-xl text-[var(--income)]">{formatCurrency(row.totalIncome)}</p>
+                    <p className="text-[11px] tracking-[0.08em] text-[var(--text-secondary)] uppercase">
+                      Entradas
+                    </p>
+                    <p className="mt-1 font-display text-xl text-[var(--income)] tabular-nums">
+                      {formatCurrency(row.totalIncome)}
+                    </p>
                   </div>
                   <div className="rounded-2xl border border-[color-mix(in_srgb,var(--expense)_22%,transparent)] bg-[color-mix(in_srgb,var(--expense)_10%,transparent)] px-4 py-3">
-                    <p className="text-[11px] uppercase tracking-[0.08em] text-[var(--text-secondary)]">Saídas</p>
-                    <p className="mt-1 font-display tabular-nums text-xl text-[var(--expense)]">{formatCurrency(row.totalExpense)}</p>
+                    <p className="text-[11px] tracking-[0.08em] text-[var(--text-secondary)] uppercase">
+                      Saídas
+                    </p>
+                    <p className="mt-1 font-display text-xl text-[var(--expense)] tabular-nums">
+                      {formatCurrency(row.totalExpense)}
+                    </p>
                   </div>
                 </div>
                 <div className="mt-4 space-y-3">
@@ -93,7 +116,8 @@ export function CoupleSplitPanel({ data }: CoupleSplitPanelProps) {
       </div>
       {data?.highestTransaction ? (
         <p className="mt-5 text-xs text-[var(--text-secondary)]">
-          Maior compra: {formatCurrency(data.highestTransaction.amount)} por {data.highestTransaction.userDisplayName}
+          Maior compra: {formatCurrency(data.highestTransaction.amount)} por{" "}
+          {data.highestTransaction.userDisplayName}
         </p>
       ) : null}
     </section>

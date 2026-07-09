@@ -19,7 +19,6 @@ export const getDashboardOverviewByMonth = (
     params: { yearMonth, createdByUserId },
   });
 
-
 export const getDashboardTrends = (ledgerId: number, months = 6) =>
   api.get<DashboardTrendsResponse>(`/ledgers/${ledgerId}/dashboard/trends`, { params: { months } });
 
@@ -46,16 +45,21 @@ export const getDashboardCoupleSplitByMonth = (
   });
 
 export const getDashboardCategoriesBreakdown = (ledgerId: number) =>
-  api.get<DashboardCategoriesBreakdownResponse>(`/ledgers/${ledgerId}/dashboard/categories/breakdown`);
+  api.get<DashboardCategoriesBreakdownResponse>(
+    `/ledgers/${ledgerId}/dashboard/categories/breakdown`,
+  );
 
 export const getDashboardCategoriesBreakdownByMonth = (
   ledgerId: number,
   yearMonth: string,
   createdByUserId?: number,
 ) =>
-  api.get<DashboardCategoriesBreakdownResponse>(`/ledgers/${ledgerId}/dashboard/categories/breakdown`, {
-    params: { yearMonth, createdByUserId },
-  });
+  api.get<DashboardCategoriesBreakdownResponse>(
+    `/ledgers/${ledgerId}/dashboard/categories/breakdown`,
+    {
+      params: { yearMonth, createdByUserId },
+    },
+  );
 
 export const getDashboardPulse = (ledgerId: number) =>
   api.get<DashboardPulseResponse>(`/ledgers/${ledgerId}/dashboard/pulse`);

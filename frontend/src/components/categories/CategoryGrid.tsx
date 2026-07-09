@@ -12,7 +12,16 @@ interface CategoryGridProps {
 export function CategoryGrid({ categories, onEdit, onDelete, deletingId }: CategoryGridProps) {
   function PencilIcon() {
     return (
-      <svg aria-hidden className="h-4 w-4" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.9" viewBox="0 0 24 24">
+      <svg
+        aria-hidden
+        className="h-4 w-4"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.9"
+        viewBox="0 0 24 24"
+      >
         <path d="m4 20 4.2-1 9.3-9.3a2.1 2.1 0 0 0-3-3L5.2 16 4 20Z" />
         <path d="m13.5 7.5 3 3" />
       </svg>
@@ -21,7 +30,16 @@ export function CategoryGrid({ categories, onEdit, onDelete, deletingId }: Categ
 
   function TrashIcon() {
     return (
-      <svg aria-hidden className="h-4 w-4" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.9" viewBox="0 0 24 24">
+      <svg
+        aria-hidden
+        className="h-4 w-4"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.9"
+        viewBox="0 0 24 24"
+      >
         <path d="M4.5 7.5h15" />
         <path d="M9.5 3.8h5l.8 1.7H19a1 1 0 0 1 1 1V8H4V6.5a1 1 0 0 1 1-1h3.7l.8-1.7Z" />
         <path d="M8.2 9.5v7.2" />
@@ -32,16 +50,24 @@ export function CategoryGrid({ categories, onEdit, onDelete, deletingId }: Categ
   }
 
   return (
-    <div className="grid gap-4" style={{ gridTemplateColumns: "repeat(auto-fill,minmax(220px,1fr))" }}>
+    <div
+      className="grid gap-4"
+      style={{ gridTemplateColumns: "repeat(auto-fill,minmax(220px,1fr))" }}
+    >
       {categories.map((category) => (
         <article
           key={category.id}
           className="surface group relative overflow-hidden p-4 transition-all duration-150 hover:-translate-y-[2px] hover:shadow-2xl hover:shadow-black/30"
         >
-          <div className="absolute inset-y-0 left-0 w-2" style={{ backgroundColor: category.color }} />
+          <div
+            className="absolute inset-y-0 left-0 w-2"
+            style={{ backgroundColor: category.color }}
+          />
           <div className="pl-4">
             <h3 className="font-semibold">{category.name}</h3>
-            <p className="mt-1 text-xs text-[var(--text-secondary)]">Criada por {category.createdByDisplayName}</p>
+            <p className="mt-1 text-xs text-[var(--text-secondary)]">
+              Criada por {category.createdByDisplayName}
+            </p>
             <div className="mt-4 flex gap-2">
               <button
                 type="button"

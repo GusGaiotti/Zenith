@@ -15,7 +15,16 @@ import { loginSchema, type LoginSchema } from "@/lib/validators/auth.schemas";
 
 function LockIcon() {
   return (
-    <svg aria-hidden className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.9" viewBox="0 0 24 24">
+    <svg
+      aria-hidden
+      className="h-3.5 w-3.5"
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="1.9"
+      viewBox="0 0 24 24"
+    >
       <rect x="5" y="11" width="14" height="9" rx="2.5" />
       <path d="M8 11V8.5a4 4 0 1 1 8 0V11" />
     </svg>
@@ -72,7 +81,7 @@ export default function LoginPage() {
 
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden p-4 sm:p-6">
-      <div className="absolute right-4 top-4 z-10">
+      <div className="absolute top-4 right-4 z-10">
         <div className="w-[190px]">
           <ThemeToggle />
         </div>
@@ -82,52 +91,71 @@ export default function LoginPage() {
           <div className="relative hidden flex-col justify-between border-r border-[var(--surface-edge)] bg-[linear-gradient(145deg,color-mix(in_srgb,var(--accent)_22%,transparent),transparent_52%),radial-gradient(circle_at_20%_18%,color-mix(in_srgb,var(--accent-violet)_16%,transparent),transparent_36%),linear-gradient(180deg,var(--surface-gradient-start),var(--elevated-gradient-end))] p-10 lg:flex">
             <div>
               <BrandWordmark animate labelClassName="text-6xl text-[var(--text-primary)]" />
-              <h1 className="mt-6 max-w-sm text-4xl font-semibold leading-tight text-[var(--text-primary)]">
+              <h1 className="mt-6 max-w-sm text-4xl leading-tight font-semibold text-[var(--text-primary)]">
                 Controle financeiro compartilhado com clareza, ritmo e tranquilidade.
               </h1>
             </div>
             <ul className="space-y-3 text-sm text-[var(--text-secondary)]">
-              <li className="rounded-xl border border-[color-mix(in_srgb,var(--accent)_18%,transparent)] bg-[color-mix(in_srgb,var(--accent)_10%,var(--panel-bg))] px-4 py-3 shadow-[var(--elevated-shadow)]">Saldo consolidado do casal em tempo real.</li>
-              <li className="rounded-xl border border-[color-mix(in_srgb,var(--accent-emerald)_18%,transparent)] bg-[color-mix(in_srgb,var(--accent-emerald)_10%,var(--panel-bg))] px-4 py-3 shadow-[var(--elevated-shadow)]">Transações organizadas por pessoa e categoria.</li>
-              <li className="rounded-xl border border-[color-mix(in_srgb,var(--accent-amber)_18%,transparent)] bg-[color-mix(in_srgb,var(--accent-amber)_10%,var(--panel-bg))] px-4 py-3 shadow-[var(--elevated-shadow)]">Visões rápidas para o fechamento do mês.</li>
+              <li className="rounded-xl border border-[color-mix(in_srgb,var(--accent)_18%,transparent)] bg-[color-mix(in_srgb,var(--accent)_10%,var(--panel-bg))] px-4 py-3 shadow-[var(--elevated-shadow)]">
+                Saldo consolidado do casal em tempo real.
+              </li>
+              <li className="rounded-xl border border-[color-mix(in_srgb,var(--accent-emerald)_18%,transparent)] bg-[color-mix(in_srgb,var(--accent-emerald)_10%,var(--panel-bg))] px-4 py-3 shadow-[var(--elevated-shadow)]">
+                Transações organizadas por pessoa e categoria.
+              </li>
+              <li className="rounded-xl border border-[color-mix(in_srgb,var(--accent-amber)_18%,transparent)] bg-[color-mix(in_srgb,var(--accent-amber)_10%,var(--panel-bg))] px-4 py-3 shadow-[var(--elevated-shadow)]">
+                Visões rápidas para o fechamento do mês.
+              </li>
             </ul>
           </div>
 
           <div className="bg-[linear-gradient(180deg,color-mix(in_srgb,var(--bg-surface)_58%,var(--accent)_2%),color-mix(in_srgb,var(--panel-bg)_84%,var(--accent-amber)_3%))] p-6 sm:p-10">
             <div className="mx-auto w-full max-w-md">
-              <div className="inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--income)_26%,transparent)] bg-[color-mix(in_srgb,var(--income)_10%,transparent)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-[var(--income)]">
+              <div className="inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--income)_26%,transparent)] bg-[color-mix(in_srgb,var(--income)_10%,transparent)] px-3 py-1 text-xs font-semibold tracking-[0.12em] text-[var(--income)] uppercase">
                 <LockIcon />
                 <span>Acesso seguro</span>
               </div>
-              <h2 className="mt-3 font-display text-3xl leading-tight text-[var(--text-primary)]">Entrar na sua conta</h2>
-              <p className="mt-2 text-sm text-[var(--text-secondary)]">Use seu email e senha para continuar.</p>
+              <h2 className="mt-3 font-display text-3xl leading-tight text-[var(--text-primary)]">
+                Entrar na sua conta
+              </h2>
+              <p className="mt-2 text-sm text-[var(--text-secondary)]">
+                Use seu email e senha para continuar.
+              </p>
 
               <form className="mt-8 space-y-5" onSubmit={onSubmit}>
                 <label className="block text-sm">
-                  <span className="mb-1.5 block font-medium text-[var(--text-secondary)]">Email</span>
+                  <span className="mb-1.5 block font-medium text-[var(--text-secondary)]">
+                    Email
+                  </span>
                   <input
                     type="email"
-                    className="focusable h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-3.5 outline-none transition-colors duration-150"
+                    className="focusable h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-3.5 transition-colors duration-150 outline-none"
                     {...form.register("email")}
                   />
                   {form.formState.errors.email ? (
-                    <span className="mt-1.5 block text-xs text-red-300">{form.formState.errors.email.message}</span>
+                    <span className="mt-1.5 block text-xs text-red-300">
+                      {form.formState.errors.email.message}
+                    </span>
                   ) : null}
                 </label>
                 <label className="block text-sm">
                   <div className="mb-1.5 flex items-center justify-between">
                     <span className="font-medium text-[var(--text-secondary)]">Senha</span>
-                    <Link className="text-xs text-[var(--text-muted)] hover:text-[var(--accent-hover)]" href="/forgot-password">
+                    <Link
+                      className="text-xs text-[var(--text-muted)] hover:text-[var(--accent-hover)]"
+                      href="/forgot-password"
+                    >
                       Esqueci minha senha
                     </Link>
                   </div>
                   <input
                     type="password"
-                    className="focusable h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-3.5 outline-none transition-colors duration-150"
+                    className="focusable h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-3.5 transition-colors duration-150 outline-none"
                     {...form.register("password")}
                   />
                   {form.formState.errors.password ? (
-                    <span className="mt-1.5 block text-xs text-red-300">{form.formState.errors.password.message}</span>
+                    <span className="mt-1.5 block text-xs text-red-300">
+                      {form.formState.errors.password.message}
+                    </span>
                   ) : null}
                 </label>
                 {loginMutation.isError ? (
@@ -143,9 +171,9 @@ export default function LoginPage() {
                     ? "Entrando..."
                     : isPreparingRoute
                       ? "Abrindo seu painel..."
-                    : cooldownSeconds > 0
-                      ? `Tente novamente em ${cooldownSeconds}s`
-                      : "Entrar"}
+                      : cooldownSeconds > 0
+                        ? `Tente novamente em ${cooldownSeconds}s`
+                        : "Entrar"}
                 </button>
               </form>
               <p className="mt-5 text-sm text-[var(--text-secondary)]">

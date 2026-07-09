@@ -14,9 +14,7 @@ function resolveBaseURL() {
     return "/api/v1";
   }
 
-  return normalizedBaseURL.endsWith("/api/v1")
-    ? normalizedBaseURL
-    : `${normalizedBaseURL}/api/v1`;
+  return normalizedBaseURL.endsWith("/api/v1") ? normalizedBaseURL : `${normalizedBaseURL}/api/v1`;
 }
 
 const api = axios.create({

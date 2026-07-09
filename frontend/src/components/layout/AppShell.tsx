@@ -19,7 +19,9 @@ export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen md:flex">
       <Sidebar collapsed={sidebarCollapsed} onCollapsedChange={setSidebarCollapsed} />
-      <div className={`w-full min-w-0 flex-1 transition-[margin] duration-300 ${sidebarCollapsed ? "md:ml-[116px]" : "md:ml-[280px]"}`}>
+      <div
+        className={`w-full min-w-0 flex-1 transition-[margin] duration-300 ${sidebarCollapsed ? "md:ml-[116px]" : "md:ml-[280px]"}`}
+      >
         <div className="mx-auto flex w-full max-w-[1280px] justify-end px-4 pt-4 md:hidden">
           <ThemeToggle compact />
         </div>
@@ -27,8 +29,8 @@ export function AppShell({ children }: { children: ReactNode }) {
           {children}
         </main>
       </div>
-      <nav className="fixed bottom-0 left-0 right-0 z-20 grid grid-cols-5 border-t border-[var(--border)] bg-[var(--bg-surface)]/98 px-2 py-2 backdrop-blur md:hidden">
-        {APP_NAV_ITEMS.map((item) => (
+      <nav className="fixed right-0 bottom-0 left-0 z-20 grid grid-cols-5 border-t border-[var(--border)] bg-[var(--bg-surface)]/98 px-2 py-2 backdrop-blur md:hidden">
+        {APP_NAV_ITEMS.map((item) =>
           item.href === "/ask-ai" && askAiLocked ? (
             <div
               key={item.href}
@@ -54,8 +56,8 @@ export function AppShell({ children }: { children: ReactNode }) {
                 <span>{item.label}</span>
               </span>
             </Link>
-          )
-        ))}
+          ),
+        )}
       </nav>
     </div>
   );

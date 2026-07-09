@@ -32,7 +32,10 @@ export function ConfirmDialog({
     >
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onCancel} />
       <div className="surface relative w-full max-w-md p-6 shadow-2xl">
-        <h4 id="confirm-dialog-title" className="text-base font-semibold text-[var(--text-primary)]">
+        <h4
+          id="confirm-dialog-title"
+          className="text-base font-semibold text-[var(--text-primary)]"
+        >
           {title}
         </h4>
         <p className="mt-2 text-sm text-[var(--text-secondary)]">{description}</p>

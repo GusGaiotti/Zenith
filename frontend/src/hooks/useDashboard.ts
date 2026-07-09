@@ -27,7 +27,6 @@ export function useDashboardOverview(yearMonth: string, createdByUserId?: number
   });
 }
 
-
 export function useDashboardTrends(months = 6, endMonth: string, createdByUserId?: number) {
   const ledgerId = useAuthStore((state) => state.activeLedgerId);
   return useQuery({
@@ -62,12 +61,17 @@ export function useDashboardCategoriesBreakdown(yearMonth: string, createdByUser
   const ledgerId = useAuthStore((state) => state.activeLedgerId);
   return useQuery({
     queryKey: ledgerId
-      ? queryKeys.dashboard(ledgerId, `categories-breakdown-${yearMonth}-${createdByUserId ?? "all"}`)
+      ? queryKeys.dashboard(
+          ledgerId,
+          `categories-breakdown-${yearMonth}-${createdByUserId ?? "all"}`,
+        )
       : ["dashboard", "none", "categories-breakdown", yearMonth, createdByUserId ?? "all"],
     queryFn: () =>
-      getDashboardCategoriesBreakdownByMonth(requireLedgerId(ledgerId), yearMonth, createdByUserId).then(
-        (response) => response.data,
-      ),
+      getDashboardCategoriesBreakdownByMonth(
+        requireLedgerId(ledgerId),
+        yearMonth,
+        createdByUserId,
+      ).then((response) => response.data),
     enabled: Boolean(ledgerId),
     staleTime: 5 * 60 * 1000,
   });

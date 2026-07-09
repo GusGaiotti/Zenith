@@ -2,8 +2,17 @@
 
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { SelectMenu } from "@/components/shared/SelectMenu";
-import { formatCurrency, normalizeCurrencyInput, parseCurrencyInputValue } from "@/lib/utils/currency";
-import type { CategoryResponse, CreateTransactionRequest, TransactionResponse, TransactionType } from "@/types/api";
+import {
+  formatCurrency,
+  normalizeCurrencyInput,
+  parseCurrencyInputValue,
+} from "@/lib/utils/currency";
+import type {
+  CategoryResponse,
+  CreateTransactionRequest,
+  TransactionResponse,
+  TransactionType,
+} from "@/types/api";
 
 interface TransactionDrawerProps {
   open: boolean;
@@ -44,7 +53,9 @@ function TransactionDrawerContent({
   const [type, setType] = useState<TransactionType>(initialTransaction?.type ?? "EXPENSE");
   const [amountInput, setAmountInput] = useState(formatInitialAmount(initialTransaction?.amount));
   const [date, setDate] = useState(initialTransaction?.date ?? getTodayValue());
-  const [categoryId, setCategoryId] = useState(initialTransaction?.categoryId ? String(initialTransaction.categoryId) : "");
+  const [categoryId, setCategoryId] = useState(
+    initialTransaction?.categoryId ? String(initialTransaction.categoryId) : "",
+  );
   const [description, setDescription] = useState(initialTransaction?.description ?? "");
   const dialogRef = useRef<HTMLElement>(null);
   const titleId = useId();

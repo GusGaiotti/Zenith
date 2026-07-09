@@ -20,11 +20,15 @@ export function useTransactions(params: TransactionParams) {
   const ledgerId = useAuthStore((state) => state.activeLedgerId);
 
   return useInfiniteQuery({
-    queryKey: ledgerId ? queryKeys.transactions(ledgerId, params) : ["transactions", "none", params],
+    queryKey: ledgerId
+      ? queryKeys.transactions(ledgerId, params)
+      : ["transactions", "none", params],
     queryFn: ({ pageParam = 0 }) =>
-      getTransactions(requireLedgerId(ledgerId), { ...params, page: pageParam, size: params.size ?? 20 }).then(
-        (response) => response.data,
-      ),
+      getTransactions(requireLedgerId(ledgerId), {
+        ...params,
+        page: pageParam,
+        size: params.size ?? 20,
+      }).then((response) => response.data),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => (lastPage.last ? undefined : lastPage.page + 1),
     enabled: Boolean(ledgerId),

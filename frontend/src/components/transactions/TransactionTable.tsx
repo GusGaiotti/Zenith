@@ -12,7 +12,7 @@ interface TransactionTableProps {
 export function TransactionTable({ items, onEdit, onDelete, deletingId }: TransactionTableProps) {
   return (
     <div className="surface overflow-hidden">
-      <div className="hidden grid-cols-6 gap-3 border-b border-[var(--border)] bg-[var(--bg-elevated)] px-4 py-3 text-xs uppercase tracking-[0.08em] text-[var(--text-muted)] md:grid">
+      <div className="hidden grid-cols-6 gap-3 border-b border-[var(--border)] bg-[var(--bg-elevated)] px-4 py-3 text-xs tracking-[0.08em] text-[var(--text-muted)] uppercase md:grid">
         <span>Data</span>
         <span>Descrição</span>
         <span>Categoria</span>
@@ -29,17 +29,27 @@ export function TransactionTable({ items, onEdit, onDelete, deletingId }: Transa
             <div className="space-y-3 md:hidden">
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
-                  <p className="truncate font-medium text-[var(--text-primary)]">{item.description ?? "Sem descricao"}</p>
-                  <p className="mt-1 text-xs text-[var(--text-secondary)]">{formatDate(item.date)}</p>
+                  <p className="truncate font-medium text-[var(--text-primary)]">
+                    {item.description ?? "Sem descricao"}
+                  </p>
+                  <p className="mt-1 text-xs text-[var(--text-secondary)]">
+                    {formatDate(item.date)}
+                  </p>
                 </div>
-                <p className={`shrink-0 font-mono ${item.type === "INCOME" ? "text-[var(--income)]" : "text-[var(--expense)]"}`}>
+                <p
+                  className={`shrink-0 font-mono ${item.type === "INCOME" ? "text-[var(--income)]" : "text-[var(--expense)]"}`}
+                >
                   {item.type === "INCOME" ? "+" : "-"}
                   {formatCurrency(Math.abs(item.amount))}
                 </p>
               </div>
               <div className="flex flex-wrap gap-2 text-xs text-[var(--text-secondary)]">
-                <span className="rounded-full border border-[var(--surface-edge)] px-2 py-1">{item.categoryName ?? "Sem categoria"}</span>
-                <span className="rounded-full border border-[var(--surface-edge)] px-2 py-1">{item.createdByDisplayName}</span>
+                <span className="rounded-full border border-[var(--surface-edge)] px-2 py-1">
+                  {item.categoryName ?? "Sem categoria"}
+                </span>
+                <span className="rounded-full border border-[var(--surface-edge)] px-2 py-1">
+                  {item.createdByDisplayName}
+                </span>
                 <span className="rounded-full border border-[var(--surface-edge)] px-2 py-1">
                   {item.type === "INCOME" ? "Entrada" : "Saida"}
                 </span>
@@ -65,9 +75,13 @@ export function TransactionTable({ items, onEdit, onDelete, deletingId }: Transa
             <div className="hidden gap-3 md:grid md:grid-cols-6">
               <span>{formatDate(item.date)}</span>
               <span>{item.description ?? "Sem descricao"}</span>
-              <span className="text-[var(--text-secondary)]">{item.categoryName ?? "Sem categoria"}</span>
+              <span className="text-[var(--text-secondary)]">
+                {item.categoryName ?? "Sem categoria"}
+              </span>
               <span className="text-[var(--text-secondary)]">{item.createdByDisplayName}</span>
-              <span className={`text-right font-mono ${item.type === "INCOME" ? "text-[var(--income)]" : "text-[var(--expense)]"}`}>
+              <span
+                className={`text-right font-mono ${item.type === "INCOME" ? "text-[var(--income)]" : "text-[var(--expense)]"}`}
+              >
                 {item.type === "INCOME" ? "+" : "-"}
                 {formatCurrency(Math.abs(item.amount))}
               </span>

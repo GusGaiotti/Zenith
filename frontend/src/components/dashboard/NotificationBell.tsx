@@ -70,9 +70,7 @@ export function NotificationBell() {
     setOpen(nextOpen);
 
     if (!open) {
-      const unseenIds = items
-        .map((item) => item.id)
-        .filter((id) => !sessionSeenIds.includes(id));
+      const unseenIds = items.map((item) => item.id).filter((id) => !sessionSeenIds.includes(id));
 
       if (unseenIds.length) {
         setSessionSeenIds((current) => [...current, ...unseenIds]);
@@ -112,19 +110,21 @@ export function NotificationBell() {
       </button>
 
       {open ? (
-        <div className="absolute right-0 top-[calc(100%+0.5rem)] z-40 w-[min(340px,calc(100vw-1.5rem))] rounded-2xl border border-[var(--surface-edge)] bg-[var(--menu-bg)] p-3 shadow-[0_20px_60px_rgba(0,0,0,0.18)] backdrop-blur">
+        <div className="absolute top-[calc(100%+0.5rem)] right-0 z-40 w-[min(340px,calc(100vw-1.5rem))] rounded-2xl border border-[var(--surface-edge)] bg-[var(--menu-bg)] p-3 shadow-[0_20px_60px_rgba(0,0,0,0.18)] backdrop-blur">
           <div className="mb-3 flex items-center justify-between">
             <p className="text-sm font-medium text-[var(--text-primary)]">Notificacoes</p>
             <div className="flex items-center gap-3">
               <button
                 type="button"
-                className="text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--accent-hover)] transition-opacity duration-150 hover:opacity-80 disabled:opacity-30"
+                className="text-[11px] font-medium tracking-[0.08em] text-[var(--accent-hover)] uppercase transition-opacity duration-150 hover:opacity-80 disabled:opacity-30"
                 onClick={handleMarkAllSeen}
                 disabled={unreadCount === 0 || markSeen.isPending}
               >
                 Marcar tudo
               </button>
-              <span className="text-[11px] uppercase tracking-[0.08em] text-[var(--text-muted)]">7 dias</span>
+              <span className="text-[11px] tracking-[0.08em] text-[var(--text-muted)] uppercase">
+                7 dias
+              </span>
             </div>
           </div>
 
@@ -151,7 +151,9 @@ export function NotificationBell() {
                     <p className="font-medium text-[var(--text-primary)]">{item.title}</p>
                     <p className="mt-1 text-[13px] text-[var(--text-secondary)]">{item.body}</p>
                     <div className="mt-2 flex items-center justify-between gap-2">
-                      <span className="text-[11px] text-[var(--text-muted)]">{formatDateTime(item.createdAt)}</span>
+                      <span className="text-[11px] text-[var(--text-muted)]">
+                        {formatDateTime(item.createdAt)}
+                      </span>
                       {item.type === "INVITATION_RECEIVED" && item.invitationToken ? (
                         <Link
                           href={`/ledger/join/${item.invitationToken}`}
@@ -173,7 +175,9 @@ export function NotificationBell() {
           ) : null}
 
           {markSeen.isError ? (
-            <p className="mt-3 text-xs text-amber-300">As notificações foram abertas, mas não foi possível sincronizar o status.</p>
+            <p className="mt-3 text-xs text-amber-300">
+              As notificações foram abertas, mas não foi possível sincronizar o status.
+            </p>
           ) : null}
         </div>
       ) : null}

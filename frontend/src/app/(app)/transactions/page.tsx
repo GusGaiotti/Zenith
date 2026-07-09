@@ -11,7 +11,12 @@ import { TransactionFilters } from "@/components/transactions/TransactionFilters
 import { TransactionTable } from "@/components/transactions/TransactionTable";
 import { useCategories } from "@/hooks/useCategories";
 import { useLedger } from "@/hooks/useLedger";
-import { useCreateTransaction, useDeleteTransaction, useTransactions, useUpdateTransaction } from "@/hooks/useTransactions";
+import {
+  useCreateTransaction,
+  useDeleteTransaction,
+  useTransactions,
+  useUpdateTransaction,
+} from "@/hooks/useTransactions";
 import { useAuthStore } from "@/lib/store/auth.store";
 import { getApiErrorMessage } from "@/lib/utils/api-error";
 import { formatCurrency } from "@/lib/utils/currency";
@@ -59,7 +64,13 @@ export default function TransactionsPage() {
 
   const categories = useCategories();
   const ledger = useLedger();
-  const transactions = useTransactions({ type: typeFilter, size: 20, startDate, endDate, createdBy });
+  const transactions = useTransactions({
+    type: typeFilter,
+    size: 20,
+    startDate,
+    endDate,
+    createdBy,
+  });
   const createTransaction = useCreateTransaction();
   const updateTransaction = useUpdateTransaction();
   const deleteTransaction = useDeleteTransaction();
@@ -70,7 +81,9 @@ export default function TransactionsPage() {
   );
 
   const totals = useMemo(() => {
-    const income = items.filter((item) => item.type === "INCOME").reduce((acc, item) => acc + Number(item.amount), 0);
+    const income = items
+      .filter((item) => item.type === "INCOME")
+      .reduce((acc, item) => acc + Number(item.amount), 0);
     const expense = items
       .filter((item) => item.type === "EXPENSE")
       .reduce((acc, item) => acc + Math.abs(Number(item.amount)), 0);
@@ -119,7 +132,11 @@ export default function TransactionsPage() {
         subtitle="Acompanhe cada movimentação do espaço compartilhado."
         actions={
           <div className="flex w-full flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-end">
-            <MonthPicker value={yearMonth} onChange={setYearMonth} buttonClassName="w-full px-3 py-2 sm:min-w-[140px] sm:w-auto" />
+            <MonthPicker
+              value={yearMonth}
+              onChange={setYearMonth}
+              buttonClassName="w-full px-3 py-2 sm:min-w-[140px] sm:w-auto"
+            />
             <SelectMenu
               value={memberFilter}
               options={memberOptions}
@@ -150,14 +167,22 @@ export default function TransactionsPage() {
 
       <div className="surface mb-4 grid gap-3 p-4 text-sm md:grid-cols-3">
         <p>
-          Entradas <span className="ml-2 font-mono text-[var(--income)]">{formatCurrency(totals.income)}</span>
+          Entradas{" "}
+          <span className="ml-2 font-mono text-[var(--income)]">
+            {formatCurrency(totals.income)}
+          </span>
         </p>
         <p>
-          Saídas <span className="ml-2 font-mono text-[var(--expense)]">{formatCurrency(totals.expense)}</span>
+          Saídas{" "}
+          <span className="ml-2 font-mono text-[var(--expense)]">
+            {formatCurrency(totals.expense)}
+          </span>
         </p>
         <p>
           Saldo{" "}
-          <span className={`ml-2 inline-block max-w-full align-middle font-mono whitespace-nowrap ${getNetBalanceClassName(totals.net)}`}>
+          <span
+            className={`ml-2 inline-block max-w-full align-middle font-mono whitespace-nowrap ${getNetBalanceClassName(totals.net)}`}
+          >
             {formatCurrency(totals.net)}
           </span>
         </p>
@@ -166,8 +191,12 @@ export default function TransactionsPage() {
       {Object.keys(totals.expenseByPerson).length ? (
         <div className="mb-4 flex flex-wrap gap-2">
           {Object.entries(totals.expenseByPerson).map(([name, total]) => (
-            <span key={name} className="rounded-full border border-[var(--border)] bg-[var(--bg-elevated)] px-3 py-1 text-xs text-[var(--text-secondary)]">
-              {name}: <span className="font-mono text-[var(--expense)]">{formatCurrency(total)}</span>
+            <span
+              key={name}
+              className="rounded-full border border-[var(--border)] bg-[var(--bg-elevated)] px-3 py-1 text-xs text-[var(--text-secondary)]"
+            >
+              {name}:{" "}
+              <span className="font-mono text-[var(--expense)]">{formatCurrency(total)}</span>
             </span>
           ))}
         </div>
@@ -183,7 +212,9 @@ export default function TransactionsPage() {
           setOpen(true);
         }}
         onDelete={(item) => {
-          const shouldDelete = window.confirm(`Excluir a transação "${item.description ?? "Sem descrição"}"?`);
+          const shouldDelete = window.confirm(
+            `Excluir a transação "${item.description ?? "Sem descrição"}"?`,
+          );
 
           if (!shouldDelete) {
             return;
@@ -238,7 +269,9 @@ export default function TransactionsPage() {
                   setEditingTransaction(null);
                 },
                 onError: (error) => {
-                  setErrorMessage(getApiErrorMessage(error, "Não foi possível atualizar a transação."));
+                  setErrorMessage(
+                    getApiErrorMessage(error, "Não foi possível atualizar a transação."),
+                  );
                 },
               },
             );

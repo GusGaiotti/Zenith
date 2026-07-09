@@ -15,14 +15,8 @@ interface AuthState {
   authResolved: boolean;
   hydrate: () => void;
   setAuthResolved: (resolved: boolean) => void;
-  setSession: (payload: {
-    user: AuthUser;
-    accessToken: string;
-  }) => void;
-  setAuth: (payload: {
-    user: AuthUser;
-    accessToken: string;
-  }) => void;
+  setSession: (payload: { user: AuthUser; accessToken: string }) => void;
+  setAuth: (payload: { user: AuthUser; accessToken: string }) => void;
   setActiveLedger: (id: number | null) => void;
   logout: () => void;
 }

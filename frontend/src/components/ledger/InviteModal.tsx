@@ -52,4 +52,3 @@ export function InviteModal({ open, onClose, onSubmit, isSubmitting = false }: I
     </div>
   );
 }
-
