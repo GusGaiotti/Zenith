@@ -7,6 +7,7 @@ import { CategoryGrid } from "@/components/categories/CategoryGrid";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { LoadingSkeleton } from "@/components/shared/LoadingSkeleton";
 import { PageHeader } from "@/components/shared/PageHeader";
+import { Alert, Button } from "@/components/ui";
 import {
   useCategories,
   useCreateCategory,
@@ -52,8 +53,8 @@ export default function CategoriesPage() {
         title="Categorias"
         subtitle="Organize gastos com categorias por cor."
         actions={
-          <button
-            className="focusable rounded-md bg-[var(--accent)] px-3 py-2 text-sm font-medium text-white"
+          <Button
+            size="sm"
             onClick={() => {
               setEditingCategory(null);
               setErrorMessage(null);
@@ -61,14 +62,14 @@ export default function CategoriesPage() {
             }}
           >
             Nova categoria
-          </button>
+          </Button>
         }
       />
 
       {errorMessage ? (
-        <div className="mb-4 rounded-md border border-[var(--danger-border)] bg-[var(--danger-bg)] px-4 py-3 text-sm text-[var(--danger-text)]">
+        <Alert tone="danger" className="mb-4">
           {errorMessage}
-        </div>
+        </Alert>
       ) : null}
 
       {categories.isLoading ? <LoadingSkeleton variant="chart" /> : null}
@@ -166,13 +167,7 @@ export default function CategoriesPage() {
             <h3 className="font-display text-3xl italic">Não foi possível excluir</h3>
             <p className="mt-4 text-sm text-[var(--text-secondary)]">{deleteErrorMessage}</p>
             <div className="mt-5 flex justify-end">
-              <button
-                type="button"
-                className="focusable rounded-md bg-[var(--accent)] px-4 py-2 font-medium text-white"
-                onClick={() => setDeleteErrorMessage(null)}
-              >
-                Fechar
-              </button>
+              <Button onClick={() => setDeleteErrorMessage(null)}>Fechar</Button>
             </div>
           </section>
         </div>
