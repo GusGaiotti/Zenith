@@ -6,6 +6,8 @@ const alertVariants = cva("rounded-xl border px-4 py-3 text-sm", {
   variants: {
     tone: {
       danger: "border-[var(--danger-border)] bg-[var(--danger-bg)] text-[var(--danger-text)]",
+      success:
+        "border-[color-mix(in_srgb,var(--income)_26%,transparent)] bg-[color-mix(in_srgb,var(--income)_10%,transparent)] text-[var(--income)]",
       info: "border-[var(--border)] bg-[var(--panel-bg)] text-[var(--text-secondary)]",
     },
   },

@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
 import { PageHeader } from "@/components/shared/PageHeader";
+import { Alert, Button, Field, Input } from "@/components/ui";
 import { useDeleteAccount, useMyProfile, useUpdateProfile } from "@/hooks/useUser";
 import { getApiErrorMessage } from "@/lib/utils/api-error";
 
@@ -79,49 +80,36 @@ export default function SettingsPage() {
         <p className="mt-1 text-sm text-[var(--text-secondary)]">Atualize seu nome de exibição.</p>
 
         <form className="mt-5 space-y-4" onSubmit={onSaveProfile}>
-          <div>
-            <label className="block text-sm">
-              <span className="mb-1.5 block font-medium text-[var(--text-secondary)]">Email</span>
-              <input
-                type="email"
-                disabled
-                value={profile?.email ?? ""}
-                className="h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-3.5 text-[var(--text-muted)] opacity-60"
-              />
-            </label>
-            <p className="mt-1 text-xs text-[var(--text-muted)]">O email não pode ser alterado.</p>
-          </div>
-          <label className="block text-sm">
-            <span className="mb-1.5 block font-medium text-[var(--text-secondary)]">
-              Nome de exibição
-            </span>
-            <input
+          <Field label="Email" htmlFor="email" hint="O email não pode ser alterado.">
+            <Input
+              id="email"
+              type="email"
+              disabled
+              value={profile?.email ?? ""}
+              className="text-[var(--text-muted)] opacity-60"
+            />
+          </Field>
+          <Field
+            label="Nome de exibição"
+            htmlFor="displayName"
+            error={profileForm.formState.errors.displayName?.message}
+          >
+            <Input
+              id="displayName"
               type="text"
-              className="focusable h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-3.5 transition-colors duration-150 outline-none"
+              invalid={!!profileForm.formState.errors.displayName}
               {...profileForm.register("displayName")}
             />
-            {profileForm.formState.errors.displayName ? (
-              <span className="mt-1.5 block text-xs text-[var(--danger-text)]">
-                {profileForm.formState.errors.displayName.message}
-              </span>
-            ) : null}
-          </label>
+          </Field>
           {updateProfile.isError && !passwordForm.formState.isSubmitting ? (
-            <p className="danger-chip rounded-xl px-3 py-2.5 text-sm">
+            <Alert tone="danger">
               {getApiErrorMessage(updateProfile.error, "Ocorreu um erro. Tente novamente.")}
-            </p>
+            </Alert>
           ) : null}
-          {profileSuccess ? (
-            <p className="rounded-xl border border-[color-mix(in_srgb,var(--income)_26%,transparent)] bg-[color-mix(in_srgb,var(--income)_10%,transparent)] px-3 py-2.5 text-sm text-[var(--income)]">
-              Perfil atualizado com sucesso.
-            </p>
-          ) : null}
-          <button
-            disabled={updateProfile.isPending}
-            className="focusable h-10 rounded-xl bg-[var(--accent)] px-5 text-sm font-semibold text-white transition-all duration-150 hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-45"
-          >
+          {profileSuccess ? <Alert tone="success">Perfil atualizado com sucesso.</Alert> : null}
+          <Button type="submit" disabled={updateProfile.isPending}>
             {updateProfile.isPending ? "Salvando..." : "Salvar"}
-          </button>
+          </Button>
         </form>
       </section>
 
@@ -132,70 +120,54 @@ export default function SettingsPage() {
         </p>
 
         <form className="mt-5 space-y-4" onSubmit={onSavePassword}>
-          <label className="block text-sm">
-            <span className="mb-1.5 block font-medium text-[var(--text-secondary)]">
-              Senha atual
-            </span>
-            <input
+          <Field
+            label="Senha atual"
+            htmlFor="currentPassword"
+            error={passwordForm.formState.errors.currentPassword?.message}
+          >
+            <Input
+              id="currentPassword"
               type="password"
               autoComplete="current-password"
-              className="focusable h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-3.5 transition-colors duration-150 outline-none"
+              invalid={!!passwordForm.formState.errors.currentPassword}
               {...passwordForm.register("currentPassword")}
             />
-            {passwordForm.formState.errors.currentPassword ? (
-              <span className="mt-1.5 block text-xs text-[var(--danger-text)]">
-                {passwordForm.formState.errors.currentPassword.message}
-              </span>
-            ) : null}
-          </label>
-          <label className="block text-sm">
-            <span className="mb-1.5 block font-medium text-[var(--text-secondary)]">
-              Nova senha
-            </span>
-            <input
+          </Field>
+          <Field
+            label="Nova senha"
+            htmlFor="newPassword"
+            error={passwordForm.formState.errors.newPassword?.message}
+          >
+            <Input
+              id="newPassword"
               type="password"
               autoComplete="new-password"
-              className="focusable h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-3.5 transition-colors duration-150 outline-none"
+              invalid={!!passwordForm.formState.errors.newPassword}
               {...passwordForm.register("newPassword")}
             />
-            {passwordForm.formState.errors.newPassword ? (
-              <span className="mt-1.5 block text-xs text-[var(--danger-text)]">
-                {passwordForm.formState.errors.newPassword.message}
-              </span>
-            ) : null}
-          </label>
-          <label className="block text-sm">
-            <span className="mb-1.5 block font-medium text-[var(--text-secondary)]">
-              Confirmar nova senha
-            </span>
-            <input
+          </Field>
+          <Field
+            label="Confirmar nova senha"
+            htmlFor="confirmPassword"
+            error={passwordForm.formState.errors.confirmPassword?.message}
+          >
+            <Input
+              id="confirmPassword"
               type="password"
               autoComplete="new-password"
-              className="focusable h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-3.5 transition-colors duration-150 outline-none"
+              invalid={!!passwordForm.formState.errors.confirmPassword}
               {...passwordForm.register("confirmPassword")}
             />
-            {passwordForm.formState.errors.confirmPassword ? (
-              <span className="mt-1.5 block text-xs text-[var(--danger-text)]">
-                {passwordForm.formState.errors.confirmPassword.message}
-              </span>
-            ) : null}
-          </label>
+          </Field>
           {updateProfile.isError && passwordForm.formState.isSubmitting ? (
-            <p className="danger-chip rounded-xl px-3 py-2.5 text-sm">
+            <Alert tone="danger">
               {getApiErrorMessage(updateProfile.error, "Ocorreu um erro. Tente novamente.")}
-            </p>
+            </Alert>
           ) : null}
-          {passwordSuccess ? (
-            <p className="rounded-xl border border-[color-mix(in_srgb,var(--income)_26%,transparent)] bg-[color-mix(in_srgb,var(--income)_10%,transparent)] px-3 py-2.5 text-sm text-[var(--income)]">
-              Senha alterada com sucesso.
-            </p>
-          ) : null}
-          <button
-            disabled={updateProfile.isPending}
-            className="focusable h-10 rounded-xl bg-[var(--accent)] px-5 text-sm font-semibold text-white transition-all duration-150 hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-45"
-          >
+          {passwordSuccess ? <Alert tone="success">Senha alterada com sucesso.</Alert> : null}
+          <Button type="submit" disabled={updateProfile.isPending}>
             {updateProfile.isPending ? "Salvando..." : "Alterar senha"}
-          </button>
+          </Button>
         </form>
       </section>
 
@@ -204,12 +176,9 @@ export default function SettingsPage() {
         <p className="mt-1 text-sm text-[var(--text-secondary)]">
           Excluir sua conta é uma ação irreversível. Todos os seus dados serão removidos.
         </p>
-        <button
-          className="focusable danger-chip mt-4 h-10 rounded-xl px-5 text-sm font-semibold transition-all duration-150"
-          onClick={() => setShowDeleteConfirm(true)}
-        >
+        <Button variant="danger" className="mt-4" onClick={() => setShowDeleteConfirm(true)}>
           Excluir minha conta
-        </button>
+        </Button>
       </section>
 
       <ConfirmDialog
