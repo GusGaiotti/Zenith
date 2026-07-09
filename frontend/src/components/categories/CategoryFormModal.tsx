@@ -135,7 +135,7 @@ function CategoryFormContent({
             <button
               type="button"
               onClick={onClose}
-              className="focusable rounded-md border border-red-400/30 bg-red-500/10 px-4 py-2 text-red-200 transition-colors duration-150 hover:border-red-300 hover:bg-red-500/20"
+              className="focusable rounded-md border border-[var(--danger-border)] bg-[var(--danger-bg)] px-4 py-2 text-[var(--danger-text)] transition-colors duration-150 hover:border-[var(--danger-border)] hover:bg-[var(--danger-bg)]"
             >
               Cancelar
             </button>

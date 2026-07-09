@@ -203,7 +203,7 @@ export default function DashboardPage() {
       ) : null}
 
       {hasError ? (
-        <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
+        <div className="rounded-xl border border-[color-mix(in_srgb,var(--accent-amber)_30%,transparent)] bg-[color-mix(in_srgb,var(--accent-amber)_10%,transparent)] px-4 py-3 text-sm text-[var(--accent-amber)]">
           Algumas seções não carregaram. Verifique a permissão da fatura e a disponibilidade da API.
         </div>
       ) : null}

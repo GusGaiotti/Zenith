@@ -19,12 +19,12 @@ export function TransactionFilters({ active, onChange }: TransactionFiltersProps
         const className =
           option === "INCOME"
             ? isActive
-              ? "border-emerald-400/80 bg-emerald-500/15 text-emerald-200"
-              : "border-emerald-500/25 bg-emerald-500/5 text-emerald-300 hover:border-emerald-400/50 hover:bg-emerald-500/10"
+              ? "border-[color-mix(in_srgb,var(--income)_80%,transparent)] bg-[color-mix(in_srgb,var(--income)_15%,transparent)] text-[var(--income)]"
+              : "border-[color-mix(in_srgb,var(--income)_25%,transparent)] bg-[color-mix(in_srgb,var(--income)_5%,transparent)] text-[var(--income)] hover:border-[color-mix(in_srgb,var(--income)_50%,transparent)] hover:bg-[color-mix(in_srgb,var(--income)_10%,transparent)]"
             : option === "EXPENSE"
               ? isActive
-                ? "border-red-400/80 bg-red-500/15 text-red-200"
-                : "border-red-500/25 bg-red-500/5 text-red-300 hover:border-red-400/50 hover:bg-red-500/10"
+                ? "border-[var(--danger-border)] bg-[var(--danger-bg)] text-[var(--danger-text)]"
+                : "border-[var(--danger-border)] bg-[var(--danger-bg)] text-[var(--danger-text)] hover:border-[var(--danger-border)] hover:bg-[var(--danger-bg)]"
               : isActive
                 ? "border-[var(--accent)] bg-[var(--accent-muted)] text-[var(--accent-hover)]"
                 : "border-[var(--surface-edge)] bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:bg-[var(--bg-muted)]";

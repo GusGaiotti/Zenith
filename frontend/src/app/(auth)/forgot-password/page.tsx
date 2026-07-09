@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { BrandWordmark } from "@/components/brand/BrandWordmark";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { Alert, Button, Field, Input } from "@/components/ui";
 import { useForgotPassword } from "@/hooks/useAuth";
 import { forgotPasswordSchema, type ForgotPasswordSchema } from "@/lib/validators/auth.schemas";
 
@@ -61,31 +62,21 @@ export default function ForgotPasswordPage() {
             </p>
 
             <form className="mt-6 space-y-5" onSubmit={onSubmit}>
-              <label className="block text-sm">
-                <span className="mb-1.5 block font-medium text-[var(--text-secondary)]">Email</span>
-                <input
+              <Field label="Email" htmlFor="email" error={form.formState.errors.email?.message}>
+                <Input
+                  id="email"
                   type="email"
                   autoComplete="email"
-                  className="focusable h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-3.5 transition-colors duration-150 outline-none"
+                  invalid={!!form.formState.errors.email}
                   {...form.register("email")}
                 />
-                {form.formState.errors.email ? (
-                  <span className="mt-1.5 block text-xs text-red-300">
-                    {form.formState.errors.email.message}
-                  </span>
-                ) : null}
-              </label>
+              </Field>
               {mutation.isError ? (
-                <p className="danger-chip rounded-xl px-3 py-2.5 text-sm">
-                  Ocorreu um erro. Tente novamente.
-                </p>
+                <Alert tone="danger">Ocorreu um erro. Tente novamente.</Alert>
               ) : null}
-              <button
-                disabled={mutation.isPending}
-                className="focusable h-11 w-full rounded-xl bg-[var(--accent)] px-4 font-semibold text-white shadow-[0_8px_24px_rgba(79,124,255,0.35)] transition-all duration-150 hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-45"
-              >
+              <Button type="submit" className="w-full" disabled={mutation.isPending}>
                 {mutation.isPending ? "Enviando..." : "Enviar link de redefinição"}
-              </button>
+              </Button>
             </form>
           </div>
         )}

@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { BrandWordmark } from "@/components/brand/BrandWordmark";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { Alert, Button, Field, Input } from "@/components/ui";
 import { useResetPassword } from "@/hooks/useAuth";
 import { resetPasswordSchema, type ResetPasswordSchema } from "@/lib/validators/auth.schemas";
 
@@ -53,47 +54,40 @@ function ResetPasswordForm() {
       </p>
 
       <form className="mt-6 space-y-5" onSubmit={onSubmit}>
-        <label className="block text-sm">
-          <span className="mb-1.5 block font-medium text-[var(--text-secondary)]">Nova senha</span>
-          <input
+        <Field
+          label="Nova senha"
+          htmlFor="newPassword"
+          error={form.formState.errors.newPassword?.message}
+        >
+          <Input
+            id="newPassword"
             type="password"
             autoComplete="new-password"
-            className="focusable h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-3.5 transition-colors duration-150 outline-none"
+            invalid={!!form.formState.errors.newPassword}
             {...form.register("newPassword")}
           />
-          {form.formState.errors.newPassword ? (
-            <span className="mt-1.5 block text-xs text-red-300">
-              {form.formState.errors.newPassword.message}
-            </span>
-          ) : null}
-        </label>
-        <label className="block text-sm">
-          <span className="mb-1.5 block font-medium text-[var(--text-secondary)]">
-            Confirmar senha
-          </span>
-          <input
+        </Field>
+        <Field
+          label="Confirmar senha"
+          htmlFor="confirmPassword"
+          error={form.formState.errors.confirmPassword?.message}
+        >
+          <Input
+            id="confirmPassword"
             type="password"
             autoComplete="new-password"
-            className="focusable h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-3.5 transition-colors duration-150 outline-none"
+            invalid={!!form.formState.errors.confirmPassword}
             {...form.register("confirmPassword")}
           />
-          {form.formState.errors.confirmPassword ? (
-            <span className="mt-1.5 block text-xs text-red-300">
-              {form.formState.errors.confirmPassword.message}
-            </span>
-          ) : null}
-        </label>
+        </Field>
         {mutation.isError ? (
-          <p className="danger-chip rounded-xl px-3 py-2.5 text-sm">
+          <Alert tone="danger">
             Link inválido ou expirado. Solicite um novo link de redefinição.
-          </p>
+          </Alert>
         ) : null}
-        <button
-          disabled={mutation.isPending}
-          className="focusable h-11 w-full rounded-xl bg-[var(--accent)] px-4 font-semibold text-white shadow-[0_8px_24px_rgba(79,124,255,0.35)] transition-all duration-150 hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-45"
-        >
+        <Button type="submit" className="w-full" disabled={mutation.isPending}>
           {mutation.isPending ? "Salvando..." : "Salvar nova senha"}
-        </button>
+        </Button>
       </form>
     </div>
   );

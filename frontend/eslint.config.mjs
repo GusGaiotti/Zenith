@@ -15,7 +15,7 @@ const eslintConfig = defineConfig([
       // acessivel vem do botao Fechar e da tecla Esc. Fica como aviso, nao erro.
       "jsx-a11y/no-static-element-interactions": "warn",
       "no-restricted-syntax": [
-        "warn",
+        "error",
         {
           selector:
             "Literal[value=/\\b(?:bg|text|border|ring|outline|from|via|to|fill|stroke|divide|placeholder)-(?:red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose|slate|gray|zinc|neutral|stone)-\\d{2,3}\\b/]",

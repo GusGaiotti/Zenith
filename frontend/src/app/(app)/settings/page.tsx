@@ -101,7 +101,7 @@ export default function SettingsPage() {
               {...profileForm.register("displayName")}
             />
             {profileForm.formState.errors.displayName ? (
-              <span className="mt-1.5 block text-xs text-red-300">
+              <span className="mt-1.5 block text-xs text-[var(--danger-text)]">
                 {profileForm.formState.errors.displayName.message}
               </span>
             ) : null}
@@ -143,7 +143,7 @@ export default function SettingsPage() {
               {...passwordForm.register("currentPassword")}
             />
             {passwordForm.formState.errors.currentPassword ? (
-              <span className="mt-1.5 block text-xs text-red-300">
+              <span className="mt-1.5 block text-xs text-[var(--danger-text)]">
                 {passwordForm.formState.errors.currentPassword.message}
               </span>
             ) : null}
@@ -159,7 +159,7 @@ export default function SettingsPage() {
               {...passwordForm.register("newPassword")}
             />
             {passwordForm.formState.errors.newPassword ? (
-              <span className="mt-1.5 block text-xs text-red-300">
+              <span className="mt-1.5 block text-xs text-[var(--danger-text)]">
                 {passwordForm.formState.errors.newPassword.message}
               </span>
             ) : null}
@@ -175,7 +175,7 @@ export default function SettingsPage() {
               {...passwordForm.register("confirmPassword")}
             />
             {passwordForm.formState.errors.confirmPassword ? (
-              <span className="mt-1.5 block text-xs text-red-300">
+              <span className="mt-1.5 block text-xs text-[var(--danger-text)]">
                 {passwordForm.formState.errors.confirmPassword.message}
               </span>
             ) : null}

@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useWatch } from "react-hook-form";
 import { BrandWordmark } from "@/components/brand/BrandWordmark";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { Alert, Button, Field, Input } from "@/components/ui";
 import { useRegister } from "@/hooks/useAuth";
 import { registerSchema, type RegisterSchema } from "@/lib/validators/auth.schemas";
 
@@ -61,62 +62,48 @@ export default function RegisterPage() {
           Configure o Zenith em menos de um minuto.
         </p>
         <form className="mt-6 space-y-4" onSubmit={onSubmit}>
-          <label className="block text-sm">
-            <span className="mb-1 block text-[var(--text-secondary)]">Nome</span>
-            <input
-              className="focusable w-full rounded-md border bg-[var(--bg-elevated)] px-3 py-2 outline-none"
+          <Field
+            label="Nome"
+            htmlFor="displayName"
+            error={form.formState.errors.displayName?.message}
+          >
+            <Input
+              id="displayName"
+              invalid={!!form.formState.errors.displayName}
               {...form.register("displayName")}
             />
-            {form.formState.errors.displayName ? (
-              <span className="mt-1 block text-xs text-red-300">
-                {form.formState.errors.displayName.message}
-              </span>
-            ) : null}
-          </label>
-          <label className="block text-sm">
-            <span className="mb-1 block text-[var(--text-secondary)]">Email</span>
-            <input
+          </Field>
+          <Field label="Email" htmlFor="email" error={form.formState.errors.email?.message}>
+            <Input
+              id="email"
               type="email"
-              className="focusable w-full rounded-md border bg-[var(--bg-elevated)] px-3 py-2 outline-none"
+              invalid={!!form.formState.errors.email}
               {...form.register("email")}
             />
-            {form.formState.errors.email ? (
-              <span className="mt-1 block text-xs text-red-300">
-                {form.formState.errors.email.message}
-              </span>
-            ) : null}
-          </label>
-          <label className="block text-sm">
-            <span className="mb-1 block text-[var(--text-secondary)]">Senha</span>
-            <input
+          </Field>
+          <Field label="Senha" htmlFor="password" error={form.formState.errors.password?.message}>
+            <Input
+              id="password"
               type="password"
-              className="focusable w-full rounded-md border bg-[var(--bg-elevated)] px-3 py-2 outline-none"
+              invalid={!!form.formState.errors.password}
               {...form.register("password")}
             />
-            <span className="mt-1 block text-xs text-[var(--text-secondary)]">
-              Força: {strength}
-            </span>
-            {form.formState.errors.password ? (
-              <span className="mt-1 block text-xs text-red-300">
-                {form.formState.errors.password.message}
-              </span>
-            ) : null}
-          </label>
+            <p className="text-xs text-[var(--text-secondary)]">Força: {strength}</p>
+          </Field>
           {registerMutation.isError ? (
-            <p className="rounded-md bg-red-500/10 px-3 py-2 text-sm text-red-300">
-              Não foi possível cadastrar. Tente novamente.
-            </p>
+            <Alert tone="danger">Não foi possível cadastrar. Tente novamente.</Alert>
           ) : null}
-          <button
+          <Button
+            type="submit"
+            className="w-full"
             disabled={registerMutation.isPending || cooldownSeconds > 0}
-            className="focusable w-full rounded-md bg-[var(--accent)] px-4 py-2 font-medium text-white transition-all duration-150 hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-40"
           >
             {registerMutation.isPending
               ? "Cadastrando..."
               : cooldownSeconds > 0
                 ? `Tente novamente em ${cooldownSeconds}s`
                 : "Cadastrar"}
-          </button>
+          </Button>
         </form>
         <p className="mt-4 text-sm text-[var(--text-secondary)]">
           Já tem conta?{" "}
