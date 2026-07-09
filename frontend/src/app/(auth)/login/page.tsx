@@ -132,7 +132,7 @@ export default function LoginPage() {
                     {...form.register("email")}
                   />
                   {form.formState.errors.email ? (
-                    <span className="mt-1.5 block text-xs text-red-300">
+                    <span className="mt-1.5 block text-xs text-[var(--danger-text)]">
                       {form.formState.errors.email.message}
                     </span>
                   ) : null}
@@ -153,7 +153,7 @@ export default function LoginPage() {
                     {...form.register("password")}
                   />
                   {form.formState.errors.password ? (
-                    <span className="mt-1.5 block text-xs text-red-300">
+                    <span className="mt-1.5 block text-xs text-[var(--danger-text)]">
                       {form.formState.errors.password.message}
                     </span>
                   ) : null}

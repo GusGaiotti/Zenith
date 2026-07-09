@@ -18,14 +18,14 @@ export default function JoinLedgerPage() {
   if (acceptErrorMessage) {
     return (
       <main className="mx-auto max-w-xl p-6">
-        <section className="surface border border-red-500/30 bg-red-500/10 p-6">
-          <p className="text-xs font-semibold tracking-[0.08em] text-red-200 uppercase">
+        <section className="surface border border-[var(--danger-border)] bg-[var(--danger-bg)] p-6">
+          <p className="text-xs font-semibold tracking-[0.08em] text-[var(--danger-text)] uppercase">
             Convite indisponível
           </p>
           <h1 className="mt-3 font-display text-4xl text-[var(--text-primary)] italic">
             Não foi possível aceitar
           </h1>
-          <p className="mt-3 text-sm text-red-100">{acceptErrorMessage}</p>
+          <p className="mt-3 text-sm text-[var(--danger-text)]">{acceptErrorMessage}</p>
           <p className="mt-2 text-sm text-[var(--text-secondary)]">
             O convite pode ter sido cancelado, expirado ou ja utilizado.
           </p>

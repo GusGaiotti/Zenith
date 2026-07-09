@@ -62,7 +62,7 @@ function ResetPasswordForm() {
             {...form.register("newPassword")}
           />
           {form.formState.errors.newPassword ? (
-            <span className="mt-1.5 block text-xs text-red-300">
+            <span className="mt-1.5 block text-xs text-[var(--danger-text)]">
               {form.formState.errors.newPassword.message}
             </span>
           ) : null}
@@ -78,7 +78,7 @@ function ResetPasswordForm() {
             {...form.register("confirmPassword")}
           />
           {form.formState.errors.confirmPassword ? (
-            <span className="mt-1.5 block text-xs text-red-300">
+            <span className="mt-1.5 block text-xs text-[var(--danger-text)]">
               {form.formState.errors.confirmPassword.message}
             </span>
           ) : null}

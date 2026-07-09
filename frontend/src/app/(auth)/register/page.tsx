@@ -68,7 +68,7 @@ export default function RegisterPage() {
               {...form.register("displayName")}
             />
             {form.formState.errors.displayName ? (
-              <span className="mt-1 block text-xs text-red-300">
+              <span className="mt-1 block text-xs text-[var(--danger-text)]">
                 {form.formState.errors.displayName.message}
               </span>
             ) : null}
@@ -81,7 +81,7 @@ export default function RegisterPage() {
               {...form.register("email")}
             />
             {form.formState.errors.email ? (
-              <span className="mt-1 block text-xs text-red-300">
+              <span className="mt-1 block text-xs text-[var(--danger-text)]">
                 {form.formState.errors.email.message}
               </span>
             ) : null}
@@ -97,13 +97,13 @@ export default function RegisterPage() {
               Força: {strength}
             </span>
             {form.formState.errors.password ? (
-              <span className="mt-1 block text-xs text-red-300">
+              <span className="mt-1 block text-xs text-[var(--danger-text)]">
                 {form.formState.errors.password.message}
               </span>
             ) : null}
           </label>
           {registerMutation.isError ? (
-            <p className="rounded-md bg-red-500/10 px-3 py-2 text-sm text-red-300">
+            <p className="rounded-md bg-[var(--danger-bg)] px-3 py-2 text-sm text-[var(--danger-text)]">
               Não foi possível cadastrar. Tente novamente.
             </p>
           ) : null}

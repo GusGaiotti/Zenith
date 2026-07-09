@@ -103,7 +103,7 @@ export function NotificationBell() {
       >
         <BellIcon className="h-5 w-5" />
         {unreadCount > 0 ? (
-          <span className="absolute bottom-1 left-1 min-w-5 rounded-full bg-red-500 px-1.5 py-0.5 text-[10px] font-semibold text-white">
+          <span className="absolute bottom-1 left-1 min-w-5 rounded-full bg-[var(--expense)] px-1.5 py-0.5 text-[10px] font-semibold text-white">
             {unreadCount > 9 ? "9+" : unreadCount}
           </span>
         ) : null}
@@ -133,7 +133,9 @@ export function NotificationBell() {
           ) : null}
 
           {notifications.isError ? (
-            <p className="text-sm text-red-300">Não foi possível carregar as notificações.</p>
+            <p className="text-sm text-[var(--danger-text)]">
+              Não foi possível carregar as notificações.
+            </p>
           ) : null}
 
           {!notifications.isLoading && !notifications.isError ? (
@@ -175,7 +177,7 @@ export function NotificationBell() {
           ) : null}
 
           {markSeen.isError ? (
-            <p className="mt-3 text-xs text-amber-300">
+            <p className="mt-3 text-xs text-[var(--accent-amber)]">
               As notificações foram abertas, mas não foi possível sincronizar o status.
             </p>
           ) : null}

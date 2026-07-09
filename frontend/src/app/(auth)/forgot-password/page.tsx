@@ -70,7 +70,7 @@ export default function ForgotPasswordPage() {
                   {...form.register("email")}
                 />
                 {form.formState.errors.email ? (
-                  <span className="mt-1.5 block text-xs text-red-300">
+                  <span className="mt-1.5 block text-xs text-[var(--danger-text)]">
                     {form.formState.errors.email.message}
                   </span>
                 ) : null}

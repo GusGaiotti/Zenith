@@ -38,10 +38,10 @@ export function CoupleSplitPanel({ data }: CoupleSplitPanelProps) {
                   : "Equilibrado";
             const statusClassName =
               delta > 0
-                ? "border border-emerald-400/40 bg-emerald-500/12 text-[var(--income)]"
+                ? "border border-[color-mix(in_srgb,var(--income)_40%,transparent)] bg-[color-mix(in_srgb,var(--income)_12%,transparent)] text-[var(--income)]"
                 : delta < 0
                   ? "danger-chip"
-                  : "border border-amber-400/35 bg-amber-500/12 text-[var(--accent-amber)]";
+                  : "border border-[color-mix(in_srgb,var(--accent-amber)_35%,transparent)] bg-[color-mix(in_srgb,var(--accent-amber)_12%,transparent)] text-[var(--accent-amber)]";
 
             return (
               <div

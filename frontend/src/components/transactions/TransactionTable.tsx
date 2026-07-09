@@ -64,7 +64,7 @@ export function TransactionTable({ items, onEdit, onDelete, deletingId }: Transa
                 </button>
                 <button
                   type="button"
-                  className="focusable rounded-full border border-red-500/30 px-3 py-1 text-red-300 transition-colors duration-150 hover:border-red-400/60 hover:bg-red-500/10"
+                  className="focusable rounded-full border border-[var(--danger-border)] px-3 py-1 text-[var(--danger-text)] transition-colors duration-150 hover:border-[var(--danger-border)] hover:bg-[var(--danger-bg)]"
                   onClick={() => onDelete(item)}
                 >
                   {deletingId === item.id ? "Excluindo..." : "Excluir"}
@@ -95,7 +95,7 @@ export function TransactionTable({ items, onEdit, onDelete, deletingId }: Transa
                 </button>
                 <button
                   type="button"
-                  className="focusable rounded-full border border-red-500/30 px-3 py-1 text-red-300 transition-colors duration-150 hover:border-red-400/60 hover:bg-red-500/10"
+                  className="focusable rounded-full border border-[var(--danger-border)] px-3 py-1 text-[var(--danger-text)] transition-colors duration-150 hover:border-[var(--danger-border)] hover:bg-[var(--danger-bg)]"
                   onClick={() => onDelete(item)}
                 >
                   {deletingId === item.id ? "Excluindo..." : "Excluir"}

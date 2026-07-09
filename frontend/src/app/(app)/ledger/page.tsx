@@ -142,7 +142,7 @@ export default function LedgerPage() {
                 Cancelar
               </button>
             </div>
-            {nameError ? <p className="text-sm text-red-300">{nameError}</p> : null}
+            {nameError ? <p className="text-sm text-[var(--danger-text)]">{nameError}</p> : null}
           </div>
         ) : (
           <div className="mt-3 flex flex-wrap items-center gap-2">

@@ -31,7 +31,7 @@ function getNetBalanceClassName(value: number) {
     return "text-[var(--expense)]";
   }
 
-  return "text-amber-300";
+  return "text-[var(--accent-amber)]";
 }
 
 export default function TransactionsPage() {

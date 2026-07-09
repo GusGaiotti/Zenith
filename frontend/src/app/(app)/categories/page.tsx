@@ -66,7 +66,7 @@ export default function CategoriesPage() {
       />
 
       {errorMessage ? (
-        <div className="mb-4 rounded-md border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+        <div className="mb-4 rounded-md border border-[var(--danger-border)] bg-[var(--danger-bg)] px-4 py-3 text-sm text-[var(--danger-text)]">
           {errorMessage}
         </div>
       ) : null}
