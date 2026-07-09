@@ -14,14 +14,21 @@ import { EmptyState } from "@/components/shared/EmptyState";
 import { LoadingSkeleton } from "@/components/shared/LoadingSkeleton";
 import { MonthPicker } from "@/components/shared/MonthPicker";
 import { SelectMenu } from "@/components/shared/SelectMenu";
-import { useDashboardCategoriesBreakdown, useDashboardCoupleSplit, useDashboardOverview, useDashboardPulse, useDashboardTrends } from "@/hooks/useDashboard";
+import {
+  useDashboardCategoriesBreakdown,
+  useDashboardCoupleSplit,
+  useDashboardOverview,
+  useDashboardPulse,
+  useDashboardTrends,
+} from "@/hooks/useDashboard";
 import { useLedger } from "@/hooks/useLedger";
 import { exportTransactionsExcel } from "@/lib/api/transactions";
 import { useTransactions } from "@/hooks/useTransactions";
 import { useAuthStore } from "@/lib/store/auth.store";
 import { getApiErrorMessage } from "@/lib/utils/api-error";
 
-const filterClassName = "elevated h-12 w-full px-4 text-sm text-[var(--text-primary)] sm:min-w-[176px] sm:w-auto";
+const filterClassName =
+  "elevated h-12 w-full px-4 text-sm text-[var(--text-primary)] sm:min-w-[176px] sm:w-auto";
 
 function parseFilename(header?: string) {
   if (!header) return null;
@@ -83,7 +90,8 @@ export default function DashboardPage() {
       }),
     onSuccess: (response) => {
       setExportError(null);
-      const filename = parseFilename(response.headers["content-disposition"]) ?? `zenith-${yearMonth}.xlsx`;
+      const filename =
+        parseFilename(response.headers["content-disposition"]) ?? `zenith-${yearMonth}.xlsx`;
       const blobUrl = URL.createObjectURL(response.data);
       const link = document.createElement("a");
       link.href = blobUrl;
@@ -99,8 +107,14 @@ export default function DashboardPage() {
   });
 
   const recent = transactions.data?.pages.flatMap((page) => page.content) ?? [];
-  const loading = overview.isLoading || trends.isLoading || split.isLoading || categories.isLoading || pulse.isLoading;
-  const hasError = overview.isError || trends.isError || split.isError || categories.isError || pulse.isError;
+  const loading =
+    overview.isLoading ||
+    trends.isLoading ||
+    split.isLoading ||
+    categories.isLoading ||
+    pulse.isLoading;
+  const hasError =
+    overview.isError || trends.isError || split.isError || categories.isError || pulse.isError;
   const memberOptions = [
     { value: "all", label: "Todos" },
     ...(ledger.data?.members ?? []).map((member) => ({
@@ -114,15 +128,21 @@ export default function DashboardPage() {
     <div className="surface flex flex-col gap-3 p-5 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between">
       <div>
         <p className="font-display text-3xl text-[var(--text-primary)]">Dashboard</p>
-        <p className="mt-1 text-sm text-[var(--text-secondary)]">Resumo mensal da fatura compartilhada.</p>
+        <p className="mt-1 text-sm text-[var(--text-secondary)]">
+          Resumo mensal da fatura compartilhada.
+        </p>
       </div>
       <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:flex-wrap sm:items-end">
         <div className="flex flex-col gap-2">
-          <span className="block text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">Alertas</span>
+          <span className="block text-xs tracking-[0.08em] text-[var(--text-muted)] uppercase">
+            Alertas
+          </span>
           <NotificationBell />
         </div>
         <div className="flex flex-col gap-2">
-          <span className="block text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">Exportar</span>
+          <span className="block text-xs tracking-[0.08em] text-[var(--text-muted)] uppercase">
+            Exportar
+          </span>
           <button
             type="button"
             aria-label="Exportar Excel"
@@ -130,7 +150,9 @@ export default function DashboardPage() {
             className="focusable elevated grid h-12 w-full place-items-center rounded-xl px-4 text-sm text-[var(--text-primary)] shadow-[0_8px_22px_rgba(7,12,30,0.35)] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
             onClick={() => exportMutation.mutate()}
           >
-            <DownloadIcon className={`h-5 w-5 ${exportMutation.isPending ? "animate-pulse" : ""}`} />
+            <DownloadIcon
+              className={`h-5 w-5 ${exportMutation.isPending ? "animate-pulse" : ""}`}
+            />
           </button>
         </div>
         <MonthPicker
@@ -157,7 +179,9 @@ export default function DashboardPage() {
       <div className="space-y-5">
         <div className="flex justify-end">
           <div className="flex flex-col gap-2">
-            <span className="block text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">Alertas</span>
+            <span className="block text-xs tracking-[0.08em] text-[var(--text-muted)] uppercase">
+              Alertas
+            </span>
             <NotificationBell />
           </div>
         </div>

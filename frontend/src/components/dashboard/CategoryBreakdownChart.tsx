@@ -15,7 +15,7 @@ export function CategoryBreakdownChart({ data }: CategoryBreakdownChartProps) {
     <section className="surface futura-card data-reveal hover-grow self-start p-6">
       <div className="relative pr-10">
         <h3 className="font-display text-2xl italic">Quebra por categoria</h3>
-        <div className="absolute right-0 top-0">
+        <div className="absolute top-0 right-0">
           <InfoTooltip text="Mostra a concentração percentual dos gastos por categoria." />
         </div>
       </div>
@@ -35,7 +35,10 @@ export function CategoryBreakdownChart({ data }: CategoryBreakdownChartProps) {
               <div className="mt-2 h-2.5 rounded-full bg-[var(--metric-track)]">
                 <div
                   className="h-2.5 rounded-full"
-                  style={{ width: `${clampPercentage(category.percentageOfTotal)}%`, backgroundColor: category.color }}
+                  style={{
+                    width: `${clampPercentage(category.percentageOfTotal)}%`,
+                    backgroundColor: category.color,
+                  }}
                 />
               </div>
             </div>
@@ -44,7 +47,9 @@ export function CategoryBreakdownChart({ data }: CategoryBreakdownChartProps) {
           <p className="text-sm text-[var(--text-secondary)]">Nenhuma categoria ainda.</p>
         )}
       </div>
-      <p className="mt-4 font-mono text-xl text-[var(--expense)]">{formatCurrency(data?.totalExpenses ?? 0)}</p>
+      <p className="mt-4 font-mono text-xl text-[var(--expense)]">
+        {formatCurrency(data?.totalExpenses ?? 0)}
+      </p>
     </section>
   );
 }

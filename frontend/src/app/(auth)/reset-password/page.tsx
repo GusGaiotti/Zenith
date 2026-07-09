@@ -22,11 +22,14 @@ function ResetPasswordForm() {
   });
 
   const onSubmit = form.handleSubmit((values) => {
-    mutation.mutate({ token, newPassword: values.newPassword }, {
-      onSuccess: () => {
-        router.push("/login?reset=success");
+    mutation.mutate(
+      { token, newPassword: values.newPassword },
+      {
+        onSuccess: () => {
+          router.push("/login?reset=success");
+        },
       },
-    });
+    );
   });
 
   if (!token) {
@@ -55,23 +58,29 @@ function ResetPasswordForm() {
           <input
             type="password"
             autoComplete="new-password"
-            className="focusable h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-3.5 outline-none transition-colors duration-150"
+            className="focusable h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-3.5 transition-colors duration-150 outline-none"
             {...form.register("newPassword")}
           />
           {form.formState.errors.newPassword ? (
-            <span className="mt-1.5 block text-xs text-red-300">{form.formState.errors.newPassword.message}</span>
+            <span className="mt-1.5 block text-xs text-red-300">
+              {form.formState.errors.newPassword.message}
+            </span>
           ) : null}
         </label>
         <label className="block text-sm">
-          <span className="mb-1.5 block font-medium text-[var(--text-secondary)]">Confirmar senha</span>
+          <span className="mb-1.5 block font-medium text-[var(--text-secondary)]">
+            Confirmar senha
+          </span>
           <input
             type="password"
             autoComplete="new-password"
-            className="focusable h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-3.5 outline-none transition-colors duration-150"
+            className="focusable h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-3.5 transition-colors duration-150 outline-none"
             {...form.register("confirmPassword")}
           />
           {form.formState.errors.confirmPassword ? (
-            <span className="mt-1.5 block text-xs text-red-300">{form.formState.errors.confirmPassword.message}</span>
+            <span className="mt-1.5 block text-xs text-red-300">
+              {form.formState.errors.confirmPassword.message}
+            </span>
           ) : null}
         </label>
         {mutation.isError ? (
@@ -93,14 +102,16 @@ function ResetPasswordForm() {
 export default function ResetPasswordPage() {
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden p-4 sm:p-6">
-      <div className="absolute right-4 top-4 z-10">
+      <div className="absolute top-4 right-4 z-10">
         <div className="w-[190px]">
           <ThemeToggle />
         </div>
       </div>
       <section className="surface w-full max-w-md p-8 sm:p-10">
         <BrandWordmark labelClassName="text-4xl text-[var(--text-primary)]" />
-        <Suspense fallback={<div className="mt-8 text-sm text-[var(--text-secondary)]">Carregando...</div>}>
+        <Suspense
+          fallback={<div className="mt-8 text-sm text-[var(--text-secondary)]">Carregando...</div>}
+        >
           <ResetPasswordForm />
         </Suspense>
         <p className="mt-6 text-sm text-[var(--text-secondary)]">

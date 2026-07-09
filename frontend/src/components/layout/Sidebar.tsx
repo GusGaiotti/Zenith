@@ -25,12 +25,16 @@ export function Sidebar({ collapsed, onCollapsedChange }: SidebarProps) {
   return (
     <aside
       className={cn(
-        "fixed left-4 top-4 z-30 hidden h-[calc(100vh-2rem)] flex-col rounded-2xl border border-[var(--border)] bg-[var(--bg-surface)]/92 p-3 shadow-[0_18px_40px_rgba(2,8,22,0.48)] backdrop-blur md:flex",
+        "fixed top-4 left-4 z-30 hidden h-[calc(100vh-2rem)] flex-col rounded-2xl border border-[var(--border)] bg-[var(--bg-surface)]/92 p-3 shadow-[0_18px_40px_rgba(2,8,22,0.48)] backdrop-blur md:flex",
         collapsed ? "w-[96px]" : "w-[260px]",
       )}
     >
       <div className={cn("px-2 py-3", collapsed && "text-center")}>
-        <BrandWordmark compact={collapsed} className={collapsed ? "justify-center" : undefined} labelClassName="text-2xl text-[var(--text-primary)]" />
+        <BrandWordmark
+          compact={collapsed}
+          className={collapsed ? "justify-center" : undefined}
+          labelClassName="text-2xl text-[var(--text-primary)]"
+        />
       </div>
 
       <nav className="flex-1 space-y-2 px-1">
@@ -84,9 +88,13 @@ export function Sidebar({ collapsed, onCollapsedChange }: SidebarProps) {
         </div>
         <div className="border-t border-[var(--border)] pt-3">
           {!collapsed ? (
-            <p className="px-1 text-xs text-[var(--text-secondary)]">Logado como {user?.displayName ?? "-"}</p>
+            <p className="px-1 text-xs text-[var(--text-secondary)]">
+              Logado como {user?.displayName ?? "-"}
+            </p>
           ) : (
-            <div className="text-[10px] uppercase tracking-[0.08em] text-[var(--text-muted)]">{user?.displayName?.slice(0, 1) ?? "Z"}</div>
+            <div className="text-[10px] tracking-[0.08em] text-[var(--text-muted)] uppercase">
+              {user?.displayName?.slice(0, 1) ?? "Z"}
+            </div>
           )}
         </div>
         <button

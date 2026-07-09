@@ -12,7 +12,16 @@ function applyTheme(theme: ThemeMode) {
 
 function SunIcon() {
   return (
-    <svg aria-hidden className="h-4 w-4" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" viewBox="0 0 24 24">
+    <svg
+      aria-hidden
+      className="h-4 w-4"
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="1.8"
+      viewBox="0 0 24 24"
+    >
       <circle cx="12" cy="12" r="4" />
       <path d="M12 2.5v2.2" />
       <path d="M12 19.3v2.2" />
@@ -28,7 +37,16 @@ function SunIcon() {
 
 function MoonIcon() {
   return (
-    <svg aria-hidden className="h-4 w-4" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" viewBox="0 0 24 24">
+    <svg
+      aria-hidden
+      className="h-4 w-4"
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="1.8"
+      viewBox="0 0 24 24"
+    >
       <path d="M20 15.2A7.8 7.8 0 1 1 8.8 4a8.4 8.4 0 0 0 11.2 11.2Z" />
     </svg>
   );
@@ -60,7 +78,9 @@ export function ThemeToggle({ compact = false }: ThemeToggleProps) {
       aria-pressed={theme === "dark"}
       className={cn(
         "focusable inline-flex items-center rounded-xl border border-[var(--surface-edge)] bg-[var(--card-strong)] text-[var(--text-secondary)] shadow-[var(--elevated-shadow)] transition-all duration-200 hover:border-[var(--accent)] hover:text-[var(--text-primary)]",
-        compact ? "h-12 w-12 justify-center" : "h-12 w-full justify-between px-4 text-sm font-medium",
+        compact
+          ? "h-12 w-12 justify-center"
+          : "h-12 w-full justify-between px-4 text-sm font-medium",
       )}
       onClick={() => {
         const updated = theme === "light" ? "dark" : "light";
@@ -68,7 +88,11 @@ export function ThemeToggle({ compact = false }: ThemeToggleProps) {
         applyTheme(updated);
       }}
     >
-      {!compact ? <span className="text-sm font-medium text-[var(--text-primary)]">{theme === "light" ? "Tema claro" : "Tema escuro"}</span> : null}
+      {!compact ? (
+        <span className="text-sm font-medium text-[var(--text-primary)]">
+          {theme === "light" ? "Tema claro" : "Tema escuro"}
+        </span>
+      ) : null}
       <span
         className={cn(
           "relative inline-flex items-center rounded-full border transition-all duration-200",
@@ -95,7 +119,9 @@ export function ThemeToggle({ compact = false }: ThemeToggleProps) {
         </span>
       </span>
       {compact ? (
-        <span className="sr-only">{theme === "light" ? "Ativar tema escuro" : "Ativar tema claro"}</span>
+        <span className="sr-only">
+          {theme === "light" ? "Ativar tema escuro" : "Ativar tema claro"}
+        </span>
       ) : null}
     </button>
   );

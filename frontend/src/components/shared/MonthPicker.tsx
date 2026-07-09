@@ -92,7 +92,11 @@ export function MonthPicker({
 
   return (
     <div ref={wrapperRef} className="relative space-y-2">
-      {label ? <span className="block text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">{label}</span> : null}
+      {label ? (
+        <span className="block text-xs tracking-[0.08em] text-[var(--text-muted)] uppercase">
+          {label}
+        </span>
+      ) : null}
       <button
         type="button"
         aria-expanded={open}

@@ -24,7 +24,16 @@ interface CategoryFormContentProps {
   initialColor: string;
 }
 
-const palette = ["#C8873A", "#F87171", "#4ADE80", "#94A3B8", "#60A5FA", "#F59E0B", "#E879F9", "#22D3EE"];
+const palette = [
+  "#C8873A",
+  "#F87171",
+  "#4ADE80",
+  "#94A3B8",
+  "#60A5FA",
+  "#F59E0B",
+  "#E879F9",
+  "#22D3EE",
+];
 
 function CategoryFormContent({
   onClose,
@@ -96,19 +105,21 @@ function CategoryFormContent({
           <div className="space-y-3">
             <div>
               <p className="text-sm font-medium text-[var(--text-secondary)]">Cor da categoria</p>
-              <p className="mt-1 text-xs text-[var(--text-muted)]">Escolha uma cor da paleta para manter o contraste e evitar combinações quebradas.</p>
+              <p className="mt-1 text-xs text-[var(--text-muted)]">
+                Escolha uma cor da paleta para manter o contraste e evitar combinações quebradas.
+              </p>
             </div>
             <div className="grid grid-cols-4 gap-2 sm:grid-cols-8">
-            {palette.map((item) => (
-              <button
-                type="button"
-                key={item}
-                onClick={() => setColor(item)}
-                className={`h-10 rounded-2xl border border-[var(--surface-edge)] transition-transform duration-150 hover:scale-[1.04] ${color === item ? "ring-2 ring-[var(--accent)] ring-offset-2 ring-offset-[var(--bg-surface)]" : ""}`}
-                style={{ backgroundColor: item }}
-                aria-label={item}
-              />
-            ))}
+              {palette.map((item) => (
+                <button
+                  type="button"
+                  key={item}
+                  onClick={() => setColor(item)}
+                  className={`h-10 rounded-2xl border border-[var(--surface-edge)] transition-transform duration-150 hover:scale-[1.04] ${color === item ? "ring-2 ring-[var(--accent)] ring-offset-2 ring-offset-[var(--bg-surface)]" : ""}`}
+                  style={{ backgroundColor: item }}
+                  aria-label={item}
+                />
+              ))}
             </div>
           </div>
           <div className="rounded-2xl border border-[var(--surface-edge)] bg-[var(--card-strong)] px-4 py-3 text-sm text-[var(--text-secondary)]">
@@ -160,4 +171,3 @@ export function CategoryFormModal({
     />
   );
 }
-

@@ -1,11 +1,8 @@
 ﻿import api from "@/lib/api/axios";
-import type {
-  CategoryResponse,
-  CreateCategoryRequest,
-  UpdateCategoryRequest,
-} from "@/types/api";
+import type { CategoryResponse, CreateCategoryRequest, UpdateCategoryRequest } from "@/types/api";
 
-export const getCategories = (ledgerId: number) => api.get<CategoryResponse[]>(`/ledgers/${ledgerId}/categories`);
+export const getCategories = (ledgerId: number) =>
+  api.get<CategoryResponse[]>(`/ledgers/${ledgerId}/categories`);
 export const createCategory = (ledgerId: number, body: CreateCategoryRequest) =>
   api.post<CategoryResponse>(`/ledgers/${ledgerId}/categories`, body);
 export const updateCategory = (ledgerId: number, id: number, body: UpdateCategoryRequest) =>

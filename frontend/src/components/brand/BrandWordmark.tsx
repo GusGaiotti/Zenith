@@ -13,10 +13,15 @@ const letters = ["e", "n", "i", "t", "h"];
 
 function ZenithMonogram({ compact = false }: { compact?: boolean }) {
   return (
-    <span className={cn("inline-flex items-center justify-center", compact ? "h-9 w-9" : "h-14 w-14")}>
+    <span
+      className={cn("inline-flex items-center justify-center", compact ? "h-9 w-9" : "h-14 w-14")}
+    >
       <svg
         aria-hidden
-        className={cn("text-[var(--accent)] drop-shadow-[0_10px_22px_rgba(37,99,235,0.24)]", compact ? "h-9 w-9" : "h-14 w-14")}
+        className={cn(
+          "text-[var(--accent)] drop-shadow-[0_10px_22px_rgba(37,99,235,0.24)]",
+          compact ? "h-9 w-9" : "h-14 w-14",
+        )}
         fill="none"
         viewBox="0 0 56 56"
       >
@@ -27,12 +32,7 @@ function ZenithMonogram({ compact = false }: { compact?: boolean }) {
           strokeLinejoin="round"
           strokeWidth="5.5"
         />
-        <path
-          d="M28 9v38"
-          stroke="currentColor"
-          strokeLinecap="round"
-          strokeWidth="4"
-        />
+        <path d="M28 9v38" stroke="currentColor" strokeLinecap="round" strokeWidth="4" />
       </svg>
     </span>
   );
@@ -48,7 +48,12 @@ export function BrandWordmark({
     <div className={cn("inline-flex items-center gap-1.5", className)}>
       <ZenithMonogram compact={compact} />
       {!compact ? (
-        <span className={cn("inline-flex items-center font-display font-semibold tracking-[-0.05em] text-[var(--text-primary)]", labelClassName)}>
+        <span
+          className={cn(
+            "inline-flex items-center font-display font-semibold tracking-[-0.05em] text-[var(--text-primary)]",
+            labelClassName,
+          )}
+        >
           {letters.map((letter, index) => (
             <span
               key={letter}

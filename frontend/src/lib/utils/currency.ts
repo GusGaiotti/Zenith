@@ -7,7 +7,8 @@
 
 export const normalizeCurrencyInput = (value: string) => value.replace(/\D/g, "");
 
-export const parseCurrencyInputValue = (value: string) => Number(normalizeCurrencyInput(value) || "0") / 100;
+export const parseCurrencyInputValue = (value: string) =>
+  Number(normalizeCurrencyInput(value) || "0") / 100;
 
 export const formatCurrencyShort = (value: number): string => {
   const abs = Math.abs(value);
@@ -15,4 +16,3 @@ export const formatCurrencyShort = (value: number): string => {
   if (abs >= 1_000) return `${(value / 1_000).toFixed(1)}k`;
   return value.toFixed(0);
 };
-

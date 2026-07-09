@@ -8,14 +8,30 @@ import { EmptyState } from "@/components/shared/EmptyState";
 import { LoadingSkeleton } from "@/components/shared/LoadingSkeleton";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
-import { useCancelInvitation, useInviteMember, useLeaveLedger, useLedger, useRemoveMember, useUpdateLedgerName } from "@/hooks/useLedger";
+import {
+  useCancelInvitation,
+  useInviteMember,
+  useLeaveLedger,
+  useLedger,
+  useRemoveMember,
+  useUpdateLedgerName,
+} from "@/hooks/useLedger";
 import { formatDateTime } from "@/lib/utils/date";
 import { useAuthStore } from "@/lib/store/auth.store";
 import { getApiErrorMessage } from "@/lib/utils/api-error";
 
 function PencilIcon() {
   return (
-    <svg aria-hidden className="h-4 w-4" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.9" viewBox="0 0 24 24">
+    <svg
+      aria-hidden
+      className="h-4 w-4"
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="1.9"
+      viewBox="0 0 24 24"
+    >
       <path d="m4 20 4.2-1 9.3-9.3a2.1 2.1 0 0 0-3-3L5.2 16 4 20Z" />
       <path d="m13.5 7.5 3 3" />
     </svg>
@@ -72,7 +88,10 @@ export default function LedgerPage() {
   if (!activeLedgerId) {
     return (
       <div className="space-y-6 pb-20 md:pb-6">
-        <PageHeader title="Fatura compartilhada" subtitle="Crie uma fatura quando quiser ou aguarde um convite." />
+        <PageHeader
+          title="Fatura compartilhada"
+          subtitle="Crie uma fatura quando quiser ou aguarde um convite."
+        />
         <EmptyState
           title="Nenhuma fatura ativa"
           description="Você ainda não faz parte de uma fatura. Quando quiser, crie uma nova e convide alguém."
@@ -88,10 +107,15 @@ export default function LedgerPage() {
 
   return (
     <div className="space-y-6 pb-20 md:pb-6">
-      <PageHeader title="Fatura compartilhada" subtitle="Gerencie sua fatura compartilhada e membros." />
+      <PageHeader
+        title="Fatura compartilhada"
+        subtitle="Gerencie sua fatura compartilhada e membros."
+      />
 
       <section className="surface p-6">
-        <h2 className="text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">Informações da fatura</h2>
+        <h2 className="text-xs tracking-[0.08em] text-[var(--text-muted)] uppercase">
+          Informações da fatura
+        </h2>
         {editing ? (
           <div className="mt-3 space-y-3">
             <input
@@ -161,9 +185,8 @@ export default function LedgerPage() {
                 joinedAt={new Date(member.joinedAt).toLocaleDateString("pt-BR")}
                 actionLabel={isCurrentUser ? "Sair da fatura" : "Remover membro"}
                 actionDisabled={leaveLedger.isPending || removeMember.isPending}
-                onAction={() => isCurrentUser
-                  ? setConfirmLeave(true)
-                  : setConfirmRemove(member.userId)
+                onAction={() =>
+                  isCurrentUser ? setConfirmLeave(true) : setConfirmRemove(member.userId)
                 }
               />
             );
@@ -240,4 +263,3 @@ export default function LedgerPage() {
     </div>
   );
 }
-

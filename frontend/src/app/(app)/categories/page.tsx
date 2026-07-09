@@ -7,7 +7,12 @@ import { CategoryGrid } from "@/components/categories/CategoryGrid";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { LoadingSkeleton } from "@/components/shared/LoadingSkeleton";
 import { PageHeader } from "@/components/shared/PageHeader";
-import { useCategories, useCreateCategory, useDeleteCategory, useUpdateCategory } from "@/hooks/useCategories";
+import {
+  useCategories,
+  useCreateCategory,
+  useDeleteCategory,
+  useUpdateCategory,
+} from "@/hooks/useCategories";
 import { useAuthStore } from "@/lib/store/auth.store";
 import { getApiErrorMessage } from "@/lib/utils/api-error";
 import type { CategoryResponse } from "@/types/api";
@@ -31,10 +36,7 @@ export default function CategoriesPage() {
   if (!activeLedgerId) {
     return (
       <div className="pb-20 md:pb-6">
-        <PageHeader
-          title="Categorias"
-          subtitle="Organize gastos com categorias por cor."
-        />
+        <PageHeader title="Categorias" subtitle="Organize gastos com categorias por cor." />
         <EmptyState
           title="Nenhuma fatura ativa"
           description="As categorias ficam disponíveis assim que você criar uma fatura ou aceitar um convite."
@@ -50,11 +52,14 @@ export default function CategoriesPage() {
         title="Categorias"
         subtitle="Organize gastos com categorias por cor."
         actions={
-          <button className="focusable rounded-md bg-[var(--accent)] px-3 py-2 text-sm font-medium text-white" onClick={() => {
-            setEditingCategory(null);
-            setErrorMessage(null);
-            setOpen(true);
-          }}>
+          <button
+            className="focusable rounded-md bg-[var(--accent)] px-3 py-2 text-sm font-medium text-white"
+            onClick={() => {
+              setEditingCategory(null);
+              setErrorMessage(null);
+              setOpen(true);
+            }}
+          >
             Nova categoria
           </button>
         }
@@ -134,7 +139,9 @@ export default function CategoriesPage() {
                   setEditingCategory(null);
                 },
                 onError: (error) => {
-                  setErrorMessage(getApiErrorMessage(error, "Não foi possível atualizar a categoria."));
+                  setErrorMessage(
+                    getApiErrorMessage(error, "Não foi possível atualizar a categoria."),
+                  );
                 },
               },
             );
@@ -173,4 +180,3 @@ export default function CategoriesPage() {
     </div>
   );
 }
-

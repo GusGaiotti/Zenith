@@ -10,7 +10,8 @@ export function useAskAi() {
   const ledgerId = useAuthStore((state) => state.activeLedgerId);
 
   return useMutation({
-    mutationFn: (payload: AskAiRequest) => askAi(requireLedgerId(ledgerId), payload).then((response) => response.data),
+    mutationFn: (payload: AskAiRequest) =>
+      askAi(requireLedgerId(ledgerId), payload).then((response) => response.data),
   });
 }
 

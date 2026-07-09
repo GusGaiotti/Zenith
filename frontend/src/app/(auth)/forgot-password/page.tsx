@@ -26,7 +26,7 @@ export default function ForgotPasswordPage() {
 
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden p-4 sm:p-6">
-      <div className="absolute right-4 top-4 z-10">
+      <div className="absolute top-4 right-4 z-10">
         <div className="w-[190px]">
           <ThemeToggle />
         </div>
@@ -36,10 +36,12 @@ export default function ForgotPasswordPage() {
 
         {submitted ? (
           <div className="mt-8">
-            <h1 className="text-2xl font-semibold text-[var(--text-primary)]">Verifique seu email</h1>
+            <h1 className="text-2xl font-semibold text-[var(--text-primary)]">
+              Verifique seu email
+            </h1>
             <p className="mt-3 text-sm text-[var(--text-secondary)]">
-              Se existe uma conta com esse endereço, você receberá um link para redefinir sua senha em breve.
-              O link expira em 1 hora.
+              Se existe uma conta com esse endereço, você receberá um link para redefinir sua senha
+              em breve. O link expira em 1 hora.
             </p>
             <p className="mt-4 text-sm text-[var(--text-secondary)]">
               Não recebeu?{" "}
@@ -64,11 +66,13 @@ export default function ForgotPasswordPage() {
                 <input
                   type="email"
                   autoComplete="email"
-                  className="focusable h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-3.5 outline-none transition-colors duration-150"
+                  className="focusable h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-3.5 transition-colors duration-150 outline-none"
                   {...form.register("email")}
                 />
                 {form.formState.errors.email ? (
-                  <span className="mt-1.5 block text-xs text-red-300">{form.formState.errors.email.message}</span>
+                  <span className="mt-1.5 block text-xs text-red-300">
+                    {form.formState.errors.email.message}
+                  </span>
                 ) : null}
               </label>
               {mutation.isError ? (

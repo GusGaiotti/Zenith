@@ -65,12 +65,27 @@ function yTickValues(maxValue: number) {
   return Array.from({ length: 4 }, (_, index) => (maxValue / 3) * index).reverse();
 }
 
-function MetricTooltip({ label, value, description, colorClassName }: { label: string; value: string; description: string; colorClassName: string }) {
+function MetricTooltip({
+  label,
+  value,
+  description,
+  colorClassName,
+}: {
+  label: string;
+  value: string;
+  description: string;
+  colorClassName: string;
+}) {
   return (
     <div className="group relative rounded-2xl border border-[var(--surface-edge)] bg-[var(--card-strong)] px-4 py-3">
-      <p className="cursor-help text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">{label}</p>
-      <p className={`mt-2 font-display tabular-nums text-sm ${colorClassName}`}>{value}</p>
-      <div className="pointer-events-none absolute bottom-full left-0 z-50 mb-3 w-64 translate-y-1 rounded-xl border border-[var(--surface-edge)] bg-[var(--tooltip-bg)] px-3 py-2 text-left text-xs leading-5 text-white opacity-0 shadow-[0_18px_50px_rgba(0,0,0,0.45)] transition-all duration-150 group-hover:translate-y-0 group-hover:opacity-100" role="tooltip">
+      <p className="cursor-help text-xs tracking-[0.08em] text-[var(--text-muted)] uppercase">
+        {label}
+      </p>
+      <p className={`mt-2 font-display text-sm tabular-nums ${colorClassName}`}>{value}</p>
+      <div
+        className="pointer-events-none absolute bottom-full left-0 z-50 mb-3 w-64 translate-y-1 rounded-xl border border-[var(--surface-edge)] bg-[var(--tooltip-bg)] px-3 py-2 text-left text-xs leading-5 text-white opacity-0 shadow-[0_18px_50px_rgba(0,0,0,0.45)] transition-all duration-150 group-hover:translate-y-0 group-hover:opacity-100"
+        role="tooltip"
+      >
         {description}
       </div>
     </div>
@@ -79,7 +94,9 @@ function MetricTooltip({ label, value, description, colorClassName }: { label: s
 
 export function ExpenseTrendChart({ trends }: ExpenseTrendChartProps) {
   const sourcePoints = trends?.monthlyTrends ?? [];
-  const inferredYear = Number(sourcePoints.at(-1)?.yearMonth.split("-")[0] ?? new Date().getFullYear());
+  const inferredYear = Number(
+    sourcePoints.at(-1)?.yearMonth.split("-")[0] ?? new Date().getFullYear(),
+  );
   const pointsByMonth = new Map(sourcePoints.map((point) => [point.yearMonth, point]));
   const points: ChartPoint[] = months.map((month) => {
     const yearMonth = `${inferredYear}-${month.value}`;
@@ -96,23 +113,31 @@ export function ExpenseTrendChart({ trends }: ExpenseTrendChartProps) {
 
   const expenses = points.map((point) => point.totalExpense);
   const incomes = points.map((point) => point.totalIncome);
-  const numericValues = points.flatMap((point) => [point.totalExpense ?? 0, point.totalIncome ?? 0]);
+  const numericValues = points.flatMap((point) => [
+    point.totalExpense ?? 0,
+    point.totalIncome ?? 0,
+  ]);
   const maxAmount = Math.max(1, ...numericValues);
-  const trendLabel = trends?.overallTrend === "IMPROVING"
-    ? "MELHORANDO"
-    : trends?.overallTrend === "DECLINING"
-      ? "PIORANDO"
-      : "ESTÁVEL";
+  const trendLabel =
+    trends?.overallTrend === "IMPROVING"
+      ? "MELHORANDO"
+      : trends?.overallTrend === "DECLINING"
+        ? "PIORANDO"
+        : "ESTÁVEL";
   const expensePath = linePath(expenses, maxAmount);
   const incomePath = linePath(incomes, maxAmount);
   const ticks = yTickValues(maxAmount);
-  const populatedPoints = points.filter((point) => point.totalExpense !== null && point.totalIncome !== null);
+  const populatedPoints = points.filter(
+    (point) => point.totalExpense !== null && point.totalIncome !== null,
+  );
   const latestPoint = [...populatedPoints].reverse()[0];
   const averageExpense = populatedPoints.length
-    ? populatedPoints.reduce((total, point) => total + Number(point.totalExpense), 0) / populatedPoints.length
+    ? populatedPoints.reduce((total, point) => total + Number(point.totalExpense), 0) /
+      populatedPoints.length
     : 0;
   const averageIncome = populatedPoints.length
-    ? populatedPoints.reduce((total, point) => total + Number(point.totalIncome), 0) / populatedPoints.length
+    ? populatedPoints.reduce((total, point) => total + Number(point.totalIncome), 0) /
+      populatedPoints.length
     : 0;
 
   return (
@@ -120,7 +145,7 @@ export function ExpenseTrendChart({ trends }: ExpenseTrendChartProps) {
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <div className="relative pr-10">
           <h3 className="font-display text-2xl italic">Tendência de gastos</h3>
-          <div className="absolute right-0 top-0">
+          <div className="absolute top-0 right-0">
             <InfoTooltip text="Gráfico anual com todos os meses de janeiro a dezembro. Os pontos aparecem apenas nos meses que já possuem dados, mantendo o contexto anual completo." />
           </div>
         </div>
@@ -133,21 +158,41 @@ export function ExpenseTrendChart({ trends }: ExpenseTrendChartProps) {
             <span className="h-2 w-2 rounded-full bg-[var(--expense)]" />
             Saídas
           </span>
-          <span className="rounded-full bg-[var(--panel-bg)] px-2 py-1 text-[var(--text-secondary)]">{trendLabel}</span>
+          <span className="rounded-full bg-[var(--panel-bg)] px-2 py-1 text-[var(--text-secondary)]">
+            {trendLabel}
+          </span>
         </div>
       </div>
 
       {populatedPoints.length ? (
         <>
           <div className="rounded-2xl border border-[var(--surface-edge)] bg-[var(--card-strong)] p-3">
-            <svg viewBox={`0 0 ${chartWidth} ${chartHeight}`} className="h-auto w-full" role="img" aria-label="Gráfico anual de entradas e saídas">
+            <svg
+              viewBox={`0 0 ${chartWidth} ${chartHeight}`}
+              className="h-auto w-full"
+              role="img"
+              aria-label="Gráfico anual de entradas e saídas"
+            >
               {ticks.map((tick) => {
                 const y = padding.top + plotHeight - (tick / maxAmount) * plotHeight;
 
                 return (
                   <g key={tick}>
-                    <line x1={padding.left} y1={y} x2={chartWidth - padding.right} y2={y} stroke="var(--chart-grid)" strokeDasharray="4 4" />
-                    <text x={padding.left - 10} y={y + 4} fill="var(--chart-label)" fontSize="10" textAnchor="end">
+                    <line
+                      x1={padding.left}
+                      y1={y}
+                      x2={chartWidth - padding.right}
+                      y2={y}
+                      stroke="var(--chart-grid)"
+                      strokeDasharray="4 4"
+                    />
+                    <text
+                      x={padding.left - 10}
+                      y={y + 4}
+                      fill="var(--chart-label)"
+                      fontSize="10"
+                      textAnchor="end"
+                    >
                       {formatCurrencyShort(tick)}
                     </text>
                   </g>
@@ -155,16 +200,40 @@ export function ExpenseTrendChart({ trends }: ExpenseTrendChartProps) {
               })}
 
               {expensePath ? (
-                <path d={expensePath} fill="none" stroke="rgba(248, 113, 113, 0.92)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                <path
+                  d={expensePath}
+                  fill="none"
+                  stroke="rgba(248, 113, 113, 0.92)"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               ) : null}
               {incomePath ? (
-                <path d={incomePath} fill="none" stroke="rgba(74, 222, 128, 0.92)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                <path
+                  d={incomePath}
+                  fill="none"
+                  stroke="rgba(74, 222, 128, 0.92)"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               ) : null}
 
               {points.map((point, index) => {
                 const x = padding.left + (plotWidth / (points.length - 1)) * index;
-                const expenseY = point.totalExpense === null ? null : padding.top + plotHeight - (Number(point.totalExpense) / maxAmount) * plotHeight;
-                const incomeY = point.totalIncome === null ? null : padding.top + plotHeight - (Number(point.totalIncome) / maxAmount) * plotHeight;
+                const expenseY =
+                  point.totalExpense === null
+                    ? null
+                    : padding.top +
+                      plotHeight -
+                      (Number(point.totalExpense) / maxAmount) * plotHeight;
+                const incomeY =
+                  point.totalIncome === null
+                    ? null
+                    : padding.top +
+                      plotHeight -
+                      (Number(point.totalIncome) / maxAmount) * plotHeight;
 
                 return (
                   <g key={point.yearMonth}>
@@ -184,7 +253,13 @@ export function ExpenseTrendChart({ trends }: ExpenseTrendChartProps) {
                         <circle cx={x} cy={expenseY} r="4" fill="rgba(248, 113, 113, 1)" />
                       </g>
                     ) : null}
-                    <text x={x} y={chartHeight - 10} fill="var(--chart-label)" fontSize="10" textAnchor="middle">
+                    <text
+                      x={x}
+                      y={chartHeight - 10}
+                      fill="var(--chart-label)"
+                      fontSize="10"
+                      textAnchor="middle"
+                    >
                       {point.label}
                     </text>
                   </g>
@@ -210,12 +285,18 @@ export function ExpenseTrendChart({ trends }: ExpenseTrendChartProps) {
               label="Saldo do último mês"
               value={formatCurrency(Number(latestPoint?.net ?? 0))}
               description="Saldo do mês mais recente com dados, calculado como entradas menos saídas."
-              colorClassName={Number(latestPoint?.net ?? 0) >= 0 ? "text-[var(--income)]" : "text-[var(--expense)]"}
+              colorClassName={
+                Number(latestPoint?.net ?? 0) >= 0
+                  ? "text-[var(--income)]"
+                  : "text-[var(--expense)]"
+              }
             />
           </div>
         </>
       ) : (
-        <p className="text-sm text-[var(--text-secondary)]">Sem dados para o período selecionado.</p>
+        <p className="text-sm text-[var(--text-secondary)]">
+          Sem dados para o período selecionado.
+        </p>
       )}
     </section>
   );

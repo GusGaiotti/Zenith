@@ -43,7 +43,13 @@ function IconBase(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-export function NavigationIcon({ name, className = iconClassName }: { name: IconName; className?: string }) {
+export function NavigationIcon({
+  name,
+  className = iconClassName,
+}: {
+  name: IconName;
+  className?: string;
+}) {
   switch (name) {
     case "dashboard":
       return (

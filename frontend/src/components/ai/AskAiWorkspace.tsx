@@ -147,8 +147,12 @@ export function AskAiWorkspace() {
         <section className="surface flex min-h-[72vh] flex-col overflow-hidden">
           <div className="border-b border-[var(--border)] px-5 py-4">
             <div className="flex flex-wrap items-center gap-3">
-              <span className="info-badge text-[var(--accent-hover)]">{getModeLabel(usage?.mode)}</span>
-              <span className="info-badge text-[var(--income)]">{remainingDaily} restantes hoje</span>
+              <span className="info-badge text-[var(--accent-hover)]">
+                {getModeLabel(usage?.mode)}
+              </span>
+              <span className="info-badge text-[var(--income)]">
+                {remainingDaily} restantes hoje
+              </span>
               <span className="text-sm text-[var(--text-secondary)]">{helperTone}</span>
             </div>
           </div>
@@ -157,44 +161,63 @@ export function AskAiWorkspace() {
             {messages.length === 0 ? (
               <div className="grid gap-4 xl:grid-cols-[minmax(0,1.3fr)_minmax(280px,0.9fr)]">
                 <div className="elevated p-6">
-                  <p className="text-xs uppercase tracking-[0.12em] text-[var(--text-muted)]">Como funciona</p>
-                  <h2 className="mt-2 text-2xl font-semibold text-[var(--text-primary)]">Use o assistente para transformar números em direção</h2>
+                  <p className="text-xs tracking-[0.12em] text-[var(--text-muted)] uppercase">
+                    Como funciona
+                  </p>
+                  <h2 className="mt-2 text-2xl font-semibold text-[var(--text-primary)]">
+                    Use o assistente para transformar números em direção
+                  </h2>
                   <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--text-secondary)]">
-                    Escolha o mês, faça uma pergunta objetiva e receba uma leitura prática sobre gastos, categorias, saldo e padrões recentes. Quando houver contexto suficiente, ele também consegue comparar o mês selecionado com o histórico mais próximo da sua fatura.
+                    Escolha o mês, faça uma pergunta objetiva e receba uma leitura prática sobre
+                    gastos, categorias, saldo e padrões recentes. Quando houver contexto suficiente,
+                    ele também consegue comparar o mês selecionado com o histórico mais próximo da
+                    sua fatura.
                   </p>
                   <div className="mt-5 grid gap-3 lg:grid-cols-2">
                     <div className="rounded-3xl border border-[color-mix(in_srgb,var(--accent)_24%,transparent)] bg-[color-mix(in_srgb,var(--accent)_10%,var(--card-strong))] px-5 py-4">
                       <div className="flex items-start justify-between gap-3">
-                        <p className="text-sm font-semibold text-[var(--text-primary)]">Mês de referência</p>
+                        <p className="text-sm font-semibold text-[var(--text-primary)]">
+                          Mês de referência
+                        </p>
                         <InfoTooltip text="A análise sempre parte do mês selecionado. Se houver dados em meses anteriores, a IA pode usar esse histórico para comparar comportamento e tendência." />
                       </div>
                       <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
-                        Troque o mês para revisar um fechamento antigo, investigar uma mudança específica ou pedir comparações com meses anteriores.
+                        Troque o mês para revisar um fechamento antigo, investigar uma mudança
+                        específica ou pedir comparações com meses anteriores.
                       </p>
                     </div>
                     <div className="rounded-3xl border border-[color-mix(in_srgb,var(--accent-emerald)_24%,transparent)] bg-[color-mix(in_srgb,var(--accent-emerald)_10%,var(--card-strong))] px-5 py-4">
                       <div className="flex items-start justify-between gap-3">
-                        <p className="text-sm font-semibold text-[var(--text-primary)]">Amostra de lançamentos</p>
+                        <p className="text-sm font-semibold text-[var(--text-primary)]">
+                          Amostra de lançamentos
+                        </p>
                         <InfoTooltip text="Quando essa opção está ativa, o sistema seleciona automaticamente até 50 lançamentos relevantes do período para enriquecer a análise." />
                       </div>
                       <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
-                        Use essa opção quando quiser respostas mais específicas sobre compras, padrões e possíveis excessos dentro do mês escolhido.
+                        Use essa opção quando quiser respostas mais específicas sobre compras,
+                        padrões e possíveis excessos dentro do mês escolhido.
                       </p>
                     </div>
                   </div>
                   <div className="mt-3 rounded-3xl border border-[color-mix(in_srgb,var(--accent-amber)_24%,transparent)] bg-[color-mix(in_srgb,var(--accent-amber)_10%,var(--card-strong))] px-5 py-4">
                     <div className="flex items-start justify-between gap-3">
-                      <p className="text-sm font-semibold text-[var(--text-primary)]">Como extrair mais valor</p>
+                      <p className="text-sm font-semibold text-[var(--text-primary)]">
+                        Como extrair mais valor
+                      </p>
                       <InfoTooltip text="Perguntas diretas tendem a gerar respostas melhores: gastos acima do normal, categorias críticas, mudanças entre meses ou oportunidades de corte." />
                     </div>
                     <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
-                      Peça prioridades, sinais de atenção, categorias mais pesadas, comportamento por pessoa ou mudanças em relação aos meses anteriores. Quanto mais clara a dúvida, melhor a resposta.
+                      Peça prioridades, sinais de atenção, categorias mais pesadas, comportamento
+                      por pessoa ou mudanças em relação aos meses anteriores. Quanto mais clara a
+                      dúvida, melhor a resposta.
                     </p>
                   </div>
                 </div>
 
                 <div className="elevated p-5">
-                  <p className="text-xs uppercase tracking-[0.12em] text-[var(--text-muted)]">Boas perguntas</p>
+                  <p className="text-xs tracking-[0.12em] text-[var(--text-muted)] uppercase">
+                    Boas perguntas
+                  </p>
                   <div className="mt-3 flex flex-col gap-2">
                     {starterQuestions.map((item) => (
                       <button
@@ -221,41 +244,59 @@ export function AskAiWorkspace() {
                 }`}
               >
                 <div className="flex items-center justify-between gap-3">
-                  <p className={`text-xs uppercase tracking-[0.12em] ${message.role === "user" ? "text-white/75" : "text-[var(--text-muted)]"}`}>
+                  <p
+                    className={`text-xs tracking-[0.12em] uppercase ${message.role === "user" ? "text-white/75" : "text-[var(--text-muted)]"}`}
+                  >
                     {message.role === "user" ? "Você" : "Assistente Zenith"}
                   </p>
                   {message.contextLevel ? (
-                    <span className="text-[11px] text-[var(--text-secondary)]">{getContextLabel(message.contextLevel)}</span>
+                    <span className="text-[11px] text-[var(--text-secondary)]">
+                      {getContextLabel(message.contextLevel)}
+                    </span>
                   ) : null}
                 </div>
                 {message.headline ? (
-                  <p className="mt-3 text-lg font-semibold text-[var(--text-primary)]">{message.headline}</p>
+                  <p className="mt-3 text-lg font-semibold text-[var(--text-primary)]">
+                    {message.headline}
+                  </p>
                 ) : null}
                 {message.highlights?.length ? (
                   <div className="mt-3 grid gap-2 sm:grid-cols-2">
                     {message.highlights.map((item) => (
-                      <div key={item} className="rounded-2xl border border-[var(--border)] bg-[var(--panel-bg)] px-3 py-3 text-xs leading-5 text-[var(--text-secondary)]">
+                      <div
+                        key={item}
+                        className="rounded-2xl border border-[var(--border)] bg-[var(--panel-bg)] px-3 py-3 text-xs leading-5 text-[var(--text-secondary)]"
+                      >
                         {item}
                       </div>
                     ))}
                   </div>
                 ) : null}
-                <p className={`mt-3 whitespace-pre-wrap text-sm leading-7 ${message.role === "user" ? "text-white" : "text-[var(--text-primary)]"}`}>
+                <p
+                  className={`mt-3 text-sm leading-7 whitespace-pre-wrap ${message.role === "user" ? "text-white" : "text-[var(--text-primary)]"}`}
+                >
                   {message.content}
                 </p>
                 {message.recommendedActions?.length ? (
                   <div className="mt-4">
-                    <p className="text-xs uppercase tracking-[0.12em] text-[var(--text-muted)]">Ações sugeridas</p>
+                    <p className="text-xs tracking-[0.12em] text-[var(--text-muted)] uppercase">
+                      Ações sugeridas
+                    </p>
                     <ul className="mt-2 space-y-2 text-sm leading-6 text-[var(--text-secondary)]">
                       {message.recommendedActions.map((item) => (
-                        <li key={item} className="rounded-2xl border border-[var(--border)] bg-[var(--panel-bg)] px-3 py-3">
+                        <li
+                          key={item}
+                          className="rounded-2xl border border-[var(--border)] bg-[var(--panel-bg)] px-3 py-3"
+                        >
                           {item}
                         </li>
                       ))}
                     </ul>
                   </div>
                 ) : null}
-                {message.disclaimer ? <p className="mt-3 text-xs text-[var(--text-secondary)]">{message.disclaimer}</p> : null}
+                {message.disclaimer ? (
+                  <p className="mt-3 text-xs text-[var(--text-secondary)]">{message.disclaimer}</p>
+                ) : null}
               </article>
             ))}
 
@@ -263,20 +304,27 @@ export function AskAiWorkspace() {
               <article className="max-w-3xl rounded-3xl border border-[var(--surface-edge)] bg-[var(--menu-bg)] px-4 py-4 text-[var(--text-primary)]">
                 <div className="flex items-center gap-3">
                   <LoadingSpinner size="sm" />
-                  <span className="text-sm text-[var(--text-secondary)]">Consultando a IA com o contexto selecionado...</span>
+                  <span className="text-sm text-[var(--text-secondary)]">
+                    Consultando a IA com o contexto selecionado...
+                  </span>
                 </div>
               </article>
             ) : null}
           </div>
 
           <div className="border-t border-[var(--border)] bg-[var(--panel-bg)] px-5 py-4">
-            {error ? <div className="danger-chip mb-4 rounded-2xl px-4 py-3 text-sm">{error}</div> : null}
+            {error ? (
+              <div className="danger-chip mb-4 rounded-2xl px-4 py-3 text-sm">{error}</div>
+            ) : null}
 
             <div className="flex flex-col gap-3">
               <label className="block">
                 <span className="mb-2 flex items-center gap-2 text-sm text-[var(--text-secondary)]">
                   Mensagem
-                  <InfoTooltip align="left" text="Perguntas curtas e diretas costumam gerar respostas mais objetivas." />
+                  <InfoTooltip
+                    align="left"
+                    text="Perguntas curtas e diretas costumam gerar respostas mais objetivas."
+                  />
                 </span>
                 <textarea
                   value={question}
@@ -292,7 +340,9 @@ export function AskAiWorkspace() {
                   placeholder="Ex: Onde estamos gastando acima do esperado neste mês?"
                   className="focusable min-h-28 w-full rounded-3xl border border-[var(--border)] bg-[var(--bg-surface)] px-4 py-4 text-[var(--text-primary)] outline-none placeholder:text-[var(--text-secondary)]"
                 />
-                <span className="mt-2 block text-right font-mono text-xs text-[var(--text-muted)]">{question.length}/300</span>
+                <span className="mt-2 block text-right font-mono text-xs text-[var(--text-muted)]">
+                  {question.length}/300
+                </span>
               </label>
 
               <div className="flex flex-wrap gap-3">
@@ -327,26 +377,35 @@ export function AskAiWorkspace() {
                   Nova conversa
                 </button>
               </div>
-              <p className="text-xs text-[var(--text-muted)]">Pressione Enter para enviar. Use Shift + Enter para quebrar linha.</p>
+              <p className="text-xs text-[var(--text-muted)]">
+                Pressione Enter para enviar. Use Shift + Enter para quebrar linha.
+              </p>
             </div>
           </div>
         </section>
 
         <aside className="space-y-4">
           <section className="surface p-5">
-            <div className="flex items-center gap-2 text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">
+            <div className="flex items-center gap-2 text-xs tracking-[0.08em] text-[var(--text-muted)] uppercase">
               <span>Uso e cotas</span>
-              <InfoTooltip align="left" text="Esses indicadores mostram a disponibilidade atual do assistente para a sua conta." />
+              <InfoTooltip
+                align="left"
+                text="Esses indicadores mostram a disponibilidade atual do assistente para a sua conta."
+              />
             </div>
             {usage ? (
               <div className="mt-4 grid gap-3">
                 <div className="elevated p-4">
                   <p className="text-xs text-[var(--text-muted)]">Restantes hoje</p>
-                  <p className="mt-1 text-2xl font-semibold text-[var(--text-primary)]">{remainingDaily}</p>
+                  <p className="mt-1 text-2xl font-semibold text-[var(--text-primary)]">
+                    {remainingDaily}
+                  </p>
                 </div>
                 <div className="elevated p-4">
                   <p className="text-xs text-[var(--text-muted)]">Usadas hoje</p>
-                  <p className="mt-1 text-2xl font-semibold text-[var(--text-primary)]">{dailyUsed}</p>
+                  <p className="mt-1 text-2xl font-semibold text-[var(--text-primary)]">
+                    {dailyUsed}
+                  </p>
                 </div>
                 <div className="elevated p-4">
                   <p className="text-xs text-[var(--text-muted)]">Janela por minuto</p>
@@ -354,7 +413,9 @@ export function AskAiWorkspace() {
                     {usage.perUserCurrentMinuteUsed}/{usage.perUserPerMinuteLimit}
                   </p>
                 </div>
-                <p className="text-sm leading-6 text-[var(--text-secondary)]">{getUsageSummary(usage.mode, usage.accessAllowed)}</p>
+                <p className="text-sm leading-6 text-[var(--text-secondary)]">
+                  {getUsageSummary(usage.mode, usage.accessAllowed)}
+                </p>
                 {!usage.accessAllowed ? (
                   <p className="danger-chip rounded-2xl px-4 py-3 text-sm">
                     O assistente não está disponível para a sua conta agora.
@@ -369,7 +430,9 @@ export function AskAiWorkspace() {
           </section>
 
           <section className="surface p-5">
-            <p className="text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">Contexto da consulta</p>
+            <p className="text-xs tracking-[0.08em] text-[var(--text-muted)] uppercase">
+              Contexto da consulta
+            </p>
             <div className="mt-4 space-y-4">
               <MonthPicker value={yearMonth} onChange={setYearMonth} label="Mês de referência" />
               <label className="flex items-start gap-3 rounded-2xl border border-[var(--border)] bg-[var(--panel-bg)] px-4 py-3 text-sm text-[var(--text-primary)]">
@@ -380,9 +443,12 @@ export function AskAiWorkspace() {
                   className="mt-1 h-4 w-4"
                 />
                 <span className="space-y-1">
-                  <span className="block font-medium">Incluir amostra automática de lançamentos</span>
+                  <span className="block font-medium">
+                    Incluir amostra automática de lançamentos
+                  </span>
                   <span className="block text-[13px] leading-5 text-[var(--text-secondary)]">
-                    O sistema seleciona até 50 lançamentos do período para enriquecer a resposta quando a pergunta pede mais contexto.
+                    O sistema seleciona até 50 lançamentos do período para enriquecer a resposta
+                    quando a pergunta pede mais contexto.
                   </span>
                 </span>
               </label>

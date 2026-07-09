@@ -16,9 +16,6 @@ export function clampPercentage(value: number | string | null | undefined): numb
   return Math.min(100, Math.max(0, normalizePercentage(value)));
 }
 
-export function formatPercentage(
-  value: number | string | null | undefined,
-  decimals = 1,
-): string {
+export function formatPercentage(value: number | string | null | undefined, decimals = 1): string {
   return `${normalizePercentage(value).toFixed(decimals)}%`;
 }
