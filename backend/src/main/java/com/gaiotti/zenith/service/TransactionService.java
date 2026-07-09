@@ -258,7 +258,7 @@ public class TransactionService {
             header.createCell(1).setCellValue("Valor");
             header.createCell(2).setCellValue("Categoria");
             header.createCell(3).setCellValue("Pessoa");
-            header.createCell(4).setCellValue("Descricao");
+            header.createCell(4).setCellValue("Descrição");
             header.createCell(5).setCellValue("Tipo");
             header.createCell(6).setCellValue("Criado em");
 
@@ -274,7 +274,7 @@ public class TransactionService {
                         transaction.getCreatedBy() != null ? transaction.getCreatedBy().getDisplayName() : "-"
                 ));
                 row.createCell(4).setCellValue(sanitizeCellValue(
-                        transaction.getDescription() != null ? transaction.getDescription() : "Sem descricao"
+                        transaction.getDescription() != null ? transaction.getDescription() : "Sem descrição"
                 ));
                 row.createCell(5).setCellValue(sanitizeCellValue(
                         mapTypeLabel(transaction.getType())
@@ -318,6 +318,6 @@ public class TransactionService {
         if (type == null) {
             return "";
         }
-        return type == Transaction.TransactionType.INCOME ? "Entrada" : "Saida";
+        return type == Transaction.TransactionType.INCOME ? "Entrada" : "Saída";
     }
 }

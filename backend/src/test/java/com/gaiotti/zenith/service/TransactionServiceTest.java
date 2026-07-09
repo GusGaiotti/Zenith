@@ -274,7 +274,7 @@ class TransactionServiceTest {
             assertEquals(testTransaction.getDate().format(EXPORT_DATE_FORMAT), sheet.getRow(1).getCell(0).getStringCellValue());
             assertEquals("100", sheet.getRow(1).getCell(1).getStringCellValue());
             assertEquals("Food", sheet.getRow(1).getCell(2).getStringCellValue());
-            assertEquals("Saida", sheet.getRow(1).getCell(5).getStringCellValue());
+            assertEquals("Saída", sheet.getRow(1).getCell(5).getStringCellValue());
         }
     }
 

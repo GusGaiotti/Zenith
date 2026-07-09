@@ -62,7 +62,7 @@ class NotificationControllerTest {
                 .items(List.of(NotificationResponse.builder()
                         .id(1L)
                         .type("TRANSACTION_CREATED")
-                        .title("Nova transacao")
+                        .title("Nova transação")
                         .body("Body")
                         .createdAt(LocalDateTime.now())
                         .build()))
