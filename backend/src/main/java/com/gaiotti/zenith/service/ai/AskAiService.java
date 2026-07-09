@@ -23,6 +23,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,6 +31,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class AskAiService {
+
+    private static final Pattern SECRET_PATTERN =
+            Pattern.compile("(?i)(?:bearer\\s+)?\\b(?:sk|rk|pk)-[A-Za-z0-9._-]{4,}");
 
     private final LedgerRepository ledgerRepository;
     private final LedgerMemberRepository ledgerMemberRepository;
@@ -76,7 +80,7 @@ public class AskAiService {
                     authenticatedUser.getId(),
                     context.contextLevel(),
                     (System.nanoTime() - startNanos) / 1_000_000,
-                    ex.getMessage()
+                    sanitizeReason(ex.getMessage())
             );
             return AskAiResponse.builder()
                     .headline(buildHeadline(context))
@@ -87,6 +91,13 @@ public class AskAiService {
                     .disclaimer("Assistente temporariamente indisponivel. Exibindo um resumo seguro com base nos dados disponiveis.")
                     .build();
         }
+    }
+
+    private static String sanitizeReason(String reason) {
+        if (reason == null || reason.isBlank()) {
+            return "unknown";
+        }
+        return SECRET_PATTERN.matcher(reason).replaceAll("[REDACTED]");
     }
 
     public AskAiUsageResponse getUsage(Long ledgerId, User authenticatedUser, String clientIp) {
