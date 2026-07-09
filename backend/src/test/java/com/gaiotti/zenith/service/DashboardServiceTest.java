@@ -59,7 +59,7 @@ class DashboardServiceTest {
     void getDashboard_LedgerNotFound_ThrowsResourceNotFoundException() {
         when(ledgerRepository.existsById(99L)).thenReturn(false);
 
-        assertThatThrownBy(() -> dashboardService.getDashboard(99L, member))
+        assertThatThrownBy(() -> dashboardService.getDashboard(99L, member, null, null))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessage("Ledger not found");
     }
@@ -69,7 +69,7 @@ class DashboardServiceTest {
         when(ledgerRepository.existsById(1L)).thenReturn(true);
         when(ledgerMemberRepository.existsByLedgerIdAndUserId(1L, 1L)).thenReturn(false);
 
-        assertThatThrownBy(() -> dashboardService.getDashboard(1L, member))
+        assertThatThrownBy(() -> dashboardService.getDashboard(1L, member, null, null))
                 .isInstanceOf(AccessDeniedException.class)
                 .hasMessage("You are not a member of this ledger");
     }
@@ -88,7 +88,7 @@ class DashboardServiceTest {
         when(transactionRepository.sumExpensesByUserForLedgerAndDateRange(eq(1L), any(LocalDate.class), any(LocalDate.class), any()))
                 .thenReturn(List.<Object[]>of(new Object[]{1L, "user@example.com", new BigDecimal("800.00")}));
 
-        DashboardResponse response = dashboardService.getDashboard(1L, member);
+        DashboardResponse response = dashboardService.getDashboard(1L, member, null, null);
 
         assertThat(response.getTotalIncome()).isEqualByComparingTo("3000.00");
         assertThat(response.getTotalExpense()).isEqualByComparingTo("1200.50");
@@ -109,7 +109,7 @@ class DashboardServiceTest {
         when(transactionRepository.sumExpensesByUserForLedgerAndDateRange(eq(1L), any(LocalDate.class), any(LocalDate.class), any()))
                 .thenReturn(List.of());
 
-        DashboardResponse response = dashboardService.getDashboard(1L, member);
+        DashboardResponse response = dashboardService.getDashboard(1L, member, null, null);
 
         assertThat(response.getTotalIncome()).isEqualByComparingTo(BigDecimal.ZERO);
         assertThat(response.getTotalExpense()).isEqualByComparingTo(BigDecimal.ZERO);
@@ -131,7 +131,7 @@ class DashboardServiceTest {
         when(transactionRepository.sumExpensesByUserForLedgerAndDateRange(eq(1L), any(LocalDate.class), any(LocalDate.class), any()))
                 .thenReturn(List.of());
 
-        DashboardResponse response = dashboardService.getDashboard(1L, member);
+        DashboardResponse response = dashboardService.getDashboard(1L, member, null, null);
 
         assertThat(response.getTotalIncome()).isEqualByComparingTo("5000.00");
         assertThat(response.getTotalExpense()).isEqualByComparingTo("0");
@@ -142,7 +142,7 @@ class DashboardServiceTest {
     void getOverview_LedgerNotFound_ThrowsResourceNotFoundException() {
         when(ledgerRepository.existsById(99L)).thenReturn(false);
 
-        assertThatThrownBy(() -> dashboardService.getOverview(99L, member))
+        assertThatThrownBy(() -> dashboardService.getOverview(99L, member, null, null))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessage("Ledger not found");
     }
@@ -152,7 +152,7 @@ class DashboardServiceTest {
         when(ledgerRepository.existsById(1L)).thenReturn(true);
         when(ledgerMemberRepository.existsByLedgerIdAndUserId(1L, 1L)).thenReturn(false);
 
-        assertThatThrownBy(() -> dashboardService.getOverview(1L, member))
+        assertThatThrownBy(() -> dashboardService.getOverview(1L, member, null, null))
                 .isInstanceOf(AccessDeniedException.class)
                 .hasMessage("You are not a member of this ledger");
     }
@@ -169,7 +169,7 @@ class DashboardServiceTest {
                 eq(1L), eq(Transaction.TransactionType.EXPENSE), any(LocalDate.class), any(LocalDate.class), any()))
                 .thenReturn(new BigDecimal("3200.00"), new BigDecimal("3000.00"));
 
-        DashboardOverviewResponse response = dashboardService.getOverview(1L, member);
+        DashboardOverviewResponse response = dashboardService.getOverview(1L, member, null, null);
 
         assertThat(response.getTotalIncome()).isEqualByComparingTo("5000.00");
         assertThat(response.getTotalExpense()).isEqualByComparingTo("3200.00");
@@ -180,7 +180,7 @@ class DashboardServiceTest {
     void getCoupleSplit_LedgerNotFound_ThrowsResourceNotFoundException() {
         when(ledgerRepository.existsById(99L)).thenReturn(false);
 
-        assertThatThrownBy(() -> dashboardService.getCoupleSplit(99L, member))
+        assertThatThrownBy(() -> dashboardService.getCoupleSplit(99L, member, null, null))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessage("Ledger not found");
     }
@@ -198,7 +198,7 @@ class DashboardServiceTest {
         when(transactionRepository.getHighestTransaction(eq(1L), any(LocalDate.class), any(LocalDate.class), any()))
                 .thenReturn(new Object[]{new BigDecimal("500.00"), "User One"});
 
-        DashboardCoupleSplitResponse response = dashboardService.getCoupleSplit(1L, member);
+        DashboardCoupleSplitResponse response = dashboardService.getCoupleSplit(1L, member, null, null);
 
         assertThat(response.getUserContributions()).hasSize(2);
         assertThat(response.getHighestTransaction()).isNotNull();
@@ -209,7 +209,7 @@ class DashboardServiceTest {
     void getTrends_LedgerNotFound_ThrowsResourceNotFoundException() {
         when(ledgerRepository.existsById(99L)).thenReturn(false);
 
-        assertThatThrownBy(() -> dashboardService.getTrends(99L, member, 6))
+        assertThatThrownBy(() -> dashboardService.getTrends(99L, member, 6, null, null))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessage("Ledger not found");
     }
@@ -226,7 +226,7 @@ class DashboardServiceTest {
         when(transactionRepository.getMonthlyTrends(eq(1L), any(LocalDate.class), any(LocalDate.class), any()))
                 .thenReturn(trendResults);
 
-        DashboardTrendsResponse response = dashboardService.getTrends(1L, member, 6);
+        DashboardTrendsResponse response = dashboardService.getTrends(1L, member, 6, null, null);
 
         assertThat(response.getMonthlyTrends()).hasSize(3);
         assertThat(response.getOverallTrend()).isEqualTo(DashboardTrendsResponse.TrendDirection.IMPROVING);
@@ -236,7 +236,7 @@ class DashboardServiceTest {
     void getCategoriesBreakdown_LedgerNotFound_ThrowsResourceNotFoundException() {
         when(ledgerRepository.existsById(99L)).thenReturn(false);
 
-        assertThatThrownBy(() -> dashboardService.getCategoriesBreakdown(99L, member))
+        assertThatThrownBy(() -> dashboardService.getCategoriesBreakdown(99L, member, null, null))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessage("Ledger not found");
     }
@@ -254,7 +254,7 @@ class DashboardServiceTest {
         when(transactionRepository.getUncategorizedTotals(eq(1L), any(LocalDate.class), any(LocalDate.class), any()))
                 .thenReturn(new Object[]{new BigDecimal("100.00"), 3L});
 
-        DashboardCategoriesBreakdownResponse response = dashboardService.getCategoriesBreakdown(1L, member);
+        DashboardCategoriesBreakdownResponse response = dashboardService.getCategoriesBreakdown(1L, member, null, null);
 
         assertThat(response.getCategories()).hasSize(2);
         assertThat(response.getTotalExpenses()).isEqualByComparingTo("900.00");
@@ -266,7 +266,7 @@ class DashboardServiceTest {
     void getPulse_LedgerNotFound_ThrowsResourceNotFoundException() {
         when(ledgerRepository.existsById(99L)).thenReturn(false);
 
-        assertThatThrownBy(() -> dashboardService.getPulse(99L, member))
+        assertThatThrownBy(() -> dashboardService.getPulse(99L, member, null, null))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessage("Ledger not found");
     }
@@ -284,7 +284,7 @@ class DashboardServiceTest {
         when(transactionRepository.getDailySpending(eq(1L), any(LocalDate.class), any(LocalDate.class), any()))
                 .thenReturn(dailyResults);
 
-        DashboardPulseResponse response = dashboardService.getPulse(1L, member, targetMonth);
+        DashboardPulseResponse response = dashboardService.getPulse(1L, member, targetMonth, null);
 
         assertThat(response.getDailySpending()).hasSize(targetMonth.lengthOfMonth());
         assertThat(response.getHighestSpendingDay()).isNotNull();

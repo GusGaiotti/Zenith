@@ -34,14 +34,6 @@ public class DashboardService {
     private static final BigDecimal HUNDRED = new BigDecimal("100");
     private static final BigDecimal TREND_THRESHOLD = new BigDecimal("10");
 
-    public DashboardResponse getDashboard(Long ledgerId, User authenticatedUser) {
-        return getDashboard(ledgerId, authenticatedUser, null, null);
-    }
-
-    public DashboardResponse getDashboard(Long ledgerId, User authenticatedUser, YearMonth targetMonth) {
-        return getDashboard(ledgerId, authenticatedUser, targetMonth, null);
-    }
-
     public DashboardResponse getDashboard(Long ledgerId, User authenticatedUser, YearMonth targetMonth, Long createdByUserId) {
         validateLedgerAccess(ledgerId, authenticatedUser);
         validateCreatedByFilter(ledgerId, createdByUserId);
@@ -83,14 +75,6 @@ public class DashboardService {
                 .expenseByCategory(expenseByCategory)
                 .expenseByUser(expenseByUser)
                 .build();
-    }
-
-    public DashboardOverviewResponse getOverview(Long ledgerId, User authenticatedUser) {
-        return getOverview(ledgerId, authenticatedUser, null, null);
-    }
-
-    public DashboardOverviewResponse getOverview(Long ledgerId, User authenticatedUser, YearMonth targetMonth) {
-        return getOverview(ledgerId, authenticatedUser, targetMonth, null);
     }
 
     public DashboardOverviewResponse getOverview(
@@ -169,14 +153,6 @@ public class DashboardService {
                 .build();
     }
 
-    public DashboardCoupleSplitResponse getCoupleSplit(Long ledgerId, User authenticatedUser) {
-        return getCoupleSplit(ledgerId, authenticatedUser, null, null);
-    }
-
-    public DashboardCoupleSplitResponse getCoupleSplit(Long ledgerId, User authenticatedUser, YearMonth targetMonth) {
-        return getCoupleSplit(ledgerId, authenticatedUser, targetMonth, null);
-    }
-
     public DashboardCoupleSplitResponse getCoupleSplit(
             Long ledgerId,
             User authenticatedUser,
@@ -243,14 +219,6 @@ public class DashboardService {
                 .userContributions(contributions)
                 .highestTransaction(highestTransaction)
                 .build();
-    }
-
-    public DashboardTrendsResponse getTrends(Long ledgerId, User authenticatedUser, int months) {
-        return getTrends(ledgerId, authenticatedUser, months, null, null);
-    }
-
-    public DashboardTrendsResponse getTrends(Long ledgerId, User authenticatedUser, int months, YearMonth endMonth) {
-        return getTrends(ledgerId, authenticatedUser, months, endMonth, null);
     }
 
     public DashboardTrendsResponse getTrends(
@@ -335,14 +303,6 @@ public class DashboardService {
                 .build();
     }
 
-    public DashboardCategoriesBreakdownResponse getCategoriesBreakdown(Long ledgerId, User authenticatedUser) {
-        return getCategoriesBreakdown(ledgerId, authenticatedUser, null, null);
-    }
-
-    public DashboardCategoriesBreakdownResponse getCategoriesBreakdown(Long ledgerId, User authenticatedUser, YearMonth targetMonth) {
-        return getCategoriesBreakdown(ledgerId, authenticatedUser, targetMonth, null);
-    }
-
     public DashboardCategoriesBreakdownResponse getCategoriesBreakdown(
             Long ledgerId,
             User authenticatedUser,
@@ -425,14 +385,6 @@ public class DashboardService {
                         .build())
                 .mostFrequentCategory(mostFrequentCategory)
                 .build();
-    }
-
-    public DashboardPulseResponse getPulse(Long ledgerId, User authenticatedUser) {
-        return getPulse(ledgerId, authenticatedUser, null, null);
-    }
-
-    public DashboardPulseResponse getPulse(Long ledgerId, User authenticatedUser, YearMonth targetMonth) {
-        return getPulse(ledgerId, authenticatedUser, targetMonth, null);
     }
 
     public DashboardPulseResponse getPulse(
