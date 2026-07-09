@@ -9,6 +9,7 @@ import { PageHeader } from "@/components/shared/PageHeader";
 import { TransactionDrawer } from "@/components/transactions/TransactionDrawer";
 import { TransactionFilters } from "@/components/transactions/TransactionFilters";
 import { TransactionTable } from "@/components/transactions/TransactionTable";
+import { Alert, Badge, Button } from "@/components/ui";
 import { useCategories } from "@/hooks/useCategories";
 import { useLedger } from "@/hooks/useLedger";
 import {
@@ -145,8 +146,8 @@ export default function TransactionsPage() {
               buttonClassName="w-full px-3 py-2 sm:min-w-[190px] sm:w-auto"
               align="right"
             />
-            <button
-              className="focusable h-11 w-full rounded-xl bg-[var(--accent)] px-4 text-sm font-semibold text-white shadow-[0_8px_24px_rgba(79,124,255,0.35)] transition-colors duration-150 hover:bg-[var(--accent-hover)] sm:w-auto"
+            <Button
+              className="w-full sm:w-auto"
               onClick={() => {
                 setEditingTransaction(null);
                 setErrorMessage(null);
@@ -154,15 +155,15 @@ export default function TransactionsPage() {
               }}
             >
               Nova transação
-            </button>
+            </Button>
           </div>
         }
       />
 
       {errorMessage ? (
-        <div className="mb-4 rounded-xl border border-[color-mix(in_srgb,var(--expense)_32%,transparent)] bg-[color-mix(in_srgb,var(--expense)_10%,var(--panel-bg))] px-4 py-3 text-sm text-[color-mix(in_srgb,var(--expense)_82%,var(--text-primary))]">
+        <Alert tone="danger" className="mb-4">
           {errorMessage}
-        </div>
+        </Alert>
       ) : null}
 
       <div className="surface mb-4 grid gap-3 p-4 text-sm md:grid-cols-3">
@@ -191,13 +192,10 @@ export default function TransactionsPage() {
       {Object.keys(totals.expenseByPerson).length ? (
         <div className="mb-4 flex flex-wrap gap-2">
           {Object.entries(totals.expenseByPerson).map(([name, total]) => (
-            <span
-              key={name}
-              className="rounded-full border border-[var(--border)] bg-[var(--bg-elevated)] px-3 py-1 text-xs text-[var(--text-secondary)]"
-            >
+            <Badge key={name} tone="neutral">
               {name}:{" "}
-              <span className="font-mono text-[var(--expense)]">{formatCurrency(total)}</span>
-            </span>
+              <span className="ml-1 font-mono text-[var(--expense)]">{formatCurrency(total)}</span>
+            </Badge>
           ))}
         </div>
       ) : null}
@@ -235,13 +233,15 @@ export default function TransactionsPage() {
       />
 
       <div className="mt-4 flex items-center gap-2">
-        <button
+        <Button
+          variant="ghost"
+          size="sm"
+          className="border border-[var(--border)]"
           disabled={!transactions.hasNextPage || transactions.isFetchingNextPage}
           onClick={() => transactions.fetchNextPage()}
-          className="focusable rounded-xl border border-[var(--border)] px-3 py-2 text-sm text-[var(--text-secondary)] transition-all duration-150 hover:bg-[var(--bg-elevated)] disabled:cursor-not-allowed disabled:opacity-40"
         >
           {transactions.isFetchingNextPage ? "Carregando..." : "Carregar mais"}
-        </button>
+        </Button>
       </div>
 
       <TransactionDrawer
