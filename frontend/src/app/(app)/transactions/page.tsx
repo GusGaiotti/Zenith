@@ -1,6 +1,5 @@
 "use client";
 
-import { AxiosError } from "axios";
 import { useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { EmptyState } from "@/components/shared/EmptyState";
@@ -14,6 +13,7 @@ import { useCategories } from "@/hooks/useCategories";
 import { useLedger } from "@/hooks/useLedger";
 import { useCreateTransaction, useDeleteTransaction, useTransactions, useUpdateTransaction } from "@/hooks/useTransactions";
 import { useAuthStore } from "@/lib/store/auth.store";
+import { getApiErrorMessage } from "@/lib/utils/api-error";
 import { formatCurrency } from "@/lib/utils/currency";
 import type { TransactionResponse, TransactionType } from "@/types/api";
 
@@ -27,15 +27,6 @@ function getNetBalanceClassName(value: number) {
   }
 
   return "text-amber-300";
-}
-
-function extractErrorMessage(error: unknown, fallback: string) {
-  if (error instanceof AxiosError) {
-    const message = (error.response?.data as { message?: string } | undefined)?.message;
-    return message || fallback;
-  }
-
-  return fallback;
 }
 
 export default function TransactionsPage() {
@@ -206,7 +197,7 @@ export default function TransactionsPage() {
             },
             onError: (error) => {
               setPendingDeleteId(null);
-              setErrorMessage(extractErrorMessage(error, "Não foi possível excluir a transação."));
+              setErrorMessage(getApiErrorMessage(error, "Não foi possível excluir a transação."));
             },
           });
         }}
@@ -247,7 +238,7 @@ export default function TransactionsPage() {
                   setEditingTransaction(null);
                 },
                 onError: (error) => {
-                  setErrorMessage(extractErrorMessage(error, "Não foi possível atualizar a transação."));
+                  setErrorMessage(getApiErrorMessage(error, "Não foi possível atualizar a transação."));
                 },
               },
             );
@@ -262,7 +253,7 @@ export default function TransactionsPage() {
               }
             },
             onError: (error) => {
-              setErrorMessage(extractErrorMessage(error, "Não foi possível criar a transação."));
+              setErrorMessage(getApiErrorMessage(error, "Não foi possível criar a transação."));
             },
           });
         }}

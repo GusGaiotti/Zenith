@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { CategoryBreakdownChart } from "@/components/dashboard/CategoryBreakdownChart";
@@ -20,6 +19,7 @@ import { useLedger } from "@/hooks/useLedger";
 import { exportTransactionsExcel } from "@/lib/api/transactions";
 import { useTransactions } from "@/hooks/useTransactions";
 import { useAuthStore } from "@/lib/store/auth.store";
+import { getApiErrorMessage } from "@/lib/utils/api-error";
 
 const filterClassName = "elevated h-12 w-full px-4 text-sm text-[var(--text-primary)] sm:min-w-[176px] sm:w-auto";
 
@@ -94,11 +94,7 @@ export default function DashboardPage() {
       URL.revokeObjectURL(blobUrl);
     },
     onError: (error) => {
-      if (error instanceof AxiosError) {
-        setExportError((error.response?.data as { message?: string } | undefined)?.message ?? "Falha ao exportar arquivo.");
-        return;
-      }
-      setExportError("Falha ao exportar arquivo.");
+      setExportError(getApiErrorMessage(error, "Falha ao exportar arquivo."));
     },
   });
 

@@ -1,21 +1,9 @@
 "use client";
 
-import { AxiosError } from "axios";
 import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useAcceptInvitation, useDeclineInvitation } from "@/hooks/useLedger";
-
-function extractInvitationErrorMessage(error: unknown) {
-  if (error instanceof AxiosError) {
-    const message = (error.response?.data as { message?: string } | undefined)?.message;
-
-    if (message) {
-      return message;
-    }
-  }
-
-  return "Esse convite não está mais disponível para aceite.";
-}
+import { getApiErrorMessage } from "@/lib/utils/api-error";
 
 export default function JoinLedgerPage() {
   const params = useParams<{ token: string }>();
@@ -67,7 +55,8 @@ export default function JoinLedgerPage() {
             onClick={() =>
               acceptMutation.mutate(token, {
                 onSuccess: () => router.push("/dashboard"),
-                onError: (error) => setAcceptErrorMessage(extractInvitationErrorMessage(error)),
+                onError: (error) =>
+                  setAcceptErrorMessage(getApiErrorMessage(error, "Esse convite não está mais disponível para aceite.")),
               })
             }
           >

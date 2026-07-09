@@ -1,6 +1,5 @@
 "use client";
 
-import { AxiosError } from "axios";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { CategoryFormModal } from "@/components/categories/CategoryFormModal";
@@ -10,19 +9,8 @@ import { LoadingSkeleton } from "@/components/shared/LoadingSkeleton";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { useCategories, useCreateCategory, useDeleteCategory, useUpdateCategory } from "@/hooks/useCategories";
 import { useAuthStore } from "@/lib/store/auth.store";
+import { getApiErrorMessage } from "@/lib/utils/api-error";
 import type { CategoryResponse } from "@/types/api";
-
-function extractErrorMessage(error: unknown, fallback: string) {
-  if (error instanceof AxiosError) {
-    const message = (error.response?.data as { message?: string } | undefined)?.message;
-    if (message?.toLowerCase().includes("associated transactions")) {
-      return "Não é possível excluir a categoria porque ela possui transações associadas. Exclua as transações vinculadas antes de tentar novamente.";
-    }
-    return message || fallback;
-  }
-
-  return fallback;
-}
 
 export default function CategoriesPage() {
   const router = useRouter();
@@ -105,7 +93,7 @@ export default function CategoriesPage() {
               onError: (error) => {
                 setPendingDeleteId(null);
                 setDeleteErrorMessage(
-                  extractErrorMessage(
+                  getApiErrorMessage(
                     error,
                     "Não foi possível excluir a categoria. Ela pode estar associada a transações existentes.",
                   ),
@@ -146,7 +134,7 @@ export default function CategoriesPage() {
                   setEditingCategory(null);
                 },
                 onError: (error) => {
-                  setErrorMessage(extractErrorMessage(error, "Não foi possível atualizar a categoria."));
+                  setErrorMessage(getApiErrorMessage(error, "Não foi possível atualizar a categoria."));
                 },
               },
             );
@@ -159,7 +147,7 @@ export default function CategoriesPage() {
               setEditingCategory(null);
             },
             onError: (error) => {
-              setErrorMessage(extractErrorMessage(error, "Não foi possível criar a categoria."));
+              setErrorMessage(getApiErrorMessage(error, "Não foi possível criar a categoria."));
             },
           });
         }}

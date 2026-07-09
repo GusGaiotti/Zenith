@@ -11,6 +11,7 @@ import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
 import { useCancelInvitation, useInviteMember, useLeaveLedger, useLedger, useRemoveMember, useUpdateLedgerName } from "@/hooks/useLedger";
 import { formatDateTime } from "@/lib/utils/date";
 import { useAuthStore } from "@/lib/store/auth.store";
+import { getApiErrorMessage } from "@/lib/utils/api-error";
 
 function PencilIcon() {
   return (
@@ -63,8 +64,7 @@ export default function LedgerPage() {
         setEditing(false);
       },
       onError: (error) => {
-        const response = (error as { response?: { data?: { message?: string } } }).response;
-        setNameError(response?.data?.message ?? "Não foi possível atualizar o nome da fatura.");
+        setNameError(getApiErrorMessage(error, "Não foi possível atualizar o nome da fatura."));
       },
     });
   }
