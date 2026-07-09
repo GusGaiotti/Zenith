@@ -7,6 +7,7 @@ import { LoadingSpinner } from "@/components/shared/LoadingSpinner";
 import { MonthPicker } from "@/components/shared/MonthPicker";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { useAskAi, useAskAiUsage } from "@/hooks/useAskAi";
+import { getApiErrorMessage } from "@/lib/utils/api-error";
 import { askAiSchema } from "@/lib/validators/ai.schemas";
 import type { AskAiRequest, AskAiResponse } from "@/types/api";
 
@@ -57,18 +58,11 @@ function getUsageSummary(mode?: string, accessAllowed?: boolean) {
 }
 
 function getAskAiErrorMessage(error: unknown) {
-  if (error instanceof AxiosError) {
-    if (error.code === "ECONNABORTED") {
-      return "A análise demorou mais do que o esperado. Tente novamente ou reduza o contexto da pergunta.";
-    }
-
-    const responseMessage = error.response?.data;
-    if (typeof responseMessage === "string" && responseMessage.trim()) {
-      return responseMessage;
-    }
+  if (error instanceof AxiosError && error.code === "ECONNABORTED") {
+    return "A análise demorou mais do que o esperado. Tente novamente ou reduza o contexto da pergunta.";
   }
 
-  return error instanceof Error ? error.message : "Não foi possível obter resposta da IA.";
+  return getApiErrorMessage(error, "Não foi possível obter resposta da IA.");
 }
 
 export function AskAiWorkspace() {

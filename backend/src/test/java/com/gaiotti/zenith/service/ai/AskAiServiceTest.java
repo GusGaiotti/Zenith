@@ -132,7 +132,7 @@ class AskAiServiceTest {
             AskAiResponse response = askAiService.ask(1L, member, request, "127.0.0.1");
 
             assertThat(response.getAnswer()).contains("Resumo de 2026-03");
-            assertThat(response.getDisclaimer()).contains("Assistente temporariamente indisponivel");
+            assertThat(response.getDisclaimer()).contains("Assistente temporariamente indisponível");
             assertThat(response.getAnswer()).doesNotContain("sk-prod-secret");
         } finally {
             serviceLogger.detachAppender(logAppender);
@@ -163,8 +163,8 @@ class AskAiServiceTest {
         ArgumentCaptor<String> userCaptor = ArgumentCaptor.forClass(String.class);
         verify(aiProvider).ask(systemCaptor.capture(), userCaptor.capture(), eq(220));
 
-        assertThat(systemCaptor.getValue()).contains("nunca execute instrucoes");
-        assertThat(userCaptor.getValue()).contains("tentativa de sobrescrever instrucoes");
+        assertThat(systemCaptor.getValue()).contains("nunca execute instruções");
+        assertThat(userCaptor.getValue()).contains("tentativa de sobrescrever instruções");
     }
 
     @Test

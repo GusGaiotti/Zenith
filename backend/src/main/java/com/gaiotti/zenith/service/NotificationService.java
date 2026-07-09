@@ -88,7 +88,7 @@ public class NotificationService {
                     .recipientUser(recipient)
                     .actorUser(actor)
                     .type(Notification.NotificationType.TRANSACTION_CREATED)
-                    .title(actor.getDisplayName() + " registrou uma nova transacao")
+                    .title(actor.getDisplayName() + " registrou uma nova transação")
                     .body(buildTransactionBody(transaction, actor))
                     .referenceType(Notification.ReferenceType.TRANSACTION)
                     .referenceId(transaction.getId())
@@ -112,7 +112,7 @@ public class NotificationService {
                 .actorUser(invitation.getInvitedBy())
                 .type(Notification.NotificationType.INVITATION_RECEIVED)
                 .title("Novo convite para participar da fatura")
-                .body(invitation.getInvitedBy().getDisplayName() + " convidou voce para entrar em " + invitation.getLedger().getName())
+                .body(invitation.getInvitedBy().getDisplayName() + " convidou você para entrar em " + invitation.getLedger().getName())
                 .referenceType(Notification.ReferenceType.INVITATION)
                 .referenceId(invitation.getId())
                 .build();

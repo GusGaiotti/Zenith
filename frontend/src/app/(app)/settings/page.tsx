@@ -1,6 +1,5 @@
 "use client";
 
-import { AxiosError } from "axios";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,6 +8,7 @@ import { z } from "zod";
 import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { useDeleteAccount, useMyProfile, useUpdateProfile } from "@/hooks/useUser";
+import { getApiErrorMessage } from "@/lib/utils/api-error";
 
 const profileSchema = z.object({
   displayName: z.string().min(2, "O nome deve ter pelo menos 2 caracteres").max(100),
@@ -27,13 +27,6 @@ const passwordSchema = z
 
 type ProfileSchema = z.infer<typeof profileSchema>;
 type PasswordSchema = z.infer<typeof passwordSchema>;
-
-function extractMessage(error: unknown, fallback: string) {
-  if (error instanceof AxiosError) {
-    return (error.response?.data as { message?: string })?.message ?? fallback;
-  }
-  return fallback;
-}
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -110,7 +103,7 @@ export default function SettingsPage() {
           </label>
           {updateProfile.isError && !passwordForm.formState.isSubmitting ? (
             <p className="danger-chip rounded-xl px-3 py-2.5 text-sm">
-              {extractMessage(updateProfile.error, "Ocorreu um erro. Tente novamente.")}
+              {getApiErrorMessage(updateProfile.error, "Ocorreu um erro. Tente novamente.")}
             </p>
           ) : null}
           {profileSuccess ? (
@@ -176,7 +169,7 @@ export default function SettingsPage() {
           </label>
           {updateProfile.isError && passwordForm.formState.isSubmitting ? (
             <p className="danger-chip rounded-xl px-3 py-2.5 text-sm">
-              {extractMessage(updateProfile.error, "Ocorreu um erro. Tente novamente.")}
+              {getApiErrorMessage(updateProfile.error, "Ocorreu um erro. Tente novamente.")}
             </p>
           ) : null}
           {passwordSuccess ? (
