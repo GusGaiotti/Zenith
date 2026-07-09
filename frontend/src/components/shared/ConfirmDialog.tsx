@@ -30,7 +30,12 @@ export function ConfirmDialog({
       aria-modal="true"
       aria-labelledby="confirm-dialog-title"
     >
-      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onCancel} />
+      <button
+        type="button"
+        aria-label="Fechar"
+        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        onClick={onCancel}
+      />
       <div className="surface relative w-full max-w-md p-6 shadow-2xl">
         <h4
           id="confirm-dialog-title"
