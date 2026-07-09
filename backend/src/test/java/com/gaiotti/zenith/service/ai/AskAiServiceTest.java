@@ -13,6 +13,9 @@ import com.gaiotti.zenith.service.ai.provider.AiProvider;
 import com.gaiotti.zenith.service.ai.provider.AiProviderException;
 import com.gaiotti.zenith.service.ai.provider.AiProviderResult;
 import com.gaiotti.zenith.service.ai.provider.AiProviderRouter;
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.read.ListAppender;
 import org.mockito.ArgumentCaptor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +23,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.time.YearMonth;
@@ -120,11 +124,25 @@ class AskAiServiceTest {
         when(aiProvider.ask(any(), any(), eq(220)))
                 .thenThrow(new AiProviderException("OpenAI provider request failed: sk-prod-secret"));
 
-        AskAiResponse response = askAiService.ask(1L, member, request, "127.0.0.1");
+        Logger serviceLogger = (Logger) LoggerFactory.getLogger(AskAiService.class);
+        ListAppender<ILoggingEvent> logAppender = new ListAppender<>();
+        logAppender.start();
+        serviceLogger.addAppender(logAppender);
+        try {
+            AskAiResponse response = askAiService.ask(1L, member, request, "127.0.0.1");
 
-        assertThat(response.getAnswer()).contains("Resumo de 2026-03");
-        assertThat(response.getDisclaimer()).contains("Assistente temporariamente indisponivel");
-        assertThat(response.getAnswer()).doesNotContain("sk-prod-secret");
+            assertThat(response.getAnswer()).contains("Resumo de 2026-03");
+            assertThat(response.getDisclaimer()).contains("Assistente temporariamente indisponivel");
+            assertThat(response.getAnswer()).doesNotContain("sk-prod-secret");
+        } finally {
+            serviceLogger.detachAppender(logAppender);
+        }
+
+        String loggedOutput = logAppender.list.stream()
+                .map(ILoggingEvent::getFormattedMessage)
+                .collect(java.util.stream.Collectors.joining("\n"));
+        assertThat(loggedOutput).doesNotContain("sk-prod-secret");
+        assertThat(loggedOutput).contains("[REDACTED]");
     }
 
     @Test
