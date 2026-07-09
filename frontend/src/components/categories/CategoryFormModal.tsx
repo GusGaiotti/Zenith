@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useId, useRef, useState } from "react";
+import { Button, Input } from "@/components/ui";
 import type { CreateCategoryRequest } from "@/types/api";
 
 interface CategoryFormModalProps {
@@ -94,13 +95,12 @@ function CategoryFormContent({
           {title}
         </h2>
         <form className="mt-5 space-y-4" onSubmit={submit}>
-          <input
+          <Input
             name="name"
             required
             value={name}
             onChange={(event) => setName(event.target.value)}
             placeholder="Nome da categoria"
-            className="focusable w-full rounded-md border bg-[var(--bg-elevated)] px-3 py-2 text-[var(--text-primary)] outline-none placeholder:text-[var(--text-secondary)]"
           />
           <div className="space-y-3">
             <div>
@@ -126,12 +126,9 @@ function CategoryFormContent({
             Cor selecionada: <span className="font-mono text-[var(--text-primary)]">{color}</span>
           </div>
           <div className="flex gap-2">
-            <button
-              disabled={isSubmitting || !name.trim()}
-              className="focusable rounded-md bg-[var(--accent)] px-4 py-2 font-medium text-white disabled:cursor-not-allowed disabled:opacity-40"
-            >
+            <Button type="submit" disabled={isSubmitting || !name.trim()}>
               {isSubmitting ? "Salvando..." : submitLabel}
-            </button>
+            </Button>
             <button
               type="button"
               onClick={onClose}

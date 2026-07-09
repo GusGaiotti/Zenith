@@ -25,6 +25,7 @@ import { useLedger } from "@/hooks/useLedger";
 import { exportTransactionsExcel } from "@/lib/api/transactions";
 import { useTransactions } from "@/hooks/useTransactions";
 import { useAuthStore } from "@/lib/store/auth.store";
+import { Alert } from "@/components/ui";
 import { getApiErrorMessage } from "@/lib/utils/api-error";
 
 const filterClassName =
@@ -198,9 +199,7 @@ export default function DashboardPage() {
     <div className="space-y-5">
       {controls}
 
-      {exportError ? (
-        <div className="danger-chip rounded-xl px-4 py-3 text-sm">{exportError}</div>
-      ) : null}
+      {exportError ? <Alert tone="danger">{exportError}</Alert> : null}
 
       {hasError ? (
         <div className="rounded-xl border border-[color-mix(in_srgb,var(--accent-amber)_30%,transparent)] bg-[color-mix(in_srgb,var(--accent-amber)_10%,transparent)] px-4 py-3 text-sm text-[var(--accent-amber)]">

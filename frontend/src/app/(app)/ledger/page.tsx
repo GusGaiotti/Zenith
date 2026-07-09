@@ -8,6 +8,7 @@ import { EmptyState } from "@/components/shared/EmptyState";
 import { LoadingSkeleton } from "@/components/shared/LoadingSkeleton";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
+import { Button, Input } from "@/components/ui";
 import {
   useCancelInvitation,
   useInviteMember,
@@ -118,29 +119,25 @@ export default function LedgerPage() {
         </h2>
         {editing ? (
           <div className="mt-3 space-y-3">
-            <input
+            <Input
               value={draftName}
               onChange={(event) => setDraftName(event.target.value)}
               maxLength={120}
-              className="focusable w-full rounded-md border bg-[var(--bg-elevated)] px-3 py-2 text-lg text-[var(--text-primary)] outline-none"
+              className="text-lg"
             />
             <div className="flex flex-wrap gap-2">
-              <button
-                type="button"
-                disabled={updateLedgerName.isPending}
-                className="focusable rounded-md bg-[var(--accent)] px-3 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-60"
-                onClick={handleSaveName}
-              >
+              <Button size="sm" disabled={updateLedgerName.isPending} onClick={handleSaveName}>
                 {updateLedgerName.isPending ? "Salvando..." : "Salvar"}
-              </button>
-              <button
-                type="button"
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="border border-[var(--border)]"
                 disabled={updateLedgerName.isPending}
-                className="focusable rounded-md border px-3 py-2 text-sm text-[var(--text-secondary)] disabled:cursor-not-allowed disabled:opacity-60"
                 onClick={handleCancelEdit}
               >
                 Cancelar
-              </button>
+              </Button>
             </div>
             {nameError ? <p className="text-sm text-[var(--danger-text)]">{nameError}</p> : null}
           </div>
@@ -166,12 +163,9 @@ export default function LedgerPage() {
         <div className="mb-3 flex items-center justify-between">
           <h2 className="font-display text-3xl italic">Membros</h2>
           {canInvite ? (
-            <button
-              className="focusable rounded-md bg-[var(--accent)] px-3 py-2 text-sm font-medium text-white"
-              onClick={() => setOpen(true)}
-            >
+            <Button size="sm" onClick={() => setOpen(true)}>
               Convidar parceiro(a)
-            </button>
+            </Button>
           ) : null}
         </div>
         <div className="grid gap-4 md:grid-cols-2">

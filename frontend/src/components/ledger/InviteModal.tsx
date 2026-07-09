@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { Button, Input } from "@/components/ui";
 
 interface InviteModalProps {
   open: boolean;
@@ -24,21 +25,17 @@ export function InviteModal({ open, onClose, onSubmit, isSubmitting = false }: I
       <section className="surface w-full max-w-md p-6">
         <h3 className="font-display text-3xl italic">Convidar parceiro(a)</h3>
         <form className="mt-5 space-y-4" onSubmit={submit}>
-          <input
+          <Input
             type="email"
             required
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             placeholder="parceiro@email.com"
-            className="focusable w-full rounded-md border bg-[var(--bg-elevated)] px-3 py-2 outline-none"
           />
           <div className="flex gap-2">
-            <button
-              disabled={isSubmitting}
-              className="focusable rounded-md bg-[var(--accent)] px-4 py-2 font-medium text-white disabled:cursor-not-allowed disabled:opacity-40"
-            >
+            <Button type="submit" disabled={isSubmitting}>
               {isSubmitting ? "Enviando..." : "Enviar convite"}
-            </button>
+            </Button>
             <button
               type="button"
               onClick={onClose}
