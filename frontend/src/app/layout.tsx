@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Mono, Manrope, Sora } from "next/font/google";
+import { Fraunces, IBM_Plex_Mono, Instrument_Sans } from "next/font/google";
 import { AuthBootstrap } from "@/components/providers/AuthBootstrap";
 import { QueryProvider } from "@/components/providers/QueryProvider";
 import "./globals.css";
@@ -22,16 +22,17 @@ function resolveMetadataBase() {
   }
 }
 
-const body = Manrope({
+const body = Instrument_Sans({
   variable: "--font-body",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
 
-const display = Sora({
+const display = Fraunces({
   variable: "--font-display",
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
 });
 
 const mono = IBM_Plex_Mono({

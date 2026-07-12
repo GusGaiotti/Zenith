@@ -349,7 +349,7 @@ export function AskAiWorkspace() {
                 <button
                   type="button"
                   disabled={askMutation.isPending || blockedByAccess}
-                  className="focusable h-12 rounded-2xl bg-[var(--accent)] px-5 font-semibold text-white shadow-[0_8px_24px_rgba(79,124,255,0.35)] transition-all duration-150 hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-40"
+                  className="focusable h-12 rounded-2xl bg-[var(--accent)] px-5 font-semibold text-white transition-all duration-150 hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-40"
                   onClick={handleSubmit}
                 >
                   {askMutation.isPending ? "Consultando..." : "Enviar pergunta"}
