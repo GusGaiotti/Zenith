@@ -170,8 +170,8 @@ body::after {
 }
 
 .font-display {
-  font-family: var(--font-display), sans-serif;
-  font-weight: 700;
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 600;
   letter-spacing: -0.02em;
 }
 
