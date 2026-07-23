@@ -37,7 +37,7 @@ export function Sidebar({ collapsed, onCollapsedChange }: SidebarProps) {
         />
       </div>
 
-      <nav className="flex-1 space-y-2 px-1">
+      <nav className="min-h-0 flex-1 space-y-2 overflow-y-auto px-1">
         {APP_NAV_ITEMS.map((item) => {
           const active = pathname.startsWith(item.href);
           const locked = item.href === "/ask-ai" && askAiLocked;
