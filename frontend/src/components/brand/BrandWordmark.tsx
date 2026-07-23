@@ -19,7 +19,7 @@ function ZenithMonogram({ compact = false }: { compact?: boolean }) {
       <svg
         aria-hidden
         className={cn(
-          "text-[var(--accent)] drop-shadow-[0_10px_22px_rgba(37,99,235,0.24)]",
+          "text-[var(--accent)] drop-shadow-[0_10px_22px_color-mix(in_srgb,var(--accent)_22%,transparent)]",
           compact ? "h-9 w-9" : "h-14 w-14",
         )}
         fill="none"

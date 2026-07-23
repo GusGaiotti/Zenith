@@ -203,7 +203,7 @@ export function ExpenseTrendChart({ trends }: ExpenseTrendChartProps) {
                 <path
                   d={expensePath}
                   fill="none"
-                  stroke="rgba(248, 113, 113, 0.92)"
+                  stroke="var(--expense)"
                   strokeWidth="3"
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -213,7 +213,7 @@ export function ExpenseTrendChart({ trends }: ExpenseTrendChartProps) {
                 <path
                   d={incomePath}
                   fill="none"
-                  stroke="rgba(74, 222, 128, 0.92)"
+                  stroke="var(--income)"
                   strokeWidth="3"
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -242,7 +242,7 @@ export function ExpenseTrendChart({ trends }: ExpenseTrendChartProps) {
                         <circle cx={x} cy={incomeY} r="10" fill="transparent">
                           <title>{pointTooltipLabel(point, "income")}</title>
                         </circle>
-                        <circle cx={x} cy={incomeY} r="4" fill="rgba(74, 222, 128, 1)" />
+                        <circle cx={x} cy={incomeY} r="4" fill="var(--income)" />
                       </g>
                     ) : null}
                     {expenseY !== null ? (
@@ -250,7 +250,7 @@ export function ExpenseTrendChart({ trends }: ExpenseTrendChartProps) {
                         <circle cx={x} cy={expenseY} r="10" fill="transparent">
                           <title>{pointTooltipLabel(point, "expense")}</title>
                         </circle>
-                        <circle cx={x} cy={expenseY} r="4" fill="rgba(248, 113, 113, 1)" />
+                        <circle cx={x} cy={expenseY} r="4" fill="var(--expense)" />
                       </g>
                     ) : null}
                     <text
